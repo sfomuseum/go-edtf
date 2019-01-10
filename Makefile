@@ -7,7 +7,8 @@ prep:
 self:   prep rmdeps
 	if test -d src; then rm -rf src; fi
 	mkdir -p src/github.com/whosonfirst/go-edtf
-	cp -r *.go src/github.com/whosonfirst/go-edtf/
+	cp  *.go src/github.com/whosonfirst/go-edtf/
+	cp -r bnf src/github.com/whosonfirst/go-edtf/
 	if test -d vendor; then cp -r vendor/* src/; fi
 
 rmdeps:
@@ -26,7 +27,10 @@ vendor-deps: rmdeps deps
 	rm -rf src
 
 fmt:
-	go fmt *.go	
+	go fmt *.go
+	go fmt bnf/*.go
+	go fmt cmd/*.go
 
 bin: 	self
-	if test -d bin; then rm -rf bin/*; 
+	if test -d bin; then rm -rf bin/*; fi
+	@GOPATH=$(GOPATH) go build -o bin/parse cmd/parse.go	

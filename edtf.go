@@ -5,7 +5,6 @@ import (
 )
 
 type Date struct {
-
 }
 
 // https://www.loc.gov/standards/datetime/pre-submission.html#bnf
