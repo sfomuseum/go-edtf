@@ -4,12 +4,22 @@ import (
 	"errors"
 )
 
-type Date struct {
+type EDTFDate struct {
+	Upper DateRange
+	Lower DateRange
 }
 
-// https://www.loc.gov/standards/datetime/pre-submission.html#bnf
+type DateRange struct {
+	Upper Date
+	Lower Date
+}
 
-func Parse(edtf_str string) (*Date, error) {
-
-	return nil, errors.New("Please write me")
+type Date struct {
+	String string
+	Time time.Time
+	Uncertain bool
+	Approximate bool
+	Unknown bool
+	Open bool
+	Precision string
 }
