@@ -1,7 +1,7 @@
 package edtf
 
 import (
-	"errors"
+	"time"
 )
 
 type EDTFDate struct {

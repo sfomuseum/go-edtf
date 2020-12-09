@@ -1,10 +1,10 @@
 # go-edtf
 
-A Go port of the python-edtf package
+A Go package for paring Extended DateTime Format dates.
 
 ## Important
 
-This is a work in progress and does not work yet. Help is welcome :D
+This is a work in progress and does not work yet. It is, currently, a naive parser using regular expressions. Help is welcome :D
 
 ## See also
 
