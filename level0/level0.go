@@ -6,6 +6,8 @@ import (
 	"regexp"
 )
 
+const LEVEL int = 0
+
 var re_date *regexp.Regexp
 var re_date_time *regexp.Regexp
 var re_time_interval *regexp.Regexp
@@ -19,6 +21,19 @@ func init() {
 	re_time_interval = regexp.MustCompile(`^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?\/(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?$`)
 }
 
+/*
+
+Date
+
+    complete representation:            [year][“-”][month][“-”][day]
+    Example 1          ‘1985-04-12’ refers to the calendar date 1985 April 12th with day precision.
+    reduced precision for year and month:   [year][“-”][month]
+    Example 2          ‘1985-04’ refers to the calendar month 1985 April with month precision.
+    reduced precision for year:  [year]
+    Example 3          ‘1985’ refers to the calendar year 1985 with year precision.
+
+*/
+
 func ParseDate(edtf_str string) (*edtf.EDTFDate, error) {
 
 	if !re_date.MatchString(edtf_str) {
@@ -28,6 +43,25 @@ func ParseDate(edtf_str string) (*edtf.EDTFDate, error) {
 	return nil, nil
 }
 
+/*
+
+Date and Time
+
+    [date][“T”][time]
+    Complete representations for calendar date and (local) time of day
+    Example 1          ‘1985-04-12T23:20:30’ refers to the date 1985 April 12th at 23:20:30 local time.
+     [dateI][“T”][time][“Z”]
+    Complete representations for calendar date and UTC time of day
+    Example 2       ‘1985-04-12T23:20:30Z’ refers to the date 1985 April 12th at 23:20:30 UTC time.
+    [dateI][“T”][time][shiftHour]
+    Date and time with timeshift in hours (only)
+    Example 3       ‘1985-04-12T23:20:30-04’ refers to the date 1985 April 12th time of day 23:20:30 with time shift of 4 hours behind UTC.
+    [dateI][“T”][time][shiftHourMinute]
+    Date and time with timeshift in hours and minutes
+    Example 4       ‘1985-04-12T23:20:30+04:30’ refers to the date 1985 April 12th,  time of day  23:20:30 with time shift of 4 hours and 30 minutes ahead of UTC.
+
+*/
+
 func ParseDateTime(edtf_str string) (*edtf.EDTFDate, error) {
 
 	if !re_date_time.MatchString(edtf_str) {
@@ -36,6 +70,21 @@ func ParseDateTime(edtf_str string) (*edtf.EDTFDate, error) {
 
 	return nil, nil
 }
+
+/*
+
+Time Interval
+
+EDTF Level 0 adopts representations of a time interval where both the start and end are dates: start and end date only; that is, both start and duration, and duration and end, are excluded. Time of day is excluded.
+
+    Example 1          ‘1964/2008’ is a time interval with calendar year precision, beginning sometime in 1964 and ending sometime in 2008.
+    Example 2          ‘2004-06/2006-08’ is a time interval with calendar month precision, beginning sometime in June 2004 and ending sometime in August of 2006.
+    Example 3          ‘2004-02-01/2005-02-08’ is a time interval with calendar day precision, beginning sometime on February 1, 2004 and ending sometime on February 8, 2005.
+    Example 4          ‘2004-02-01/2005-02’ is a time interval beginning sometime on February 1, 2004 and ending sometime in February 2005. Since the start endpoint precision (day) is different than that of the end endpoint (month) the precision of the time interval at large is undefined.
+    Example 5          ‘2004-02-01/2005’ is a time interval beginning sometime on February 1, 2004 and ending sometime in 2005. The start endpoint has calendar day precision and the end endpoint has calendar year precision. Similar to the previous example, the precision of the time interval at large is undefined.
+    Example 6          ‘2005/2006-02’ is a time interval beginning sometime in 2005 and ending sometime in February 2006.
+
+*/
 
 func ParseTimeInterval(edtf_str string) (*edtf.EDTFDate, error) {
 

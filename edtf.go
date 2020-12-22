@@ -7,6 +7,8 @@ import (
 type EDTFDate struct {
 	Upper DateRange
 	Lower DateRange
+	Raw   string
+	Level int
 }
 
 type DateRange struct {

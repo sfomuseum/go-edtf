@@ -6,9 +6,16 @@ import (
 	"regexp"
 )
 
+const LEVEL int = 2
+
 var re_exponential_year *regexp.Regexp
 var re_significant_digits *regexp.Regexp
 var re_sub_year *regexp.Regexp
+var re_set_representations *regexp.Regexp
+var re_group_qualification *regexp.Regexp
+var re_individual_qualification *regexp.Regexp
+var re_unspecified_digit *regexp.Regexp
+var re_interval *regexp.Regexp
 
 func init() {
 
@@ -17,6 +24,16 @@ func init() {
 	re_significant_digits = regexp.MustCompile(`(?:(\d{4})S(\d+)|Y(\d+)S(\d+)|Y(\d+)E(\d+)S(\d+))$`)
 
 	re_sub_year = regexp.MustCompile(`^(\d{4})\-(2[1-9]|3[0-9]|4[0-1])$`)
+
+	re_set_representations = regexp.MustCompile(`^(\[|\{)(\.\.)?(?:(?:(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?)(,|\.\.)?)+(\.\.)?(\}|\])$`)
+
+	re_group_qualification = regexp.MustCompile(`^(?:(\d{4})(%|~|\?)?(?:-(\d{2})(%|~|\?)?(?:-(\d{2})(%|~|\?)?)?)?)$`)
+
+	re_individual_qualification = regexp.MustCompile(`^(?:(%|~|\?)?(\d{4})(?:-(%|~|\?)?(\d{2})(?:-(%|~|\?)?(\d{2}))?)?)$`)
+
+	re_unspecified_digit = regexp.MustCompile(`^([0-9X]{4})(?:-([0-9X]{2})(?:-([0-9X]{2}))?)?$`)
+
+	re_interval = regexp.MustCompile(`^(%|~|\?)?([0-9X]{4})(?:-(%|~|\?)?([0-9X]{2})(?:-(%|~|\?)?([0-9X]{2}))?)?\/(%|~|\?)?([0-9X]{4})(?:-(%|~|\?)?([0-9X]{2})(?:-(%|~|\?)?([0-9X]{2}))?)?$`)
 }
 
 /*
@@ -89,7 +106,7 @@ Level 2 extends the season feature of Level 1 to include the following sub-year 
 40     Semestral 1 (6 months in duration)
 41     Semestral 2 (6 months in duration)
 
-    Example        ‘2001-34’   
+    Example        ‘2001-34’
     second quarter of 2001
 
 */
@@ -98,6 +115,148 @@ func ParseSubYearGroupings(edtf_str string) (*edtf.EDTFDate, error) {
 
 	if !re_sub_year.MatchString(edtf_str) {
 		return nil, errors.New("Invalid Level 2 sub year groupings string")
+	}
+
+	return nil, nil
+}
+
+/*
+
+Set representation
+
+    Square brackets wrap a single-choice list (select one member).
+    Curly brackets wrap an inclusive list (all members included).
+    Members of the set are separated by commas.
+    No spaces are allowed, anywhere within the expression.
+    Double-dots indicates all the values between the two values it separates, inclusive.
+    Double-dot at the beginning or end of the list means "on or before" or "on or after" respectively.
+    Elements immediately preceeding and/or following as well as the elements represented by a double-dot, all have the same precision. Otherwise, different elements may have different precisions
+
+One of a set
+
+    Example 1       [1667,1668,1670..1672]
+    One of the years 1667, 1668, 1670, 1671, 1672
+    Example 2         [..1760-12-03]
+    December 3, 1760; or some earlier date
+    Example 3          [1760-12..]
+    December 1760, or some later month
+    Example 4         [1760-01,1760-02,1760-12..]
+    January or February of 1760 or December 1760 or some later month
+    Example 5          [1667,1760-12]
+    Either the year 1667 or the month December of 1760.
+    Example 6         [..1984]
+    The year 1984 or an earlier year
+
+All Members
+
+    Example 7          {1667,1668,1670..1672}
+    All of the years 1667, 1668, 1670, 1671, 1672
+    Example 8            {1960,1961-12}
+    The year 1960 and the month December of 1961.
+    Example 9         {..1984}
+    The year 1984 and all earlier years
+
+*/
+
+func ParseSetRepresentations(edtf_str string) (*edtf.EDTFDate, error) {
+
+	if !re_set_representations.MatchString(edtf_str) {
+		return nil, errors.New("Invalid Level 2 set representation string")
+	}
+
+	return nil, nil
+}
+
+/*
+
+Qualification
+
+Group Qualification
+
+A qualification character to the immediate right of a component applies to that component as well as to all components to the left.
+
+    Example 1                ‘2004-06-11%’
+    year, month, and day uncertain and approximate
+    Example 2                 ‘2004-06~-11’
+    year and month approximate
+    Example  3              ‘2004?-06-11’
+    year uncertain
+
+Qualification of Individual Component
+
+A qualification character to the immediate left of a component applies to that component only.
+
+    Example 4                   ‘?2004-06-~11’
+    year uncertain; month known; day approximate
+    Example 5                   ‘2004-%06-11’
+    month uncertain and approximate; year and day known
+
+*/
+
+func ParseGroupQualification(edtf_str string) (*edtf.EDTFDate, error) {
+
+	if !re_group_qualification.MatchString(edtf_str) {
+		return nil, errors.New("Invalid Level 2 group qualification string")
+	}
+
+	return nil, nil
+}
+
+func ParseIndividualQualification(edtf_str string) (*edtf.EDTFDate, error) {
+
+	if !re_individual_qualification.MatchString(edtf_str) {
+		return nil, errors.New("Invalid Level 2 individual qualification string")
+	}
+
+	return nil, nil
+}
+
+/*
+
+Unspecified Digit
+
+For level 2 the unspecified digit, 'X', may occur anywhere within a component.
+
+    Example 1                 ‘156X-12-25’
+    December 25 sometime during the 1560s
+    Example 2                 ‘15XX-12-25’
+    December 25 sometime during the 1500s
+    Example 3                ‘XXXX-12-XX’
+    Some day in December in some year
+    Example 4                 '1XXX-XX’
+    Some month during the 1000s
+    Example 5                  ‘1XXX-12’
+    Some December during the 1000s
+    Example 6                  ‘1984-1X’
+    October, November, or December 1984
+
+*/
+
+func ParseUnspecifiedDigit(edtf_str string) (*edtf.EDTFDate, error) {
+
+	if !re_unspecified_digit.MatchString(edtf_str) {
+		return nil, errors.New("Invalid Level 2 unspecified digit string")
+	}
+
+	return nil, nil
+}
+
+/*
+
+For Level 2 portions of a date within an interval may be designated as approximate, uncertain, or unspecified.
+
+    Example 1                 ‘2004-06-~01/2004-06-~20’
+    An interval in June 2004 beginning approximately the first and ending approximately the 20th
+    Example 2                 ‘2004-06-XX/2004-07-03’
+    An interval beginning on an unspecified day in June 2004 and ending July 3.
+
+
+*/
+
+func ParseInterval(edtf_str string) (*edtf.EDTFDate, error) {
+
+	if !re_interval.MatchString(edtf_str) {
+		return nil, errors.New("Invalid Level 2 interval string")
 	}
 
 	return nil, nil

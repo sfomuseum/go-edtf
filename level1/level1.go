@@ -6,6 +6,8 @@ import (
 	"regexp"
 )
 
+const LEVEL int = 1
+
 var re_calendaryear *regexp.Regexp
 var re_season *regexp.Regexp
 var re_qualified *regexp.Regexp
