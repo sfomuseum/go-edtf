@@ -11,8 +11,8 @@ var re_season *regexp.Regexp
 
 func init() {
 
-	re_calendaryear = regexp.MustCompile(`^Y(-)?(\d{4})(\d{2})(\d{2})$`)
-	re_season = regexp.MustCompile(`(\d{4})-(0[1-9]|2[1-4])|(spring|summer|fall|winter)\s+,\s+(\d{4})$`)
+	re_calendaryear = regexp.MustCompile(`^Y(\-)?(\d+)$`)
+	re_season = regexp.MustCompile(`(\d{4})-(0[1-9]|2[1-4])|(?i)(spring|summer|fall|winter)\s*,\s*(\d{4})$`)
 }
 
 func ParseLetterPrefixedCalendarYear(edtf_str string) (*edtf.EDTFDate, error) {
