@@ -62,17 +62,19 @@ func TestQualifiedDate(t *testing.T) {
 
 }
 
-/*
 func TestUnspecifiedDigits(t *testing.T) {
 
 	valid := []string{
-		"Y170000002",
-		"Y-170000002",
+		"201X",
+		"20XX",
+		"2004-XX",
+		"1985-04-XX",
+		"1985-XX-XX",
 	}
 
 	for _, str := range valid {
 
-		_, err := ParseLetterPrefixedCalendarYear(str)
+		_, err := ParseUnspecifiedDigits(str)
 
 		if err != nil {
 			t.Fatalf("Failed to parse '%s', %v", str, err)
@@ -81,6 +83,7 @@ func TestUnspecifiedDigits(t *testing.T) {
 
 }
 
+/*
 func TestExtendedInterval(t *testing.T) {
 
 	valid := []string{
