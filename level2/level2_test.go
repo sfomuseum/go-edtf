@@ -37,3 +37,20 @@ func TestSignificantDigits(t *testing.T) {
 		}
 	}
 }
+
+func TestSubYearGroupings(t *testing.T) {
+
+	valid := []string{
+		"2001-34",
+		// "second quarter of 2001"
+	}
+
+	for _, str := range valid {
+
+		_, err := ParseSubYearGroupings(str)
+
+		if err != nil {
+			t.Fatalf("Failed to parse '%s', %v", str, err)
+		}
+	}
+}
