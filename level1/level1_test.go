@@ -43,17 +43,17 @@ func TestSeason(t *testing.T) {
 
 }
 
-/*
 func TestQualifiedDate(t *testing.T) {
 
 	valid := []string{
-		"Y170000002",
-		"Y-170000002",
+		"1984?",
+		"2004-06~",
+		"2004-06-11%",
 	}
 
 	for _, str := range valid {
 
-		_, err := ParseLetterPrefixedCalendarYear(str)
+		_, err := ParseQualifiedDate(str)
 
 		if err != nil {
 			t.Fatalf("Failed to parse '%s', %v", str, err)
@@ -62,6 +62,7 @@ func TestQualifiedDate(t *testing.T) {
 
 }
 
+/*
 func TestUnspecifiedDigits(t *testing.T) {
 
 	valid := []string{
