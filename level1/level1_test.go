@@ -83,17 +83,42 @@ func TestUnspecifiedDigits(t *testing.T) {
 
 }
 
-/*
-func TestExtendedInterval(t *testing.T) {
+func TestExtendedIntervalEnd(t *testing.T) {
 
 	valid := []string{
-		"Y170000002",
-		"Y-170000002",
+		"1985-04-12/..",
+		"1985-04/..",
+		"1985/..",
+		"1985-04-12/",
+		"1985-04/",
+		"1985/",
 	}
 
 	for _, str := range valid {
 
-		_, err := ParseLetterPrefixedCalendarYear(str)
+		_, err := ParseExtendedIntervalEnd(str)
+
+		if err != nil {
+			t.Fatalf("Failed to parse '%s', %v", str, err)
+		}
+	}
+
+}
+
+func TestExtendedIntervalStart(t *testing.T) {
+
+	valid := []string{
+		"../1985-04-12",
+		"../1985-04",
+		"../1985",
+		"/1985-04-12",
+		"/1985-04",
+		"/1985",
+	}
+
+	for _, str := range valid {
+
+		_, err := ParseExtendedIntervalStart(str)
 
 		if err != nil {
 			t.Fatalf("Failed to parse '%s', %v", str, err)
@@ -105,13 +130,12 @@ func TestExtendedInterval(t *testing.T) {
 func TestNegativeCalendarYear(t *testing.T) {
 
 	valid := []string{
-		"Y170000002",
-		"Y-170000002",
+		"-1985",
 	}
 
 	for _, str := range valid {
 
-		_, err := ParseLetterPrefixedCalendarYear(str)
+		_, err := ParseNegativeCalendarYear(str)
 
 		if err != nil {
 			t.Fatalf("Failed to parse '%s', %v", str, err)
@@ -119,4 +143,3 @@ func TestNegativeCalendarYear(t *testing.T) {
 	}
 
 }
-*/

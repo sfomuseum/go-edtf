@@ -10,6 +10,9 @@ var re_calendaryear *regexp.Regexp
 var re_season *regexp.Regexp
 var re_qualified *regexp.Regexp
 var re_unspecified *regexp.Regexp
+var re_interval_end *regexp.Regexp
+var re_interval_start *regexp.Regexp
+var re_negative_year *regexp.Regexp
 
 func init() {
 
@@ -20,6 +23,13 @@ func init() {
 	re_qualified = regexp.MustCompile(`^(?:(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?)(\?|~|%)$`)
 
 	re_unspecified = regexp.MustCompile(`^(?:(\d{3})(X)|(\d{2})(XX)|(\d{4})-(XX)|(\d{4})\-(\d{2})\-(XX)|(\d{4})\-(XX)\-(XX))$`)
+
+	re_interval_end = regexp.MustCompile(`^(?:(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?)\/(\.\.)?$`)
+
+	re_interval_start = regexp.MustCompile(`^(\.\.)?\/(?:(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?)$`)
+
+	re_negative_year = regexp.MustCompile(`^\-(\d{4})$`)
+
 }
 
 func ParseLetterPrefixedCalendarYear(edtf_str string) (*edtf.EDTFDate, error) {
@@ -58,12 +68,29 @@ func ParseUnspecifiedDigits(edtf_str string) (*edtf.EDTFDate, error) {
 	return nil, nil
 }
 
-func ParseExtendedInterval(edtf_str string) (*edtf.EDTFDate, error) {
+func ParseExtendedIntervalEnd(edtf_str string) (*edtf.EDTFDate, error) {
+
+	if !re_interval_end.MatchString(edtf_str) {
+		return nil, errors.New("Invalid Level 1 extended interval (end) string")
+	}
+
+	return nil, nil
+}
+
+func ParseExtendedIntervalStart(edtf_str string) (*edtf.EDTFDate, error) {
+
+	if !re_interval_start.MatchString(edtf_str) {
+		return nil, errors.New("Invalid Level 1 extended interval (start) string")
+	}
 
 	return nil, nil
 }
 
 func ParseNegativeCalendarYear(edtf_str string) (*edtf.EDTFDate, error) {
+
+	if !re_negative_year.MatchString(edtf_str) {
+		return nil, errors.New("Invalid Level 1 negative year string")
+	}
 
 	return nil, nil
 }
