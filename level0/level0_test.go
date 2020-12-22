@@ -38,7 +38,7 @@ func TestParseDateTime(t *testing.T) {
 		if err != nil {
 			t.Fatalf("Failed to parse '%s', %v", str, err)
 		}
-	}	
+	}
 }
 
 func TestParseTimeInterval(t *testing.T) {

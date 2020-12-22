@@ -2,8 +2,8 @@ package level0
 
 import (
 	"errors"
-	"regexp"
 	"github.com/whosonfirst/go-edtf"
+	"regexp"
 )
 
 var re_date *regexp.Regexp
@@ -21,7 +21,7 @@ func init() {
 
 func ParseDate(edtf_str string) (*edtf.EDTFDate, error) {
 
-	if !re_date.MatchString(edtf_str){
+	if !re_date.MatchString(edtf_str) {
 		return nil, errors.New("Invalid Level 0 date string")
 	}
 
@@ -30,18 +30,18 @@ func ParseDate(edtf_str string) (*edtf.EDTFDate, error) {
 
 func ParseDateTime(edtf_str string) (*edtf.EDTFDate, error) {
 
-	if !re_date_time.MatchString(edtf_str){
+	if !re_date_time.MatchString(edtf_str) {
 		return nil, errors.New("Invalid Level 0 date and time string")
 	}
 
-	return nil, nil	
+	return nil, nil
 }
 
 func ParseTimeInterval(edtf_str string) (*edtf.EDTFDate, error) {
 
-	if !re_time_interval.MatchString(edtf_str){
+	if !re_time_interval.MatchString(edtf_str) {
 		return nil, errors.New("Invalid Level 0 time interval string")
 	}
 
-	return nil, nil	
+	return nil, nil
 }

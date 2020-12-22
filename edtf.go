@@ -15,11 +15,11 @@ type DateRange struct {
 }
 
 type Date struct {
-	String string
-	Time time.Time
-	Uncertain bool
+	String      string
+	Time        time.Time
+	Uncertain   bool
 	Approximate bool
-	Unknown bool
-	Open bool
-	Precision string
+	Unknown     bool
+	Open        bool
+	Precision   string
 }

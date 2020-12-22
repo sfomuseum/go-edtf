@@ -1,8 +1,8 @@
 package level1
 
 import (
-	"errors"
-	"regexp"
+	// "errors"
+	// "regexp"
 	"testing"
 )
 
@@ -26,20 +26,21 @@ func TestLetterPrefixedCalendarYear(t *testing.T) {
 func TestSeason(t *testing.T) {
 
 	valid := []string{
-		"Y170000002",
-		"Y-170000002",
+		"2001-01",
+		"2001-24",
+		"Spring, 2002",
+		"winter, 2002",
 	}
 
 	for _, str := range valid {
 
-		_, err := ParseLetterPrefixedCalendarYear(str)
+		_, err := ParseSeason(str)
 
 		if err != nil {
 			t.Fatalf("Failed to parse '%s', %v", str, err)
 		}
 	}
-	
-	return nil, nil
+
 }
 
 func TestQualifiedDate(t *testing.T) {
@@ -57,8 +58,7 @@ func TestQualifiedDate(t *testing.T) {
 			t.Fatalf("Failed to parse '%s', %v", str, err)
 		}
 	}
-	
-	return nil, nil
+
 }
 
 func TestUnspecifiedDigits(t *testing.T) {
@@ -76,8 +76,7 @@ func TestUnspecifiedDigits(t *testing.T) {
 			t.Fatalf("Failed to parse '%s', %v", str, err)
 		}
 	}
-	
-	return nil, nil
+
 }
 
 func TestExtendedInterval(t *testing.T) {
@@ -95,8 +94,7 @@ func TestExtendedInterval(t *testing.T) {
 			t.Fatalf("Failed to parse '%s', %v", str, err)
 		}
 	}
-	
-	return nil, nil
+
 }
 
 func TestNegativeCalendarYear(t *testing.T) {
@@ -114,7 +112,5 @@ func TestNegativeCalendarYear(t *testing.T) {
 			t.Fatalf("Failed to parse '%s', %v", str, err)
 		}
 	}
-	
-	return nil, nil
-}
 
+}
