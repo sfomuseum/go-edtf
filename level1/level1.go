@@ -34,6 +34,15 @@ func init() {
 
 }
 
+/*
+
+'Y' may be used at the beginning of the date string to signify that the date is a year, when (and only when) the year exceeds four digits, i.e. for years later than 9999 or earlier than -9999.
+
+    Example 1             'Y170000002' is the year 170000002
+    Example 2             'Y-170000002' is the year -170000002
+
+*/
+
 func ParseLetterPrefixedCalendarYear(edtf_str string) (*edtf.EDTFDate, error) {
 
 	if !re_calendaryear.MatchString(edtf_str) {
@@ -42,6 +51,16 @@ func ParseLetterPrefixedCalendarYear(edtf_str string) (*edtf.EDTFDate, error) {
 
 	return nil, nil
 }
+
+/*
+
+Seasons
+
+The values 21, 22, 23, 24 may be used used to signify ' Spring', 'Summer', 'Autumn', 'Winter', respectively, in place of a month value (01 through 12) for a year-and-month format string.
+
+    Example                   2001-21     Spring, 2001
+
+*/
 
 func ParseSeason(edtf_str string) (*edtf.EDTFDate, error) {
 
@@ -52,6 +71,18 @@ func ParseSeason(edtf_str string) (*edtf.EDTFDate, error) {
 	return nil, nil
 }
 
+/*
+
+Qualification of a date (complete)
+
+The characters '?', '~' and '%' are used to mean "uncertain", "approximate", and "uncertain" as well as "approximate", respectively. These characters may occur only at the end of the date string and apply to the entire date.
+
+    Example 1             '1984?'             year uncertain (possibly the year 1984, but not definitely)
+    Example 2              '2004-06~''       year-month approximate
+    Example 3        '2004-06-11%'          entire date (year-month-day) uncertain and approximate
+
+*/
+
 func ParseQualifiedDate(edtf_str string) (*edtf.EDTFDate, error) {
 
 	if !re_qualified.MatchString(edtf_str) {
@@ -61,6 +92,25 @@ func ParseQualifiedDate(edtf_str string) (*edtf.EDTFDate, error) {
 	return nil, nil
 }
 
+/*
+
+Unspecified digit(s) from the right
+
+The character 'X' may be used in place of one or more rightmost digits to indicate that the value of that digit is unspecified, for the following cases:
+
+    A year with one or two (rightmost) unspecified digits in a year-only expression (year precision)
+    Example 1       ‘201X’
+    Example 2       ‘20XX’
+    Year specified, month unspecified in a year-month expression (month precision)
+    Example 3       ‘2004-XX’
+    Year and month specified, day unspecified in a year-month-day expression (day precision)
+    Example 4       ‘1985-04-XX’               
+    Year specified, day and month unspecified in a year-month-day expression  (day precision)
+    Example 5       ‘1985-XX-XX’              
+
+
+*/
+
 func ParseUnspecifiedDigits(edtf_str string) (*edtf.EDTFDate, error) {
 
 	if !re_unspecified.MatchString(edtf_str) {
@@ -69,6 +119,52 @@ func ParseUnspecifiedDigits(edtf_str string) (*edtf.EDTFDate, error) {
 
 	return nil, nil
 }
+
+/*
+
+Extended Interval (L1)
+
+    A null string may be used for the start or end date when it is unknown.
+    Double-dot (“..”) may be used when either the start or end date is not specified, either because there is none or for any other reason.
+    A modifier may appear at the end of the date to indicate "uncertain" and/or "approximate"
+
+Open end time interval
+
+    Example 1          ‘1985-04-12/..’
+    interval starting at 1985 April 12th with day precision; end open
+    Example 2          ‘1985-04/..’
+    interval starting at 1985 April with month precision; end open
+    Example 3          ‘1985/..’
+    interval starting at year 1985 with year precision; end open
+
+Open start time interval
+
+    Example 4          ‘../1985-04-12’
+    interval with open start; ending 1985 April 12th with day precision
+    Example 5          ‘../1985-04’
+    interval with open start; ending 1985 April with month precision
+    Example 6          ‘../1985’
+    interval with open start; ending at year 1985 with year precision
+
+Time interval with unknown end
+
+    Example 7          ‘1985-04-12/’
+    interval starting 1985 April 12th with day precision; end unknown
+    Example 8          ‘1985-04/’
+    interval starting 1985 April with month precision; end unknown
+    Example 9          ‘1985/’
+    interval starting year 1985 with year precision; end unknown
+
+Time interval with unknown start
+
+    Example 10       ‘/1985-04-12’
+    interval with unknown start; ending 1985 April 12th with day precision
+    Example 11       ‘/1985-04’
+    interval with unknown start; ending 1985 April with month precision
+    Example 12       ‘/1985’
+    interval with unknown start; ending year 1985 with year precision
+ 
+*/
 
 func ParseExtendedIntervalEnd(edtf_str string) (*edtf.EDTFDate, error) {
 
@@ -87,6 +183,16 @@ func ParseExtendedIntervalStart(edtf_str string) (*edtf.EDTFDate, error) {
 
 	return nil, nil
 }
+
+/*
+
+ Negative calendar year
+
+    Example 1       ‘-1985’
+
+Note: ISO 8601 Part 1 does not support negative year. 
+
+*/
 
 func ParseNegativeCalendarYear(edtf_str string) (*edtf.EDTFDate, error) {
 
