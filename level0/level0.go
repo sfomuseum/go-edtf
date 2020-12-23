@@ -6,6 +6,7 @@ import (
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/calendar"
 	"regexp"
+	"strings"
 	"time"
 )
 
@@ -163,11 +164,65 @@ Date and Time
 
 func ParseDateTime(edtf_str string) (*edtf.EDTFDate, error) {
 
+	/*
 	if !re_date_time.MatchString(edtf_str) {
 		return nil, errors.New("Invalid Level 0 date and time string")
 	}
+	*/
+	
+	m := re_date_time.FindStringSubmatch(edtf_str)
 
-	return nil, nil
+	if len(m) != 12 {
+		return nil, errors.New("Invalid Level 0 date and time string")
+	}
+	
+	t_fmt := "2006-01-02T15:04:05"
+	
+	if m[7] == "Z" {
+		t_fmt = "2006-01-02T15:04:05Z"
+	}
+
+	if m[8] == "-" || m[8] == "+" {
+
+		if strings.HasPrefix(m[10], ":") {
+			t_fmt = "2006-01-02T15:04:05-07:00"			
+		} else {
+			t_fmt = "2006-01-02T15:04:05-07"
+		}
+	}
+
+	t, err := time.Parse(t_fmt, edtf_str)
+
+	if err != nil {
+		return nil, err
+	}
+
+	upper_date := &edtf.Date{
+		Time: t,
+	}
+
+	lower_date := &edtf.Date{
+		Time: t,
+	}
+
+	upper_range := &edtf.DateRange{
+		Upper: upper_date,
+		Lower: upper_date,
+	}
+
+	lower_range := &edtf.DateRange{
+		Upper: lower_date,
+		Lower: lower_date,
+	}
+
+	d := &edtf.EDTFDate{
+		Upper: upper_range,
+		Lower: lower_range,
+		Raw:   edtf_str,
+		Level: LEVEL,
+	}
+	
+	return d, nil
 }
 
 /*
