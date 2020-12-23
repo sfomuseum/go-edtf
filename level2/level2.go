@@ -47,6 +47,10 @@ Exponential year
 
 */
 
+func IsExponentialYear(edtf_str string) bool {
+	return re_exponential_year.MatchString(edtf_str)
+}
+
 func ParseExponentialYear(edtf_str string) (*edtf.EDTFDate, error) {
 
 	if !re_exponential_year.MatchString(edtf_str) {
@@ -70,6 +74,10 @@ A year (expressed in any of the three allowable forms: four-digit, 'Y' prefix, o
     some year between 338000 and 338999, estimated to be 338800.
 
 */
+
+func IsSignificantDigits(edtf_str string) bool {
+	return re_significant_digits.MatchString(edtf_str)
+}
 
 func ParseSignificantDigits(edtf_str string) (*edtf.EDTFDate, error) {
 
@@ -110,6 +118,10 @@ Level 2 extends the season feature of Level 1 to include the following sub-year 
     second quarter of 2001
 
 */
+
+func IsSubYearGrouping(edtf_str string) bool {
+	return re_sub_year.MatchString(edtf_str)
+}
 
 func ParseSubYearGroupings(edtf_str string) (*edtf.EDTFDate, error) {
 
@@ -158,6 +170,10 @@ All Members
 
 */
 
+func IsSetRepresentation(edtf_str string) bool {
+	return re_set_representations.MatchString(edtf_str)
+}
+
 func ParseSetRepresentations(edtf_str string) (*edtf.EDTFDate, error) {
 
 	if !re_set_representations.MatchString(edtf_str) {
@@ -193,6 +209,10 @@ A qualification character to the immediate left of a component applies to that c
 
 */
 
+func IsGroupQualification(edtf_str string) bool {
+	return re_group_qualification.MatchString(edtf_str)
+}
+
 func ParseGroupQualification(edtf_str string) (*edtf.EDTFDate, error) {
 
 	if !re_group_qualification.MatchString(edtf_str) {
@@ -200,6 +220,10 @@ func ParseGroupQualification(edtf_str string) (*edtf.EDTFDate, error) {
 	}
 
 	return nil, nil
+}
+
+func IsIndividualQualification(edtf_str string) bool {
+	return re_individual_qualification.MatchString(edtf_str)
 }
 
 func ParseIndividualQualification(edtf_str string) (*edtf.EDTFDate, error) {
@@ -232,6 +256,10 @@ For level 2 the unspecified digit, 'X', may occur anywhere within a component.
 
 */
 
+func IsUnspecifiedDigit(edtf_str string) bool {
+	return re_unspecified_digit.MatchString(edtf_str)
+}
+
 func ParseUnspecifiedDigit(edtf_str string) (*edtf.EDTFDate, error) {
 
 	if !re_unspecified_digit.MatchString(edtf_str) {
@@ -252,6 +280,10 @@ For Level 2 portions of a date within an interval may be designated as approxima
 
 
 */
+
+func IsInterval(edtf_str string) bool {
+	return re_interval.MatchString(edtf_str)
+}
 
 func ParseInterval(edtf_str string) (*edtf.EDTFDate, error) {
 

@@ -12,17 +12,52 @@ import (
 
 const LEVEL int = 0
 
+const PATTERN_DATE string = `^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?$`
+const PATTERN_DATE_TIME string = `^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(Z|(\+|-)(\d{2})(\:(\d{2}))?)?$`
+const PATTERN_TIME_INTERVAL string = `^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?\/(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?$`
+
 var re_date *regexp.Regexp
 var re_date_time *regexp.Regexp
 var re_time_interval *regexp.Regexp
 
+var re_level0 *regexp.Regexp
+
 func init() {
 
-	re_date = regexp.MustCompile(`^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?$`)
+	re_date = regexp.MustCompile(PATTERN_DATE)
 
-	re_date_time = regexp.MustCompile(`^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(Z|(\+|-)(\d{2})(\:(\d{2}))?)?$`)
+	re_date_time = regexp.MustCompile(PATTERN_DATE_TIME)
 
-	re_time_interval = regexp.MustCompile(`^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?\/(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?$`)
+	re_time_interval = regexp.MustCompile(PATTERN_TIME_INTERVAL)
+
+	level0_patterns := []string{
+		PATTERN_DATE,
+		PATTERN_DATE_TIME,
+		PATTERN_TIME_INTERVAL,
+	}
+
+	re_level0 = regexp.MustCompile(`(` + strings.Join(level0_patterns, "|") + `)`)
+}
+
+func IsLevel0(edtf_str string) bool {
+	return re_level0.MatchString(edtf_str)
+}
+
+func ParseLevel0(edtf_str string) (*edtf.EDTFDate, error) {
+
+	if IsDate(edtf_str) {
+		return ParseDate(edtf_str)
+	}
+
+	if IsDateTime(edtf_str) {
+		return ParseDateTime(edtf_str)
+	}
+
+	if IsTimeInterval(edtf_str) {
+		return ParseTimeInterval(edtf_str)
+	}
+
+	return nil, errors.New("Invalid Level 0 string")
 }
 
 /*
@@ -37,6 +72,10 @@ Date
     Example 3          ‘1985’ refers to the calendar year 1985 with year precision.
 
 */
+
+func IsDate(edtf_str string) bool {
+	return re_date.MatchString(edtf_str)
+}
 
 func ParseDate(edtf_str string) (*edtf.EDTFDate, error) {
 
@@ -91,13 +130,11 @@ Date and Time
 
 */
 
-func ParseDateTime(edtf_str string) (*edtf.EDTFDate, error) {
+func IsDateTime(edtf_str string) bool {
+	return re_date_time.MatchString(edtf_str)
+}
 
-	/*
-		if !re_date_time.MatchString(edtf_str) {
-			return nil, errors.New("Invalid Level 0 date and time string")
-		}
-	*/
+func ParseDateTime(edtf_str string) (*edtf.EDTFDate, error) {
 
 	m := re_date_time.FindStringSubmatch(edtf_str)
 
@@ -169,13 +206,11 @@ EDTF Level 0 adopts representations of a time interval where both the start and 
 
 */
 
-func ParseTimeInterval(edtf_str string) (*edtf.EDTFDate, error) {
+func IsTimeInterval(edtf_str string) bool {
+	return re_time_interval.MatchString(edtf_str)
+}
 
-	/*
-		if !re_time_interval.MatchString(edtf_str) {
-			return nil, errors.New("Invalid Level 0 time interval string")
-		}
-	*/
+func ParseTimeInterval(edtf_str string) (*edtf.EDTFDate, error) {
 
 	m := re_time_interval.FindStringSubmatch(edtf_str)
 

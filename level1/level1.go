@@ -43,6 +43,10 @@ func init() {
 
 */
 
+func IsLetterPrefixedCalendarYear(edtf_str string) bool {
+	return re_calendaryear.MatchString(edtf_str)
+}
+
 func ParseLetterPrefixedCalendarYear(edtf_str string) (*edtf.EDTFDate, error) {
 
 	if !re_calendaryear.MatchString(edtf_str) {
@@ -61,6 +65,10 @@ The values 21, 22, 23, 24 may be used used to signify ' Spring', 'Summer', 'Autu
     Example                   2001-21     Spring, 2001
 
 */
+
+func IsSeason(edtf_str string) bool {
+	return re_season.MatchString(edtf_str)
+}
 
 func ParseSeason(edtf_str string) (*edtf.EDTFDate, error) {
 
@@ -83,6 +91,10 @@ The characters '?', '~' and '%' are used to mean "uncertain", "approximate", and
 
 */
 
+func IsQualifiedDate(edtf_str string) bool {
+	return re_qualified.MatchString(edtf_str)
+}
+
 func ParseQualifiedDate(edtf_str string) (*edtf.EDTFDate, error) {
 
 	if !re_qualified.MatchString(edtf_str) {
@@ -104,12 +116,16 @@ The character 'X' may be used in place of one or more rightmost digits to indica
     Year specified, month unspecified in a year-month expression (month precision)
     Example 3       ‘2004-XX’
     Year and month specified, day unspecified in a year-month-day expression (day precision)
-    Example 4       ‘1985-04-XX’               
+    Example 4       ‘1985-04-XX’
     Year specified, day and month unspecified in a year-month-day expression  (day precision)
-    Example 5       ‘1985-XX-XX’              
+    Example 5       ‘1985-XX-XX’
 
 
 */
+
+func IsUnspecifiedDigits(edtf_str string) bool {
+	return re_qualified.MatchString(edtf_str)
+}
 
 func ParseUnspecifiedDigits(edtf_str string) (*edtf.EDTFDate, error) {
 
@@ -163,8 +179,21 @@ Time interval with unknown start
     interval with unknown start; ending 1985 April with month precision
     Example 12       ‘/1985’
     interval with unknown start; ending year 1985 with year precision
- 
+
 */
+
+func IsExtendedInterval(edtf_str string) bool {
+
+	if !re_interval_end.MatchString(edtf_str) {
+		return false
+	}
+
+	if !re_interval_start.MatchString(edtf_str) {
+		return false
+	}
+
+	return true
+}
 
 func ParseExtendedIntervalEnd(edtf_str string) (*edtf.EDTFDate, error) {
 
@@ -190,9 +219,13 @@ func ParseExtendedIntervalStart(edtf_str string) (*edtf.EDTFDate, error) {
 
     Example 1       ‘-1985’
 
-Note: ISO 8601 Part 1 does not support negative year. 
+Note: ISO 8601 Part 1 does not support negative year.
 
 */
+
+func IsNegativeCalendarYear(edtf_str string) bool {
+	return re_negative_year.MatchString(edtf_str)
+}
 
 func ParseNegativeCalendarYear(edtf_str string) (*edtf.EDTFDate, error) {
 
