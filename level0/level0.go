@@ -2,11 +2,10 @@ package level0
 
 import (
 	"errors"
-	"github.com/whosonfirst/go-edtf"
-	"regexp"
-
 	"fmt"
-	"strconv"
+	"github.com/whosonfirst/go-edtf"
+	"github.com/whosonfirst/go-edtf/calendar"
+	"regexp"
 	"time"
 )
 
@@ -77,25 +76,24 @@ func ParseDate(edtf_str string) (*edtf.EDTFDate, error) {
 		upper_yyyy = yyyy
 		upper_mm = mm
 
-		mm, err := strconv.Atoi(upper_mm)
+		upper_ym := fmt.Sprintf("%s-%s", upper_yyyy, upper_mm)
+
+		dd, err := calendar.DaysInMonthWithString(upper_ym)
 
 		if err != nil {
 			return nil, err
 		}
 
-		next_mm := mm + 1
+		upper_dd = fmt.Sprintf("%02d", dd)
 
-		next_ymd := fmt.Sprintf("%s-%02d-01", upper_yyyy, next_mm)
-		next_t, err := time.Parse("2006-01-02", next_ymd)
+	} else {
+		upper_yyyy = yyyy
+		upper_mm = mm
+		upper_dd = dd
 
-		if err != nil {
-			return nil, err
-		}
-
-		mm_t := next_t.AddDate(0, 0, -1)
-
-		upper_dd = fmt.Sprintf("%02d", mm_t.Day())
-
+		lower_yyyy = yyyy
+		lower_mm = mm
+		lower_dd = dd
 	}
 
 	lower_hms := "00:00:00"
@@ -103,6 +101,7 @@ func ParseDate(edtf_str string) (*edtf.EDTFDate, error) {
 
 	upper_str := fmt.Sprintf("%s-%s-%sT%s", upper_yyyy, upper_mm, upper_dd, upper_hms)
 	lower_str := fmt.Sprintf("%s-%s-%sT%s", lower_yyyy, lower_mm, lower_dd, lower_hms)
+
 	upper_t, err := time.Parse("2006-01-02T15:04:05", upper_str)
 
 	if err != nil {

@@ -2,7 +2,7 @@ package level0
 
 import (
 	"testing"
-	"fmt"
+	"time"
 )
 
 func TestParseDate(t *testing.T) {
@@ -28,7 +28,15 @@ func TestParseDate(t *testing.T) {
 		t.Fatal("Failed to parse '2020-02'")
 	}
 
-	fmt.Printf("%v\n", dt.Upper.Upper.Time)
+	tm := dt.Upper.Upper.Time
+
+	tm_str := tm.Format(time.RFC3339)
+	expected_str := "2020-02-29T23:59:59Z"
+
+	if tm_str != expected_str {
+		t.Fatalf("Invalid time string. Expected '%s' but got '%s'", expected_str, tm_str)
+	}
+
 }
 
 func TestParseDateTime(t *testing.T) {
