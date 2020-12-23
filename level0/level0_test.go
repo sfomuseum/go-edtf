@@ -15,11 +15,16 @@ func TestParseDate(t *testing.T) {
 
 	for _, str := range valid {
 
-		_, err := ParseDate(str)
+		d, err := ParseDate(str)
 
 		if err != nil {
 			t.Fatalf("Failed to parse '%s', %v", str, err)
 		}
+
+		if d.String() != str {
+			t.Fatalf("Failed to stringify '%s', %v", str, err)
+		}
+
 	}
 
 	dt, err := ParseDate("2020-02")
@@ -50,10 +55,14 @@ func TestParseDateTime(t *testing.T) {
 
 	for _, str := range valid {
 
-		_, err := ParseDateTime(str)
+		d, err := ParseDateTime(str)
 
 		if err != nil {
 			t.Fatalf("Failed to parse '%s', %v", str, err)
+		}
+
+		if d.String() != str {
+			t.Fatalf("Failed to stringify '%s', %v", str, err)
 		}
 	}
 }
@@ -71,10 +80,14 @@ func TestParseTimeInterval(t *testing.T) {
 
 	for _, str := range valid {
 
-		_, err := ParseTimeInterval(str)
+		d, err := ParseTimeInterval(str)
 
 		if err != nil {
 			t.Fatalf("Failed to parse '%s', %v", str, err)
+		}
+
+		if d.String() != str {
+			t.Fatalf("Failed to stringify '%s', %v", str, err)
 		}
 	}
 }

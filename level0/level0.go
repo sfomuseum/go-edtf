@@ -50,92 +50,21 @@ func ParseDate(edtf_str string) (*edtf.EDTFDate, error) {
 	mm := m[2]
 	dd := m[3]
 
-	var lower_yyyy string
-	var lower_mm string
-	var lower_dd string
-
-	var upper_yyyy string
-	var upper_mm string
-	var upper_dd string
-
-	if mm == "" && dd == "" {
-
-		lower_yyyy = yyyy
-		lower_mm = "01"
-		lower_dd = "01"
-
-		upper_yyyy = yyyy
-		upper_mm = "12"
-		upper_dd = "31"
-
-	} else if dd == "" {
-
-		lower_yyyy = yyyy
-		lower_mm = mm
-		lower_dd = "01"
-
-		upper_yyyy = yyyy
-		upper_mm = mm
-
-		upper_ym := fmt.Sprintf("%s-%s", upper_yyyy, upper_mm)
-
-		dd, err := calendar.DaysInMonthWithString(upper_ym)
-
-		if err != nil {
-			return nil, err
-		}
-
-		upper_dd = fmt.Sprintf("%02d", dd)
-
-	} else {
-		upper_yyyy = yyyy
-		upper_mm = mm
-		upper_dd = dd
-
-		lower_yyyy = yyyy
-		lower_mm = mm
-		lower_dd = dd
-	}
-
-	lower_hms := "00:00:00"
-	upper_hms := "23:59:59"
-
-	upper_str := fmt.Sprintf("%s-%s-%sT%s", upper_yyyy, upper_mm, upper_dd, upper_hms)
-	lower_str := fmt.Sprintf("%s-%s-%sT%s", lower_yyyy, lower_mm, lower_dd, lower_hms)
-
-	upper_t, err := time.Parse("2006-01-02T15:04:05", upper_str)
+	lower_range, err := dateRangeWithYMD(yyyy, mm, dd)
 
 	if err != nil {
 		return nil, err
 	}
 
-	lower_t, err := time.Parse("2006-01-02T15:04:05", lower_str)
+	upper_range := lower_range
 
 	if err != nil {
 		return nil, err
-	}
-
-	upper_date := &edtf.Date{
-		Time: upper_t,
-	}
-
-	lower_date := &edtf.Date{
-		Time: lower_t,
-	}
-
-	upper_range := &edtf.DateRange{
-		Upper: upper_date,
-		Lower: upper_date,
-	}
-
-	lower_range := &edtf.DateRange{
-		Upper: lower_date,
-		Lower: lower_date,
 	}
 
 	d := &edtf.EDTFDate{
-		Upper: upper_range,
 		Lower: lower_range,
+		Upper: upper_range,
 		Raw:   edtf_str,
 		Level: LEVEL,
 	}
@@ -165,19 +94,19 @@ Date and Time
 func ParseDateTime(edtf_str string) (*edtf.EDTFDate, error) {
 
 	/*
-	if !re_date_time.MatchString(edtf_str) {
-		return nil, errors.New("Invalid Level 0 date and time string")
-	}
+		if !re_date_time.MatchString(edtf_str) {
+			return nil, errors.New("Invalid Level 0 date and time string")
+		}
 	*/
-	
+
 	m := re_date_time.FindStringSubmatch(edtf_str)
 
 	if len(m) != 12 {
 		return nil, errors.New("Invalid Level 0 date and time string")
 	}
-	
+
 	t_fmt := "2006-01-02T15:04:05"
-	
+
 	if m[7] == "Z" {
 		t_fmt = "2006-01-02T15:04:05Z"
 	}
@@ -185,7 +114,7 @@ func ParseDateTime(edtf_str string) (*edtf.EDTFDate, error) {
 	if m[8] == "-" || m[8] == "+" {
 
 		if strings.HasPrefix(m[10], ":") {
-			t_fmt = "2006-01-02T15:04:05-07:00"			
+			t_fmt = "2006-01-02T15:04:05-07:00"
 		} else {
 			t_fmt = "2006-01-02T15:04:05-07"
 		}
@@ -198,11 +127,11 @@ func ParseDateTime(edtf_str string) (*edtf.EDTFDate, error) {
 	}
 
 	upper_date := &edtf.Date{
-		Time: t,
+		Time: &t,
 	}
 
 	lower_date := &edtf.Date{
-		Time: t,
+		Time: &t,
 	}
 
 	upper_range := &edtf.DateRange{
@@ -221,7 +150,7 @@ func ParseDateTime(edtf_str string) (*edtf.EDTFDate, error) {
 		Raw:   edtf_str,
 		Level: LEVEL,
 	}
-	
+
 	return d, nil
 }
 
@@ -242,9 +171,138 @@ EDTF Level 0 adopts representations of a time interval where both the start and 
 
 func ParseTimeInterval(edtf_str string) (*edtf.EDTFDate, error) {
 
-	if !re_time_interval.MatchString(edtf_str) {
+	/*
+		if !re_time_interval.MatchString(edtf_str) {
+			return nil, errors.New("Invalid Level 0 time interval string")
+		}
+	*/
+
+	m := re_time_interval.FindStringSubmatch(edtf_str)
+
+	if len(m) != 7 {
 		return nil, errors.New("Invalid Level 0 time interval string")
 	}
 
-	return nil, nil
+	start_yyyy := m[1]
+	start_mm := m[2]
+	start_dd := m[3]
+
+	end_yyyy := m[4]
+	end_mm := m[5]
+	end_dd := m[6]
+
+	lower_range, err := dateRangeWithYMD(start_yyyy, start_mm, start_dd)
+
+	if err != nil {
+		return nil, err
+	}
+
+	upper_range, err := dateRangeWithYMD(end_yyyy, end_mm, end_dd)
+
+	if err != nil {
+		return nil, err
+	}
+
+	d := &edtf.EDTFDate{
+		Lower: lower_range,
+		Upper: upper_range,
+		Raw:   edtf_str,
+		Level: LEVEL,
+	}
+
+	return d, nil
+}
+
+func dateRangeWithYMD(yyyy string, mm string, dd string) (*edtf.DateRange, error) {
+
+	lower, upper, err := timeRangeWithYMD(yyyy, mm, dd)
+
+	if err != nil {
+		return nil, err
+	}
+
+	dr := &edtf.DateRange{
+		Lower: &edtf.Date{
+			Time: lower,
+		},
+		Upper: &edtf.Date{
+			Time: upper,
+		},
+	}
+
+	return dr, nil
+}
+
+func timeRangeWithYMD(yyyy string, mm string, dd string) (*time.Time, *time.Time, error) {
+
+	var lower_yyyy string
+	var lower_mm string
+	var lower_dd string
+
+	var upper_yyyy string
+	var upper_mm string
+	var upper_dd string
+
+	if yyyy == "" {
+		return nil, nil, errors.New("Missing yyyy")
+	}
+
+	if mm == "" && dd == "" {
+
+		lower_yyyy = yyyy
+		lower_mm = "01"
+		lower_dd = "01"
+
+		upper_yyyy = yyyy
+		upper_mm = "12"
+		upper_dd = "31"
+
+	} else if dd == "" {
+
+		lower_yyyy = yyyy
+		lower_mm = mm
+		lower_dd = "01"
+
+		upper_yyyy = yyyy
+		upper_mm = mm
+
+		upper_ym := fmt.Sprintf("%s-%s", upper_yyyy, upper_mm)
+
+		dd, err := calendar.DaysInMonthWithString(upper_ym)
+
+		if err != nil {
+			return nil, nil, err
+		}
+
+		upper_dd = fmt.Sprintf("%02d", dd)
+
+	} else {
+		upper_yyyy = yyyy
+		upper_mm = mm
+		upper_dd = dd
+
+		lower_yyyy = yyyy
+		lower_mm = mm
+		lower_dd = dd
+	}
+
+	lower_hms := "00:00:00"
+	upper_hms := "23:59:59"
+
+	upper_str := fmt.Sprintf("%s-%s-%sT%s", upper_yyyy, upper_mm, upper_dd, upper_hms)
+	lower_str := fmt.Sprintf("%s-%s-%sT%s", lower_yyyy, lower_mm, lower_dd, lower_hms)
+
+	upper_t, err := time.Parse("2006-01-02T15:04:05", upper_str)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	lower_t, err := time.Parse("2006-01-02T15:04:05", lower_str)
+
+	if err != nil {
+		return nil, nil, err
+	}
+
+	return &lower_t, &upper_t, nil
 }

@@ -18,10 +18,22 @@ type DateRange struct {
 
 type Date struct {
 	// String      string
-	Time        time.Time
+	Time        *time.Time
 	Uncertain   bool
 	Approximate bool
 	Unknown     bool
 	Open        bool
 	Precision   string
+}
+
+/*
+
+Eventually this should be generated from the components pieces
+collected during parsing and compared against Raw but this will
+do for now (20201223/thisisaaronland)
+
+*/
+
+func (d *EDTFDate) String() string {
+	return d.Raw
 }
