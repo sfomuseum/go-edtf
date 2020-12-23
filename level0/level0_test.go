@@ -2,6 +2,7 @@ package level0
 
 import (
 	"testing"
+	"fmt"
 )
 
 func TestParseDate(t *testing.T) {
@@ -20,6 +21,14 @@ func TestParseDate(t *testing.T) {
 			t.Fatalf("Failed to parse '%s', %v", str, err)
 		}
 	}
+
+	dt, err := ParseDate("2020-02")
+
+	if err != nil {
+		t.Fatal("Failed to parse '2020-02'")
+	}
+
+	fmt.Printf("%v\n", dt.Upper.Upper.Time)
 }
 
 func TestParseDateTime(t *testing.T) {

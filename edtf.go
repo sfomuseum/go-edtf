@@ -5,19 +5,19 @@ import (
 )
 
 type EDTFDate struct {
-	Upper DateRange
-	Lower DateRange
+	Upper *DateRange
+	Lower *DateRange
 	Raw   string
 	Level int
 }
 
 type DateRange struct {
-	Upper Date
-	Lower Date
+	Upper *Date
+	Lower *Date
 }
 
 type Date struct {
-	String      string
+	// String      string
 	Time        time.Time
 	Uncertain   bool
 	Approximate bool

@@ -4,6 +4,10 @@ import (
 	"errors"
 	"github.com/whosonfirst/go-edtf"
 	"regexp"
+
+	"fmt"
+	"strconv"
+	"time"
 )
 
 const LEVEL int = 0
@@ -36,11 +40,107 @@ Date
 
 func ParseDate(edtf_str string) (*edtf.EDTFDate, error) {
 
-	if !re_date.MatchString(edtf_str) {
+	m := re_date.FindStringSubmatch(edtf_str)
+
+	if len(m) != 4 {
 		return nil, errors.New("Invalid Level 0 date string")
 	}
 
-	return nil, nil
+	yyyy := m[1]
+	mm := m[2]
+	dd := m[3]
+
+	var lower_yyyy string
+	var lower_mm string
+	var lower_dd string
+
+	var upper_yyyy string
+	var upper_mm string
+	var upper_dd string
+
+	if mm == "" && dd == "" {
+
+		lower_yyyy = yyyy
+		lower_mm = "01"
+		lower_dd = "01"
+
+		upper_yyyy = yyyy
+		upper_mm = "12"
+		upper_dd = "31"
+
+	} else if dd == "" {
+
+		lower_yyyy = yyyy
+		lower_mm = mm
+		lower_dd = "01"
+
+		upper_yyyy = yyyy
+		upper_mm = mm
+
+		mm, err := strconv.Atoi(upper_mm)
+
+		if err != nil {
+			return nil, err
+		}
+
+		next_mm := mm + 1
+
+		next_ymd := fmt.Sprintf("%s-%02d-01", upper_yyyy, next_mm)
+		next_t, err := time.Parse("2006-01-02", next_ymd)
+
+		if err != nil {
+			return nil, err
+		}
+
+		mm_t := next_t.AddDate(0, 0, -1)
+
+		upper_dd = fmt.Sprintf("%02d", mm_t.Day())
+
+	}
+
+	lower_hms := "00:00:00"
+	upper_hms := "23:59:59"
+
+	upper_str := fmt.Sprintf("%s-%s-%sT%s", upper_yyyy, upper_mm, upper_dd, upper_hms)
+	lower_str := fmt.Sprintf("%s-%s-%sT%s", lower_yyyy, lower_mm, lower_dd, lower_hms)
+	upper_t, err := time.Parse("2006-01-02T15:04:05", upper_str)
+
+	if err != nil {
+		return nil, err
+	}
+
+	lower_t, err := time.Parse("2006-01-02T15:04:05", lower_str)
+
+	if err != nil {
+		return nil, err
+	}
+
+	upper_date := &edtf.Date{
+		Time: upper_t,
+	}
+
+	lower_date := &edtf.Date{
+		Time: lower_t,
+	}
+
+	upper_range := &edtf.DateRange{
+		Upper: upper_date,
+		Lower: upper_date,
+	}
+
+	lower_range := &edtf.DateRange{
+		Upper: lower_date,
+		Lower: lower_date,
+	}
+
+	d := &edtf.EDTFDate{
+		Upper: upper_range,
+		Lower: lower_range,
+		Raw:   edtf_str,
+		Level: LEVEL,
+	}
+
+	return d, nil
 }
 
 /*
