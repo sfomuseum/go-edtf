@@ -4,60 +4,11 @@ import (
 	"testing"
 )
 
-var test_strings map[string][]string
-
-func init() {
-
-	test_strings = map[string][]string{
-		"prefixed_calendar_year": []string{
-			"Y170000002",
-			"Y-17000002",
-		},
-		"season": []string{
-			"2001-01",
-			"2001-24",
-			"Spring, 2002",
-			"winter, 2002",
-		},
-		"qualified_date": []string{
-			"1984?",
-			"2004-06~",
-			"2004-06-11%",
-		},
-		"unspecified_digits": []string{
-			"201X",
-			"20XX",
-			"2004-XX",
-			"1985-04-XX",
-			"1985-XX-XX",
-		},
-		"extended_interval_start": []string{
-			"../1985-04-12",
-			"../1985-04",
-			"../1985",
-			"/1985-04-12",
-			"/1985-04",
-			"/1985",
-		},
-		"extended_interval_end": []string{
-			"1985-04-12/..",
-			"1985-04/..",
-			"1985/..",
-			"1985-04-12/",
-			"1985-04/",
-			"1985/",
-		},
-		"negative_calendar_year": []string{
-			"-1985",
-		},
-	}
-}
-
 func TestIsLevel1(t *testing.T) {
 
 	valid := make([]string, 0)
 
-	for _, candidates := range test_strings {
+	for _, candidates := range Tests {
 
 		for _, str := range candidates {
 			valid = append(valid, str)
@@ -97,7 +48,7 @@ func TestParseString(t *testing.T) {
 
 	valid := make([]string, 0)
 
-	for _, candidates := range test_strings {
+	for _, candidates := range Tests {
 
 		for _, str := range candidates {
 			valid = append(valid, str)
@@ -122,7 +73,7 @@ func TestParseString(t *testing.T) {
 
 func TestLetterPrefixedCalendarYear(t *testing.T) {
 
-	valid, ok := test_strings["prefixed_calendar_year"]
+	valid, ok := Tests["prefixed_calendar_year"]
 
 	if !ok {
 		t.Fatalf("Failed to load test strings")
@@ -140,7 +91,7 @@ func TestLetterPrefixedCalendarYear(t *testing.T) {
 
 func TestSeason(t *testing.T) {
 
-	valid, ok := test_strings["season"]
+	valid, ok := Tests["season"]
 
 	if !ok {
 		t.Fatalf("Failed to load test strings")
@@ -159,7 +110,7 @@ func TestSeason(t *testing.T) {
 
 func TestQualifiedDate(t *testing.T) {
 
-	valid, ok := test_strings["qualified_date"]
+	valid, ok := Tests["qualified_date"]
 
 	if !ok {
 		t.Fatalf("Failed to load test strings")
@@ -178,7 +129,7 @@ func TestQualifiedDate(t *testing.T) {
 
 func TestUnspecifiedDigits(t *testing.T) {
 
-	valid, ok := test_strings["unspecified_digits"]
+	valid, ok := Tests["unspecified_digits"]
 
 	if !ok {
 		t.Fatalf("Failed to load test strings")
@@ -197,7 +148,7 @@ func TestUnspecifiedDigits(t *testing.T) {
 
 func TestExtendedIntervalEnd(t *testing.T) {
 
-	valid, ok := test_strings["extended_interval_end"]
+	valid, ok := Tests["extended_interval_end"]
 
 	if !ok {
 		t.Fatalf("Failed to load test strings")
@@ -216,7 +167,7 @@ func TestExtendedIntervalEnd(t *testing.T) {
 
 func TestExtendedIntervalStart(t *testing.T) {
 
-	valid, ok := test_strings["extended_interval_start"]
+	valid, ok := Tests["extended_interval_start"]
 
 	if !ok {
 		t.Fatalf("Failed to load test strings")
@@ -235,7 +186,7 @@ func TestExtendedIntervalStart(t *testing.T) {
 
 func TestNegativeCalendarYear(t *testing.T) {
 
-	valid, ok := test_strings["negative_calendar_year"]
+	valid, ok := Tests["negative_calendar_year"]
 
 	if !ok {
 		t.Fatalf("Failed to load test strings")

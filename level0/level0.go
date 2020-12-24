@@ -21,6 +21,28 @@ var re_date_time *regexp.Regexp
 var re_time_interval *regexp.Regexp
 var re_level0 *regexp.Regexp
 
+var Tests map[string][]string = map[string][]string{
+	"date": []string{
+		"1985-04-12",
+		"1985-04",
+		"1985",
+	},
+	"date_time": []string{
+		"1985-04-12T23:20:30",
+		"1985-04-12T23:20:30Z",
+		"1985-04-12T23:20:30-04",
+		"1985-04-12T23:20:30+04:30",
+	},
+	"time_interval": []string{
+		"1964/2008",
+		"2004-06/2006-08",
+		"2004-02-01/2005-02-08",
+		"2004-02-01/2005-02",
+		"2004-02-01/2005",
+		"2005/2006-02",
+	},
+}
+
 func init() {
 
 	re_date = regexp.MustCompile(PATTERN_DATE)
@@ -36,6 +58,7 @@ func init() {
 	}
 
 	re_level0 = regexp.MustCompile(`(` + strings.Join(level0_patterns, "|") + `)`)
+
 }
 
 func IsLevel0(edtf_str string) bool {

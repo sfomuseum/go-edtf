@@ -28,6 +28,53 @@ var re_unspecified_digit *regexp.Regexp
 var re_interval *regexp.Regexp
 var re_level2 *regexp.Regexp
 
+var Tests map[string][]string = map[string][]string{
+	"exponential_year": []string{
+		"Y-17E7",
+	},
+	"significant_digits": []string{
+		"1950S2",
+		"Y171010000S3",
+		"Y3388E2S3",
+	},
+	"sub_year_groupings": []string{
+		"2001-34",
+		// "second quarter of 2001"
+	},
+	"set_representations": []string{
+		"[1667,1668,1670..1672]",
+		"[..1760-12-03]",
+		"[1760-12..]",
+		"[1760-01,1760-02,1760-12..]",
+		"[1667,1760-12]",
+		"[..1984]",
+		"{1667,1668,1670..1672}",
+		"{1960,1961-12}",
+		"{..1984}",
+	},
+	"group_qualification": []string{
+		"2004-06-11%",
+		"2004-06~-11",
+		"2004?-06-11",
+	},
+	"individual_qualification": []string{
+		"?2004-06-~11",
+		"2004-%06-11",
+	},
+	"unspecified_digit": []string{
+		"156X-12-25",
+		"15XX-12-25",
+		"XXXX-12-XX",
+		"1XXX-XX",
+		"1XXX-12",
+		"1984-1X",
+	},
+	"interval": []string{
+		"2004-06-~01/2004-06-~20",
+		"2004-06-XX/2004-07-03",
+	},
+}
+
 func init() {
 
 	re_exponential_year = regexp.MustCompile(PATTERN_EXPONENTIAL_YEAR)

@@ -27,6 +27,50 @@ var re_interval_start *regexp.Regexp
 var re_negative_year *regexp.Regexp
 var re_level1 *regexp.Regexp
 
+var Tests map[string][]string = map[string][]string{
+	"prefixed_calendar_year": []string{
+		"Y170000002",
+		"Y-17000002",
+	},
+	"season": []string{
+		"2001-01",
+		"2001-24",
+		"Spring, 2002",
+		"winter, 2002",
+	},
+	"qualified_date": []string{
+		"1984?",
+		"2004-06~",
+		"2004-06-11%",
+	},
+	"unspecified_digits": []string{
+		"201X",
+		"20XX",
+		"2004-XX",
+		"1985-04-XX",
+		"1985-XX-XX",
+	},
+	"extended_interval_start": []string{
+		"../1985-04-12",
+		"../1985-04",
+		"../1985",
+		"/1985-04-12",
+		"/1985-04",
+		"/1985",
+	},
+	"extended_interval_end": []string{
+		"1985-04-12/..",
+		"1985-04/..",
+		"1985/..",
+		"1985-04-12/",
+		"1985-04/",
+		"1985/",
+	},
+	"negative_calendar_year": []string{
+		"-1985",
+	},
+}
+
 func init() {
 
 	re_calendaryear = regexp.MustCompile(PATTERN_CALENDAR_YEAR)
