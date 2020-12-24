@@ -4,9 +4,19 @@ import (
 	"errors"
 	"github.com/whosonfirst/go-edtf"
 	"regexp"
+	"strings"
 )
 
 const LEVEL int = 2
+
+const PATTERN_EXPONENTIAL_YEAR string = `^(?i)Y(\-?\d+)E(\d+)$`
+const PATTERN_SIGNIFICANT_DIGITS string = `^(?:(\d{4})S(\d+)|Y(\d+)S(\d+)|Y(\d+)E(\d+)S(\d+))$`
+const PATTERN_SUB_YEAR string = `^(\d{4})\-(2[1-9]|3[0-9]|4[0-1])$`
+const PATTERN_SET_REPRESENTATIONS string = `^(\[|\{)(\.\.)?(?:(?:(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?)(,|\.\.)?)+(\.\.)?(\}|\])$`
+const PATTERN_GROUP_QUALIFICATION string = `^(?:(\d{4})(%|~|\?)?(?:-(\d{2})(%|~|\?)?(?:-(\d{2})(%|~|\?)?)?)?)$`
+const PATTERN_INDIVIDUAL_QUALIFICATION string = `^(?:(%|~|\?)?(\d{4})(?:-(%|~|\?)?(\d{2})(?:-(%|~|\?)?(\d{2}))?)?)$`
+const PATTERN_UNSPECIFIED_DIGIT string = `^([0-9X]{4})(?:-([0-9X]{2})(?:-([0-9X]{2}))?)?$`
+const PATTERN_INTERVAL string = `^(%|~|\?)?([0-9X]{4})(?:-(%|~|\?)?([0-9X]{2})(?:-(%|~|\?)?([0-9X]{2}))?)?\/(%|~|\?)?([0-9X]{4})(?:-(%|~|\?)?([0-9X]{2})(?:-(%|~|\?)?([0-9X]{2}))?)?$`
 
 var re_exponential_year *regexp.Regexp
 var re_significant_digits *regexp.Regexp
@@ -16,24 +26,80 @@ var re_group_qualification *regexp.Regexp
 var re_individual_qualification *regexp.Regexp
 var re_unspecified_digit *regexp.Regexp
 var re_interval *regexp.Regexp
+var re_level2 *regexp.Regexp
 
 func init() {
 
-	re_exponential_year = regexp.MustCompile(`^(?i)Y(\-?\d+)E(\d+)$`)
+	re_exponential_year = regexp.MustCompile(PATTERN_EXPONENTIAL_YEAR)
 
-	re_significant_digits = regexp.MustCompile(`(?:(\d{4})S(\d+)|Y(\d+)S(\d+)|Y(\d+)E(\d+)S(\d+))$`)
+	re_significant_digits = regexp.MustCompile(PATTERN_SIGNIFICANT_DIGITS)
 
-	re_sub_year = regexp.MustCompile(`^(\d{4})\-(2[1-9]|3[0-9]|4[0-1])$`)
+	re_sub_year = regexp.MustCompile(PATTERN_SUB_YEAR)
 
-	re_set_representations = regexp.MustCompile(`^(\[|\{)(\.\.)?(?:(?:(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?)(,|\.\.)?)+(\.\.)?(\}|\])$`)
+	re_set_representations = regexp.MustCompile(PATTERN_SET_REPRESENTATIONS)
 
-	re_group_qualification = regexp.MustCompile(`^(?:(\d{4})(%|~|\?)?(?:-(\d{2})(%|~|\?)?(?:-(\d{2})(%|~|\?)?)?)?)$`)
+	re_group_qualification = regexp.MustCompile(PATTERN_GROUP_QUALIFICATION)
 
-	re_individual_qualification = regexp.MustCompile(`^(?:(%|~|\?)?(\d{4})(?:-(%|~|\?)?(\d{2})(?:-(%|~|\?)?(\d{2}))?)?)$`)
+	re_individual_qualification = regexp.MustCompile(PATTERN_INDIVIDUAL_QUALIFICATION)
 
-	re_unspecified_digit = regexp.MustCompile(`^([0-9X]{4})(?:-([0-9X]{2})(?:-([0-9X]{2}))?)?$`)
+	re_unspecified_digit = regexp.MustCompile(PATTERN_UNSPECIFIED_DIGIT)
 
-	re_interval = regexp.MustCompile(`^(%|~|\?)?([0-9X]{4})(?:-(%|~|\?)?([0-9X]{2})(?:-(%|~|\?)?([0-9X]{2}))?)?\/(%|~|\?)?([0-9X]{4})(?:-(%|~|\?)?([0-9X]{2})(?:-(%|~|\?)?([0-9X]{2}))?)?$`)
+	re_interval = regexp.MustCompile(PATTERN_INTERVAL)
+
+	level2_patterns := []string{
+		PATTERN_EXPONENTIAL_YEAR,
+		PATTERN_SIGNIFICANT_DIGITS,
+		PATTERN_SUB_YEAR,
+		PATTERN_SET_REPRESENTATIONS,
+		PATTERN_GROUP_QUALIFICATION,
+		PATTERN_INDIVIDUAL_QUALIFICATION,
+		PATTERN_UNSPECIFIED_DIGIT,
+		PATTERN_INTERVAL,
+	}
+
+	re_level2 = regexp.MustCompile(`(` + strings.Join(level2_patterns, "|") + `)`)
+
+}
+
+func IsLevel2(edtf_str string) bool {
+	return re_level2.MatchString(edtf_str)
+}
+
+func ParseString(edtf_str string) (*edtf.EDTFDate, error) {
+
+	if IsExponentialYear(edtf_str) {
+		return ParseExponentialYear(edtf_str)
+	}
+
+	if IsSignificantDigits(edtf_str) {
+		return ParseSignificantDigits(edtf_str)
+	}
+
+	if IsSubYearGrouping(edtf_str) {
+		return ParseSubYearGroupings(edtf_str)
+	}
+
+	if IsSetRepresentation(edtf_str) {
+		return ParseSetRepresentations(edtf_str)
+	}
+
+	if IsGroupQualification(edtf_str) {
+		return ParseGroupQualification(edtf_str)
+	}
+
+	if IsIndividualQualification(edtf_str) {
+		return ParseIndividualQualification(edtf_str)
+	}
+
+	if IsUnspecifiedDigit(edtf_str) {
+		return ParseUnspecifiedDigit(edtf_str)
+	}
+
+	if IsInterval(edtf_str) {
+		return ParseInterval(edtf_str)
+	}
+
+	return nil, errors.New("Invalid or unsupported Level 2 string")
 }
 
 /*

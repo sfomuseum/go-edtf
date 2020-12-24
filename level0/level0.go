@@ -19,7 +19,6 @@ const PATTERN_TIME_INTERVAL string = `^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?\/(\d{4}
 var re_date *regexp.Regexp
 var re_date_time *regexp.Regexp
 var re_time_interval *regexp.Regexp
-
 var re_level0 *regexp.Regexp
 
 func init() {
@@ -43,7 +42,7 @@ func IsLevel0(edtf_str string) bool {
 	return re_level0.MatchString(edtf_str)
 }
 
-func ParseLevel0(edtf_str string) (*edtf.EDTFDate, error) {
+func ParseString(edtf_str string) (*edtf.EDTFDate, error) {
 
 	if IsDate(edtf_str) {
 		return ParseDate(edtf_str)

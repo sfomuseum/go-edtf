@@ -5,22 +5,42 @@ import (
 	"time"
 )
 
+var test_strings map[string][]string
+
+func init() {
+
+	test_strings = map[string][]string{
+		"date": []string{
+			"1985-04-12",
+			"1985-04",
+			"1985",
+		},
+		"date_time": []string{
+			"1985-04-12T23:20:30",
+			"1985-04-12T23:20:30Z",
+			"1985-04-12T23:20:30-04",
+			"1985-04-12T23:20:30+04:30",
+		},
+		"time_interval": []string{
+			"1964/2008",
+			"2004-06/2006-08",
+			"2004-02-01/2005-02-08",
+			"2004-02-01/2005-02",
+			"2004-02-01/2005",
+			"2005/2006-02",
+		},
+	}
+}
+
 func TestIsLevel0(t *testing.T) {
 
-	valid := []string{
-		"1985-04-12",
-		"1985-04",
-		"1985",
-		"1985-04-12T23:20:30",
-		"1985-04-12T23:20:30Z",
-		"1985-04-12T23:20:30-04",
-		"1985-04-12T23:20:30+04:30",
-		"1964/2008",
-		"2004-06/2006-08",
-		"2004-02-01/2005-02-08",
-		"2004-02-01/2005-02",
-		"2004-02-01/2005",
-		"2005/2006-02",
+	valid := make([]string, 0)
+
+	for _, candidates := range test_strings {
+
+		for _, str := range candidates {
+			valid = append(valid, str)
+		}
 	}
 
 	invalid := []string{
@@ -38,7 +58,7 @@ func TestIsLevel0(t *testing.T) {
 			t.Fatalf("Expected '%s' to parse as Level 0 string", str)
 		}
 
-		ParseLevel0(str)
+		ParseString(str)
 	}
 
 	for _, str := range invalid {
@@ -52,27 +72,20 @@ func TestIsLevel0(t *testing.T) {
 
 }
 
-func TestParseLevel0(t *testing.T) {
+func TestParseString(t *testing.T) {
 
-	valid := []string{
-		"1985-04-12",
-		"1985-04",
-		"1985",
-		"1985-04-12T23:20:30",
-		"1985-04-12T23:20:30Z",
-		"1985-04-12T23:20:30-04",
-		"1985-04-12T23:20:30+04:30",
-		"1964/2008",
-		"2004-06/2006-08",
-		"2004-02-01/2005-02-08",
-		"2004-02-01/2005-02",
-		"2004-02-01/2005",
-		"2005/2006-02",
+	valid := make([]string, 0)
+
+	for _, candidates := range test_strings {
+
+		for _, str := range candidates {
+			valid = append(valid, str)
+		}
 	}
 
 	for _, str := range valid {
 
-		d, err := ParseLevel0(str)
+		d, err := ParseString(str)
 
 		if err != nil {
 			t.Fatalf("Failed to parse '%s', %v", str, err)
@@ -87,10 +100,10 @@ func TestParseLevel0(t *testing.T) {
 
 func TestParseDate(t *testing.T) {
 
-	valid := []string{
-		"1985-04-12",
-		"1985-04",
-		"1985",
+	valid, ok := test_strings["date"]
+
+	if !ok {
+		t.Fatal("Failed to load test strings")
 	}
 
 	for _, str := range valid {
@@ -125,11 +138,10 @@ func TestParseDate(t *testing.T) {
 
 func TestParseDateTime(t *testing.T) {
 
-	valid := []string{
-		"1985-04-12T23:20:30",
-		"1985-04-12T23:20:30Z",
-		"1985-04-12T23:20:30-04",
-		"1985-04-12T23:20:30+04:30",
+	valid, ok := test_strings["date_time"]
+
+	if !ok {
+		t.Fatal("Failed to load test strings")
 	}
 
 	for _, str := range valid {
@@ -148,13 +160,10 @@ func TestParseDateTime(t *testing.T) {
 
 func TestParseTimeInterval(t *testing.T) {
 
-	valid := []string{
-		"1964/2008",
-		"2004-06/2006-08",
-		"2004-02-01/2005-02-08",
-		"2004-02-01/2005-02",
-		"2004-02-01/2005",
-		"2005/2006-02",
+	valid, ok := test_strings["time_interval"]
+
+	if !ok {
+		t.Fatal("Failed to load test strings")
 	}
 
 	for _, str := range valid {
