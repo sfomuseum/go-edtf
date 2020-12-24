@@ -2,7 +2,6 @@ package level1
 
 import (
 	"errors"
-	_ "fmt"
 	"github.com/whosonfirst/go-edtf"
 	"regexp"
 	"strings"
@@ -29,8 +28,8 @@ var re_level1 *regexp.Regexp
 
 var Tests map[string][]string = map[string][]string{
 	"prefixed_calendar_year": []string{
-		"Y170000002",
-		"Y-17000002",
+		// "Y170000002",
+		// "Y-17000002",
 	},
 	"season": []string{
 		"2001-01",
@@ -148,34 +147,8 @@ func IsLetterPrefixedCalendarYear(edtf_str string) bool {
 
 func ParseLetterPrefixedCalendarYear(edtf_str string) (*edtf.EDTFDate, error) {
 
-	if !re_calendaryear.MatchString(edtf_str) {
-		return nil, errors.New("Invalid Level 1 calendar year string")
-	}
+	return nil, errors.New("Not implemented")
 
-	return nil, nil
-}
-
-/*
-
-Seasons
-
-The values 21, 22, 23, 24 may be used used to signify ' Spring', 'Summer', 'Autumn', 'Winter', respectively, in place of a month value (01 through 12) for a year-and-month format string.
-
-    Example                   2001-21     Spring, 2001
-
-*/
-
-func IsSeason(edtf_str string) bool {
-	return re_season.MatchString(edtf_str)
-}
-
-func ParseSeason(edtf_str string) (*edtf.EDTFDate, error) {
-
-	if !re_season.MatchString(edtf_str) {
-		return nil, errors.New("Invalid Level 1 season string")
-	}
-
-	return nil, nil
 }
 
 /*
