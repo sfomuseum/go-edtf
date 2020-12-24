@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func DaysInMonthWithString(yyyymm string) (int, error) {
+func DaysInMonthWithString(yyyymm string) (uint, error) {
 
 	ym := strings.Split(yyyymm, "-")
 
@@ -28,10 +28,10 @@ func DaysInMonthWithString(yyyymm string) (int, error) {
 		return 0, err
 	}
 
-	return DaysInMonth(yyyy, mm)
+	return DaysInMonth(uint(yyyy), uint(mm))
 }
 
-func DaysInMonth(yyyy int, mm int) (int, error) {
+func DaysInMonth(yyyy uint, mm uint) (uint, error) {
 
 	next_yyyy := yyyy
 	next_mm := mm + 1
@@ -51,5 +51,5 @@ func DaysInMonth(yyyy int, mm int) (int, error) {
 	mm_t := next_t.AddDate(0, 0, -1)
 	dd := mm_t.Day()
 
-	return dd, nil
+	return uint(dd), nil
 }

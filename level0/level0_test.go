@@ -98,7 +98,7 @@ func TestParseDate(t *testing.T) {
 		t.Fatal("Failed to parse '2020-02'")
 	}
 
-	tm := dt.Upper.Upper.Time
+	tm := dt.End.Upper.Time
 
 	tm_str := tm.Format(time.RFC3339)
 	expected_str := "2020-02-29T23:59:59Z"

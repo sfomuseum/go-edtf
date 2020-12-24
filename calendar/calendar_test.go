@@ -6,7 +6,7 @@ import (
 
 func TestDaysInMonth(t *testing.T) {
 
-	tests := map[string]int{
+	tests := map[string]uint{
 		"2019-02": 28,
 		"2020-02": 29,
 		"1985-06": 30,

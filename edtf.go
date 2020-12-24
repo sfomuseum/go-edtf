@@ -5,25 +5,26 @@ import (
 )
 
 type EDTFDate struct {
-	Upper *DateRange
-	Lower *DateRange
-	Raw   string
-	Level int
+	Start *DateRange `json:"start"`
+	End   *DateRange `json:"end"`
+	EDTF  string     `json:"edtf"`
+	Level int        `json:"level"`
+	Label string     `json:"label"`
 }
 
 type DateRange struct {
-	Upper *Date
-	Lower *Date
+	Lower *Date `json:"lower"`
+	Upper *Date `json:"upper"`
 }
 
 type Date struct {
-	// String      string
-	Time        *time.Time
-	Uncertain   bool
-	Approximate bool
-	Unknown     bool
-	Open        bool
-	Precision   string
+	EDTF        string     `json:"edtf"`
+	Time        *time.Time `json:"time,omitempty"`
+	Uncertain   bool       `json:"uncertain,omitempty"`
+	Approximate bool       `json:"approximate,omitempty"`
+	Unknown     bool       `json:"unknown,omitempty"`
+	Open        bool       `json:"open,omitempty"`
+	Precision   string     `json:"precision,omitempty"`
 }
 
 /*
@@ -35,5 +36,5 @@ do for now (20201223/thisisaaronland)
 */
 
 func (d *EDTFDate) String() string {
-	return d.Raw
+	return d.EDTF
 }

@@ -6,6 +6,7 @@ import (
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/calendar"
 	"regexp"
+	"strconv"
 	"strings"
 	"time"
 )
@@ -111,22 +112,22 @@ func ParseDate(edtf_str string) (*edtf.EDTFDate, error) {
 	mm := m[2]
 	dd := m[3]
 
-	lower_range, err := dateRangeWithYMD(yyyy, mm, dd)
+	start, err := dateRangeWithYMD(yyyy, mm, dd)
 
 	if err != nil {
 		return nil, err
 	}
 
-	upper_range := lower_range
+	end := start
 
 	if err != nil {
 		return nil, err
 	}
 
 	d := &edtf.EDTFDate{
-		Lower: lower_range,
-		Upper: upper_range,
-		Raw:   edtf_str,
+		Start: start,
+		End:   end,
+		EDTF:  edtf_str,
 		Level: LEVEL,
 	}
 
@@ -193,20 +194,20 @@ func ParseDateTime(edtf_str string) (*edtf.EDTFDate, error) {
 		Time: &t,
 	}
 
-	upper_range := &edtf.DateRange{
-		Upper: upper_date,
-		Lower: upper_date,
+	start := &edtf.DateRange{
+		Lower: lower_date,
+		Upper: lower_date,
 	}
 
-	lower_range := &edtf.DateRange{
-		Upper: lower_date,
-		Lower: lower_date,
+	end := &edtf.DateRange{
+		Lower: upper_date,
+		Upper: upper_date,
 	}
 
 	d := &edtf.EDTFDate{
-		Upper: upper_range,
-		Lower: lower_range,
-		Raw:   edtf_str,
+		Start: start,
+		End:   end,
+		EDTF:  edtf_str,
 		Level: LEVEL,
 	}
 
@@ -248,23 +249,24 @@ func ParseTimeInterval(edtf_str string) (*edtf.EDTFDate, error) {
 	end_mm := m[5]
 	end_dd := m[6]
 
-	lower_range, err := dateRangeWithYMD(start_yyyy, start_mm, start_dd)
+	start, err := dateRangeWithYMD(start_yyyy, start_mm, start_dd)
 
 	if err != nil {
 		return nil, err
 	}
 
-	upper_range, err := dateRangeWithYMD(end_yyyy, end_mm, end_dd)
+	end, err := dateRangeWithYMD(end_yyyy, end_mm, end_dd)
 
 	if err != nil {
 		return nil, err
 	}
 
 	d := &edtf.EDTFDate{
-		Lower: lower_range,
-		Upper: upper_range,
-		Raw:   edtf_str,
+		Start: start,
+		End:   end,
+		EDTF:  edtf_str,
 		Level: LEVEL,
+		// Label: "TimeInterval",
 	}
 
 	return d, nil
@@ -278,12 +280,20 @@ func dateRangeWithYMD(yyyy string, mm string, dd string) (*edtf.DateRange, error
 		return nil, err
 	}
 
+	edtf_str, err := ymdToEDTFWithStrings(yyyy, mm, dd)
+
+	if err != nil {
+		return nil, err
+	}
+
 	dr := &edtf.DateRange{
 		Lower: &edtf.Date{
 			Time: lower,
+			EDTF: edtf_str,
 		},
 		Upper: &edtf.Date{
 			Time: upper,
+			EDTF: edtf_str,
 		},
 	}
 
@@ -362,4 +372,90 @@ func timeRangeWithYMD(yyyy string, mm string, dd string) (*time.Time, *time.Time
 	}
 
 	return &lower_t, &upper_t, nil
+}
+
+func ymdToEDTFWithStrings(str_yyyy string, str_mm string, str_dd string) (string, error) {
+
+	if str_yyyy == "" {
+		return "", errors.New("Missing year")
+	}
+
+	if str_mm == "" && str_dd != "" {
+		return "", errors.New("Missing month")
+	}
+
+	yyyy, err := strconv.Atoi(str_yyyy)
+
+	if err != nil {
+		return "", err
+	}
+
+	mm := 0
+	dd := 0
+
+	if str_mm != "" {
+
+		m, err := strconv.Atoi(str_mm)
+
+		if err != nil {
+			return "", err
+		}
+
+		mm = m
+	}
+
+	if str_dd != "" {
+
+		d, err := strconv.Atoi(str_dd)
+
+		if err != nil {
+			return "", err
+		}
+
+		dd = d
+	}
+
+	return ymdToEDTF(uint(yyyy), uint(mm), uint(dd))
+}
+
+func ymdToEDTF(yyyy uint, mm uint, dd uint) (string, error) {
+
+	if yyyy == 0 {
+		return "", errors.New("Missing year")
+	}
+
+	if mm == 0 && dd != 0 {
+		return "", errors.New("Missing month")
+	}
+
+	edtf_parts := []string{
+		fmt.Sprintf("%04d", yyyy),
+	}
+
+	if mm > 0 {
+
+		if mm > 12 {
+			return "", errors.New("Invalid month for year")
+		}
+
+		edtf_parts = append(edtf_parts, fmt.Sprintf("%02d", mm))
+	}
+
+	if dd > 0 {
+
+		days, err := calendar.DaysInMonth(yyyy, mm)
+
+		if err != nil {
+			return "", err
+		}
+
+		if dd > days {
+			return "", errors.New("Invalid days for month")
+		}
+
+		edtf_parts = append(edtf_parts, fmt.Sprintf("%02d", dd))
+	}
+
+	edtf_str := strings.Join(edtf_parts, "-")
+	return edtf_str, nil
 }
