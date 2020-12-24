@@ -2,12 +2,11 @@ package level1
 
 import (
 	"errors"
-	"fmt"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/calendar"
+	"github.com/whosonfirst/go-edtf/common"	
 	"strconv"
 	"strings"
-	"time"
 )
 
 /*
@@ -163,22 +162,23 @@ func ParseSeason(edtf_str string) (*edtf.EDTFDate, error) {
 			end_mm = mm
 		}
 
-		dm, err := calendar.DaysInMonth(uint(end_yyyy), uint(end_mm))
-
-		if err != nil {
-			return nil, err
-		}
-
-		end_dd = int(dm)
 	}
-
-	start, err := dateRange(start_yyyy, start_mm, start_dd)
+	
+	dm, err := calendar.DaysInMonth(uint(end_yyyy), uint(end_mm))
+	
+	if err != nil {
+		return nil, err
+	}
+	
+	end_dd = int(dm)
+	
+	start, err := common.DateRangeWithYMD(start_yyyy, start_mm, start_dd)
 
 	if err != nil {
 		return nil, err
 	}
 
-	end, err := dateRange(end_yyyy, end_mm, end_dd)
+	end, err := common.DateRangeWithYMD(end_yyyy, end_mm, end_dd)
 
 	if err != nil {
 		return nil, err
@@ -192,40 +192,4 @@ func ParseSeason(edtf_str string) (*edtf.EDTFDate, error) {
 	}
 
 	return d, nil
-}
-
-func dateRange(yyyy int, mm int, dd int) (*edtf.DateRange, error) {
-
-	lower_hms := "00:00:00"
-	upper_hms := "23:59:59"
-
-	lower_str := fmt.Sprintf("%04d-%02d-%02dT%s", yyyy, mm, dd, lower_hms)
-	upper_str := fmt.Sprintf("%04d-%02d-%02dT%s", yyyy, mm, dd, upper_hms)
-
-	lower_t, err := time.Parse("2006-01-02T15:04:05", lower_str)
-
-	if err != nil {
-		return nil, err
-	}
-
-	upper_t, err := time.Parse("2006-01-02T15:04:05", upper_str)
-
-	if err != nil {
-		return nil, err
-	}
-
-	lower_d := &edtf.Date{
-		Time: &lower_t,
-	}
-
-	upper_d := &edtf.Date{
-		Time: &upper_t,
-	}
-
-	dt := &edtf.DateRange{
-		Lower: lower_d,
-		Upper: upper_d,
-	}
-
-	return dt, nil
 }
