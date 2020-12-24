@@ -1,6 +1,6 @@
 # go-edtf
 
-A Go package for paring Extended DateTime Format dates.
+A Go package for pars ing Extended DateTime Format dates.
 
 ## Important
 
