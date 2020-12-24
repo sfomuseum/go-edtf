@@ -78,12 +78,12 @@ func ParseString(edtf_str string) (*edtf.EDTFDate, error) {
 		return ParseUnspecifiedDigits(edtf_str)
 	}
 
-	if IsExtendedInterval(edtf_str) {
-		return ParseExtendedInterval(edtf_str)
-	}
-
 	if IsNegativeCalendarYear(edtf_str) {
 		return ParseNegativeCalendarYear(edtf_str)
+	}
+
+	if IsExtendedInterval(edtf_str) {
+		return ParseExtendedInterval(edtf_str)
 	}
 
 	return nil, errors.New("Invalid or unsupported Level 1 EDTF string")
@@ -239,12 +239,12 @@ Time interval with unknown start
 
 func IsExtendedInterval(edtf_str string) bool {
 
-	if !re_interval_end.MatchString(edtf_str) {
-		return false
+	if re_interval_end.MatchString(edtf_str) {
+		return true
 	}
 
-	if !re_interval_start.MatchString(edtf_str) {
-		return false
+	if re_interval_start.MatchString(edtf_str) {
+		return true
 	}
 
 	return true
@@ -252,11 +252,11 @@ func IsExtendedInterval(edtf_str string) bool {
 
 func ParseExtendedInterval(edtf_str string) (*edtf.EDTFDate, error) {
 
-	if !re_interval_start.MatchString(edtf_str) {
+	if re_interval_start.MatchString(edtf_str) {
 		return ParseExtendedIntervalStart(edtf_str)
 	}
 
-	if !re_interval_end.MatchString(edtf_str) {
+	if re_interval_end.MatchString(edtf_str) {
 		return ParseExtendedIntervalEnd(edtf_str)
 	}
 
