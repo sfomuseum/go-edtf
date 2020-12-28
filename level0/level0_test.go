@@ -2,7 +2,6 @@ package level0
 
 import (
 	"testing"
-	"time"
 )
 
 func TestIsLevel0(t *testing.T) {
