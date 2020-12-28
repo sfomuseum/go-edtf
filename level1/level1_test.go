@@ -71,62 +71,6 @@ func TestParseString(t *testing.T) {
 	}
 }
 
-func TestLetterPrefixedCalendarYear(t *testing.T) {
-
-	valid, ok := Tests["prefixed_calendar_year"]
-
-	if !ok {
-		t.Fatalf("Failed to load test strings")
-	}
-
-	for _, str := range valid {
-
-		_, err := ParseLetterPrefixedCalendarYear(str)
-
-		if err != nil {
-			t.Fatalf("Failed to parse '%s', %v", str, err)
-		}
-	}
-}
-
-func TestSeason(t *testing.T) {
-
-	valid, ok := Tests["season"]
-
-	if !ok {
-		t.Fatalf("Failed to load test strings")
-	}
-
-	for _, str := range valid {
-
-		_, err := ParseSeason(str)
-
-		if err != nil {
-			t.Fatalf("Failed to parse '%s', %v", str, err)
-		}
-	}
-
-}
-
-func TestQualifiedDate(t *testing.T) {
-
-	valid, ok := Tests["qualified_date"]
-
-	if !ok {
-		t.Fatalf("Failed to load test strings")
-	}
-
-	for _, str := range valid {
-
-		_, err := ParseQualifiedDate(str)
-
-		if err != nil {
-			t.Fatalf("Failed to parse '%s', %v", str, err)
-		}
-	}
-
-}
-
 func TestUnspecifiedDigits(t *testing.T) {
 
 	valid, ok := Tests["unspecified_digits"]
