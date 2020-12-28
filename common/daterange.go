@@ -66,7 +66,7 @@ func DateRangeWithYMD(yyyy int, mm int, dd int) (*edtf.DateRange, error) {
 	if mm == 0 {
 		mm = 1
 	}
-	
+
 	if dd == 0 {
 
 		days, err := calendar.DaysInMonth(uint(yyyy), uint(mm))

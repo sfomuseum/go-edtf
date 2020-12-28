@@ -4,6 +4,10 @@ import (
 	"time"
 )
 
+const UNCERTAIN string = "?"
+const APPROXIMATE string = "~"
+const UNCERTAIN_AND_APPROXIMATE string = "%"
+
 type EDTFDate struct {
 	Start *DateRange `json:"start"`
 	End   *DateRange `json:"end"`

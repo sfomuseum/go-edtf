@@ -43,10 +43,6 @@ func ParseDate(edtf_str string) (*edtf.EDTFDate, error) {
 
 	end := start
 
-	if err != nil {
-		return nil, err
-	}
-
 	d := &edtf.EDTFDate{
 		Start: start,
 		End:   end,
