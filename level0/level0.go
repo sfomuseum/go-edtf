@@ -2,13 +2,13 @@ package level0
 
 import (
 	"errors"
-	"fmt"
+	// "fmt"
 	"github.com/whosonfirst/go-edtf"
-	"github.com/whosonfirst/go-edtf/calendar"
+	// "github.com/whosonfirst/go-edtf/calendar"
 	"regexp"
-	"strconv"
+	// "strconv"
 	"strings"
-	"time"
+	// "time"
 )
 
 const LEVEL int = 0
@@ -28,7 +28,7 @@ var Tests map[string][]string = map[string][]string{
 		"1985-04",
 		"1985",
 	},
-	"date_time": []string{
+	"date_and_time": []string{
 		"1985-04-12T23:20:30",
 		"1985-04-12T23:20:30Z",
 		"1985-04-12T23:20:30-04",
@@ -72,8 +72,8 @@ func ParseString(edtf_str string) (*edtf.EDTFDate, error) {
 		return ParseDate(edtf_str)
 	}
 
-	if IsDateTime(edtf_str) {
-		return ParseDateTime(edtf_str)
+	if IsDateAndTime(edtf_str) {
+		return ParseDateAndTime(edtf_str)
 	}
 
 	if IsTimeInterval(edtf_str) {
@@ -84,194 +84,6 @@ func ParseString(edtf_str string) (*edtf.EDTFDate, error) {
 }
 
 /*
-
-Date
-
-    complete representation:            [year][“-”][month][“-”][day]
-    Example 1          ‘1985-04-12’ refers to the calendar date 1985 April 12th with day precision.
-    reduced precision for year and month:   [year][“-”][month]
-    Example 2          ‘1985-04’ refers to the calendar month 1985 April with month precision.
-    reduced precision for year:  [year]
-    Example 3          ‘1985’ refers to the calendar year 1985 with year precision.
-
-*/
-
-func IsDate(edtf_str string) bool {
-	return re_date.MatchString(edtf_str)
-}
-
-func ParseDate(edtf_str string) (*edtf.EDTFDate, error) {
-
-	m := re_date.FindStringSubmatch(edtf_str)
-
-	if len(m) != 4 {
-		return nil, errors.New("Invalid Level 0 date string")
-	}
-
-	yyyy := m[1]
-	mm := m[2]
-	dd := m[3]
-
-	start, err := dateRangeWithYMD(yyyy, mm, dd)
-
-	if err != nil {
-		return nil, err
-	}
-
-	end := start
-
-	if err != nil {
-		return nil, err
-	}
-
-	d := &edtf.EDTFDate{
-		Start: start,
-		End:   end,
-		EDTF:  edtf_str,
-		Level: LEVEL,
-	}
-
-	return d, nil
-}
-
-/*
-
-Date and Time
-
-    [date][“T”][time]
-    Complete representations for calendar date and (local) time of day
-    Example 1          ‘1985-04-12T23:20:30’ refers to the date 1985 April 12th at 23:20:30 local time.
-     [dateI][“T”][time][“Z”]
-    Complete representations for calendar date and UTC time of day
-    Example 2       ‘1985-04-12T23:20:30Z’ refers to the date 1985 April 12th at 23:20:30 UTC time.
-    [dateI][“T”][time][shiftHour]
-    Date and time with timeshift in hours (only)
-    Example 3       ‘1985-04-12T23:20:30-04’ refers to the date 1985 April 12th time of day 23:20:30 with time shift of 4 hours behind UTC.
-    [dateI][“T”][time][shiftHourMinute]
-    Date and time with timeshift in hours and minutes
-    Example 4       ‘1985-04-12T23:20:30+04:30’ refers to the date 1985 April 12th,  time of day  23:20:30 with time shift of 4 hours and 30 minutes ahead of UTC.
-
-*/
-
-func IsDateTime(edtf_str string) bool {
-	return re_date_time.MatchString(edtf_str)
-}
-
-func ParseDateTime(edtf_str string) (*edtf.EDTFDate, error) {
-
-	m := re_date_time.FindStringSubmatch(edtf_str)
-
-	if len(m) != 12 {
-		return nil, errors.New("Invalid Level 0 date and time string")
-	}
-
-	t_fmt := "2006-01-02T15:04:05"
-
-	if m[7] == "Z" {
-		t_fmt = "2006-01-02T15:04:05Z"
-	}
-
-	if m[8] == "-" || m[8] == "+" {
-
-		if strings.HasPrefix(m[10], ":") {
-			t_fmt = "2006-01-02T15:04:05-07:00"
-		} else {
-			t_fmt = "2006-01-02T15:04:05-07"
-		}
-	}
-
-	t, err := time.Parse(t_fmt, edtf_str)
-
-	if err != nil {
-		return nil, err
-	}
-
-	upper_date := &edtf.Date{
-		Time: &t,
-	}
-
-	lower_date := &edtf.Date{
-		Time: &t,
-	}
-
-	start := &edtf.DateRange{
-		Lower: lower_date,
-		Upper: lower_date,
-	}
-
-	end := &edtf.DateRange{
-		Lower: upper_date,
-		Upper: upper_date,
-	}
-
-	d := &edtf.EDTFDate{
-		Start: start,
-		End:   end,
-		EDTF:  edtf_str,
-		Level: LEVEL,
-	}
-
-	return d, nil
-}
-
-/*
-
-Time Interval
-
-EDTF Level 0 adopts representations of a time interval where both the start and end are dates: start and end date only; that is, both start and duration, and duration and end, are excluded. Time of day is excluded.
-
-    Example 1          ‘1964/2008’ is a time interval with calendar year precision, beginning sometime in 1964 and ending sometime in 2008.
-    Example 2          ‘2004-06/2006-08’ is a time interval with calendar month precision, beginning sometime in June 2004 and ending sometime in August of 2006.
-    Example 3          ‘2004-02-01/2005-02-08’ is a time interval with calendar day precision, beginning sometime on February 1, 2004 and ending sometime on February 8, 2005.
-    Example 4          ‘2004-02-01/2005-02’ is a time interval beginning sometime on February 1, 2004 and ending sometime in February 2005. Since the start endpoint precision (day) is different than that of the end endpoint (month) the precision of the time interval at large is undefined.
-    Example 5          ‘2004-02-01/2005’ is a time interval beginning sometime on February 1, 2004 and ending sometime in 2005. The start endpoint has calendar day precision and the end endpoint has calendar year precision. Similar to the previous example, the precision of the time interval at large is undefined.
-    Example 6          ‘2005/2006-02’ is a time interval beginning sometime in 2005 and ending sometime in February 2006.
-
-*/
-
-func IsTimeInterval(edtf_str string) bool {
-	return re_time_interval.MatchString(edtf_str)
-}
-
-func ParseTimeInterval(edtf_str string) (*edtf.EDTFDate, error) {
-
-	m := re_time_interval.FindStringSubmatch(edtf_str)
-
-	if len(m) != 7 {
-		return nil, errors.New("Invalid Level 0 time interval string")
-	}
-
-	start_yyyy := m[1]
-	start_mm := m[2]
-	start_dd := m[3]
-
-	end_yyyy := m[4]
-	end_mm := m[5]
-	end_dd := m[6]
-
-	start, err := dateRangeWithYMD(start_yyyy, start_mm, start_dd)
-
-	if err != nil {
-		return nil, err
-	}
-
-	end, err := dateRangeWithYMD(end_yyyy, end_mm, end_dd)
-
-	if err != nil {
-		return nil, err
-	}
-
-	d := &edtf.EDTFDate{
-		Start: start,
-		End:   end,
-		EDTF:  edtf_str,
-		Level: LEVEL,
-		// Label: "TimeInterval",
-	}
-
-	return d, nil
-}
-
 func dateRangeWithYMD(yyyy string, mm string, dd string) (*edtf.DateRange, error) {
 
 	lower, upper, err := timeRangeWithYMD(yyyy, mm, dd)
@@ -459,3 +271,4 @@ func ymdToEDTF(yyyy uint, mm uint, dd uint) (string, error) {
 	edtf_str := strings.Join(edtf_parts, "-")
 	return edtf_str, nil
 }
+*/

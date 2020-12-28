@@ -4,7 +4,7 @@ import (
 	"errors"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/calendar"
-	"github.com/whosonfirst/go-edtf/common"	
+	"github.com/whosonfirst/go-edtf/common"
 	"strconv"
 	"strings"
 )
@@ -163,15 +163,15 @@ func ParseSeason(edtf_str string) (*edtf.EDTFDate, error) {
 		}
 
 	}
-	
+
 	dm, err := calendar.DaysInMonth(uint(end_yyyy), uint(end_mm))
-	
+
 	if err != nil {
 		return nil, err
 	}
-	
+
 	end_dd = int(dm)
-	
+
 	start, err := common.DateRangeWithYMD(start_yyyy, start_mm, start_dd)
 
 	if err != nil {
