@@ -12,7 +12,11 @@ const LEVEL int = 1
 const PATTERN_CALENDAR_YEAR string = `^Y(\-)?(\d+)$`
 const PATTERN_SEASON string = `^(\d{4})-(0[1-9]|2[1-4])|(?i)(spring|summer|fall|winter)\s*,\s*(\d{4})$`
 const PATTERN_QUALIFIED string = `^(?:(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?)(\?|~|%)$`
-const PATTERN_UNSPECIFIED string = `^(?:(\d{3})(X)|(\d{2})(XX)|(\d{4})-(XX)|(\d{4})\-(\d{2})\-(XX)|(\d{4})\-(XX)\-(XX))$`
+
+// const PATTERN_UNSPECIFIED string = `^(?:(\d{3})(X)|(\d{2})(XX)|(\d{4})-(XX)|(\d{4})\-(\d{2})\-(XX)|(\d{4})\-(XX)\-(XX))$`
+
+const PATTERN_UNSPECIFIED string = `^(?:([0-9X]{4})(?:-([0-9X]{2})(?:-([0-9X]{2}))?)?)$`
+
 const PATTERN_INTERVAL_START = `^(\.\.)?\/(?:(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?)$`
 const PATTERN_INTERVAL_END = `^(?:(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?)\/(\.\.)?$`
 const PATTERN_NEGATIVE_YEAR = `^\-(\d{4})$`
@@ -130,38 +134,6 @@ func ParseString(edtf_str string) (*edtf.EDTFDate, error) {
 	}
 
 	return nil, errors.New("Invalid or unsupported Level 1 EDTF string")
-}
-
-/*
-
-Unspecified digit(s) from the right
-
-The character 'X' may be used in place of one or more rightmost digits to indicate that the value of that digit is unspecified, for the following cases:
-
-    A year with one or two (rightmost) unspecified digits in a year-only expression (year precision)
-    Example 1       ‘201X’
-    Example 2       ‘20XX’
-    Year specified, month unspecified in a year-month expression (month precision)
-    Example 3       ‘2004-XX’
-    Year and month specified, day unspecified in a year-month-day expression (day precision)
-    Example 4       ‘1985-04-XX’
-    Year specified, day and month unspecified in a year-month-day expression  (day precision)
-    Example 5       ‘1985-XX-XX’
-
-
-*/
-
-func IsUnspecifiedDigits(edtf_str string) bool {
-	return re_unspecified.MatchString(edtf_str)
-}
-
-func ParseUnspecifiedDigits(edtf_str string) (*edtf.EDTFDate, error) {
-
-	if !re_unspecified.MatchString(edtf_str) {
-		return nil, errors.New("Invalid Level 1 unspecified digits string")
-	}
-
-	return nil, nil
 }
 
 /*
