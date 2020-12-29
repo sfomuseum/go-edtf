@@ -27,6 +27,7 @@ type Date struct {
 	Uncertain   bool       `json:"uncertain,omitempty"`
 	Approximate bool       `json:"approximate,omitempty"`
 	Unknown     bool       `json:"unknown,omitempty"`
+	Unspecified bool       `json:"unspecified,omitempty"`
 	Open        bool       `json:"open,omitempty"`
 	Precision   string     `json:"precision,omitempty"`
 }

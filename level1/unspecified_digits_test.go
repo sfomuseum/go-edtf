@@ -22,4 +22,3 @@ func TestUnspecifiedDigits(t *testing.T) {
 	}
 
 }
-
