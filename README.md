@@ -23,6 +23,10 @@ The following is taken from the [EDTF website](https://www.loc.gov/standards/dat
 ## See also
 
 * http://www.loc.gov/standards/datetime/
-* https://www.loc.gov/standards/datetime/pre-submission.html#bnf
-* https://github.com/ixc/python-edtf
-* https://digital2.library.unt.edu/edtf/
+* https://www.iso.org/standard/70907.html (ISO 8601-1:2019)
+* https://www.iso.org/standard/70908.html (ISO 8601-2:2019)
+
+### Related
+
+* https://github.com/sjansen/edtf
+* https://github.com/unt-libraries/edtf-validate

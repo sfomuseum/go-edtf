@@ -9,6 +9,7 @@ const APPROXIMATE string = "~"
 const UNCERTAIN_AND_APPROXIMATE string = "%"
 const OPEN string = ".."
 const UNKNOWN string = ""
+const NEGATIVE string = "-"
 
 type EDTFDate struct {
 	Start *DateRange `json:"start"`
@@ -31,6 +32,7 @@ type Date struct {
 	Unspecified bool       `json:"unspecified,omitempty"`
 	Open        bool       `json:"open,omitempty"`
 	Unknown     bool       `json:"unknown,omitempty"`
+	BCE         bool       `json:"bce,omitempty"`
 	// Precision   string     `json:"precision,omitempty"`
 }
 

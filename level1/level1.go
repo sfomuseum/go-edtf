@@ -12,11 +12,7 @@ const LEVEL int = 1
 const PATTERN_CALENDAR_YEAR string = `^Y(\-)?(\d+)$`
 const PATTERN_SEASON string = `^(\d{4})-(0[1-9]|2[1-4])|(?i)(spring|summer|fall|winter)\s*,\s*(\d{4})$`
 const PATTERN_QUALIFIED string = `^(?:(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?)(\?|~|%)$`
-
-// const PATTERN_UNSPECIFIED string = `^(?:(\d{3})(X)|(\d{2})(XX)|(\d{4})-(XX)|(\d{4})\-(\d{2})\-(XX)|(\d{4})\-(XX)\-(XX))$`
-
 const PATTERN_UNSPECIFIED string = `^(?:([0-9X]{4})(?:-([0-9X]{2})(?:-([0-9X]{2}))?)?)$`
-
 const PATTERN_INTERVAL_START = `^(\.\.)?\/(?:(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?)$`
 const PATTERN_INTERVAL_END = `^(?:(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?)\/(\.\.)?$`
 const PATTERN_NEGATIVE_YEAR = `^\-(\d{4})$`
@@ -32,8 +28,8 @@ var re_level1 *regexp.Regexp
 
 var Tests map[string][]string = map[string][]string{
 	"prefixed_calendar_year": []string{
-		// "Y170000002",
-		// "Y-17000002",
+		"Y170000002",
+		"Y-17000002",
 	},
 	"season": []string{
 		"2001-01",
@@ -134,27 +130,4 @@ func ParseString(edtf_str string) (*edtf.EDTFDate, error) {
 	}
 
 	return nil, errors.New("Invalid or unsupported Level 1 EDTF string")
-}
-
-/*
-
- Negative calendar year
-
-    Example 1       ‘-1985’
-
-Note: ISO 8601 Part 1 does not support negative year.
-
-*/
-
-func IsNegativeCalendarYear(edtf_str string) bool {
-	return re_negative_year.MatchString(edtf_str)
-}
-
-func ParseNegativeCalendarYear(edtf_str string) (*edtf.EDTFDate, error) {
-
-	if !re_negative_year.MatchString(edtf_str) {
-		return nil, errors.New("Invalid Level 1 negative year string")
-	}
-
-	return nil, nil
 }
