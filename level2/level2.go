@@ -8,25 +8,35 @@ import (
 
 const LEVEL int = 2
 
+const EXPONENTIAL_YEAR string = "exponential year"
+const SIGNIFICANT_DIGITS string = "significant digits"
+const SUB_YEAR_GROUPINGS string = "sub year groupings"
+const SET_REPRESENTATIONS string = "set representations"
+const GROUP_QUALIFICATION string = "group qualification"
+const INDIVIDUAL_QUALIFICATION string = "individual qualification"
+const UNSPECIFIED_DIGIT string = "unspecified digit"
+const INTERVAL string = "interval"
+
 var Tests map[string][]string = map[string][]string{
-	"exponential_year": []string{
+	EXPONENTIAL_YEAR: []string{
 		// https://github.com/whosonfirst/go-edtf/issues/5
 		// "Y-17E7",
 		// "Y10E7",
 		"Y2E3",
 	},
-	"significant_digits": []string{
+	SIGNIFICANT_DIGITS: []string{
 		"1950S2",
 		"Y171010000S3",
 		"Y-1S3",
 		"Y3388E2S3",
 		"Y-20E2S3",
 	},
-	"sub_year_groupings": []string{
+	SUB_YEAR_GROUPINGS: []string{
 		"2001-34",
+		// TO DO
 		// "second quarter of 2001"
 	},
-	"set_representations": []string{
+	SET_REPRESENTATIONS: []string{
 		"[1667,1668,1670..1672]",
 		"[..1760-12-03]",
 		"[1760-12..]",
@@ -37,24 +47,25 @@ var Tests map[string][]string = map[string][]string{
 		"{1960,1961-12}",
 		"{..1984}",
 	},
-	"group_qualification": []string{
+	GROUP_QUALIFICATION: []string{
 		"2004-06-11%",
 		"2004-06~-11",
 		"2004?-06-11",
 	},
-	"individual_qualification": []string{
+	INDIVIDUAL_QUALIFICATION: []string{
 		"?2004-06-~11",
 		"2004-%06-11",
 	},
-	"unspecified_digit": []string{
+	UNSPECIFIED_DIGIT: []string{
 		"156X-12-25",
 		"15XX-12-25",
-		"XXXX-12-XX",
+		// TO DO		
+		// "XXXX-12-XX",
 		"1XXX-XX",
 		"1XXX-12",
 		"1984-1X",
 	},
-	"interval": []string{
+	INTERVAL: []string{
 		"2004-06-~01/2004-06-~20",
 		"2004-06-XX/2004-07-03",
 	},
@@ -62,6 +73,43 @@ var Tests map[string][]string = map[string][]string{
 
 func IsLevel2(edtf_str string) bool {
 	return re.Level2.MatchString(edtf_str)
+}
+
+func Matches(edtf_str string) (string, error) {
+
+	if IsExponentialYear(edtf_str) {
+		return EXPONENTIAL_YEAR, nil
+	}
+
+	if IsSignificantDigits(edtf_str) {
+		return SIGNIFICANT_DIGITS, nil
+	}
+
+	if IsSubYearGrouping(edtf_str) {
+		return SUB_YEAR_GROUPINGS, nil
+	}
+
+	if IsSetRepresentation(edtf_str) {
+		return SET_REPRESENTATIONS, nil
+	}
+
+	if IsGroupQualification(edtf_str) {
+		return GROUP_QUALIFICATION, nil
+	}
+
+	if IsIndividualQualification(edtf_str) {
+		return INDIVIDUAL_QUALIFICATION, nil
+	}
+
+	if IsUnspecifiedDigit(edtf_str) {
+		return UNSPECIFIED_DIGIT, nil
+	}
+
+	if IsInterval(edtf_str) {
+		return INTERVAL, nil
+	}
+
+	return "", errors.New("Invalid or unsupported Level 2 string")
 }
 
 func ParseString(edtf_str string) (*edtf.EDTFDate, error) {

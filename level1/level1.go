@@ -8,33 +8,42 @@ import (
 
 const LEVEL int = 1
 
+const LETTER_PREFIXED_CALENDAR_YEAR string = "letter prefixed calendar year"
+const SEASON string = "season"
+const QUALIFIED_DATE string = "qualified date"
+const UNSPECIFIED_DIGITS string = "unspecified digits"
+const EXTENDED_INTERVAL_START string = "extended interval start"
+const EXTENDED_INTERVAL_END string = "extended interval end"
+const NEGATIVE_CALENDAR_YEAR string = "negative calendar year"
+
 var Tests map[string][]string = map[string][]string{
-	"prefixed_calendar_year": []string{
+	LETTER_PREFIXED_CALENDAR_YEAR: []string{
+		// TO DO
 		// Go is incapable of parsing these dates
 		// "Y170000002",
 		// "Y-17000002",
 		"Y1700",
 		"Y-1200",
 	},
-	"season": []string{
+	SEASON: []string{
 		"2001-01",
 		"2001-24",
 		"Spring, 2002",
 		"winter, 2002",
 	},
-	"qualified_date": []string{
+	QUALIFIED_DATE: []string{
 		"1984?",
 		"2004-06~",
 		"2004-06-11%",
 	},
-	"unspecified_digits": []string{
+	UNSPECIFIED_DIGITS: []string{
 		"201X",
 		"20XX",
 		"2004-XX",
 		"1985-04-XX",
 		"1985-XX-XX",
 	},
-	"extended_interval_start": []string{
+	EXTENDED_INTERVAL_START: []string{
 		"../1985-04-12",
 		"../1985-04",
 		"../1985",
@@ -42,7 +51,7 @@ var Tests map[string][]string = map[string][]string{
 		"/1985-04",
 		"/1985",
 	},
-	"extended_interval_end": []string{
+	EXTENDED_INTERVAL_END: []string{
 		"1985-04-12/..",
 		"1985-04/..",
 		"1985/..",
@@ -50,13 +59,49 @@ var Tests map[string][]string = map[string][]string{
 		"1985-04/",
 		"1985/",
 	},
-	"negative_calendar_year": []string{
+	NEGATIVE_CALENDAR_YEAR: []string{
 		"-1985",
 	},
 }
 
 func IsLevel1(edtf_str string) bool {
 	return re.Level1.MatchString(edtf_str)
+}
+
+func Matches(edtf_str string) (string, error) {
+
+	if IsLetterPrefixedCalendarYear(edtf_str) {
+		return LETTER_PREFIXED_CALENDAR_YEAR, nil
+	}
+
+	if IsSeason(edtf_str) {
+		return SEASON, nil
+	}
+
+	if IsQualifiedDate(edtf_str) {
+		return QUALIFIED_DATE, nil
+	}
+
+	if IsUnspecifiedDigits(edtf_str) {
+		return UNSPECIFIED_DIGITS, nil
+	}
+
+	if IsNegativeCalendarYear(edtf_str) {
+		return NEGATIVE_CALENDAR_YEAR, nil
+	}
+	
+	if IsExtendedInterval(edtf_str) {
+
+		if re.IntervalStart.MatchString(edtf_str) {
+			return EXTENDED_INTERVAL_START, nil
+		}
+
+		if re.IntervalEnd.MatchString(edtf_str) {
+			return EXTENDED_INTERVAL_END, nil
+		}				
+	}
+
+	return "", errors.New("Invalid Level 1 string")
 }
 
 func ParseString(edtf_str string) (*edtf.EDTFDate, error) {

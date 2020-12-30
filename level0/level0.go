@@ -8,19 +8,23 @@ import (
 
 const LEVEL int = 0
 
+const DATE string = "date"
+const DATE_AND_TIME string = "date and time"
+const TIME_INTERVAL string = "time interval"
+
 var Tests map[string][]string = map[string][]string{
-	"date": []string{
+	DATE: []string{
 		"1985-04-12",
 		"1985-04",
 		"1985",
 	},
-	"date_and_time": []string{
+	DATE_AND_TIME: []string{
 		"1985-04-12T23:20:30",
 		"1985-04-12T23:20:30Z",
 		"1985-04-12T23:20:30-04",
 		"1985-04-12T23:20:30+04:30",
 	},
-	"time_interval": []string{
+	TIME_INTERVAL: []string{
 		"1964/2008",
 		"2004-06/2006-08",
 		"2004-02-01/2005-02-08",
@@ -32,6 +36,23 @@ var Tests map[string][]string = map[string][]string{
 
 func IsLevel0(edtf_str string) bool {
 	return re.Level0.MatchString(edtf_str)
+}
+
+func Matches(edtf_str string) (string, error) {
+
+	if IsDate(edtf_str) {
+		return DATE, nil
+	}
+
+	if IsDateAndTime(edtf_str) {
+		return DATE_AND_TIME, nil		
+	}
+
+	if IsTimeInterval(edtf_str) {
+		return TIME_INTERVAL, nil				
+	}
+
+	return "", errors.New("Invalid Level 0 string")
 }
 
 func ParseString(edtf_str string) (*edtf.EDTFDate, error) {
