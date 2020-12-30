@@ -74,7 +74,7 @@ func TestParseString(t *testing.T) {
 
 func TestSetRepresentations(t *testing.T) {
 
-	valid, ok := Tests["set_representations"]
+	valid, ok := Tests[SET_REPRESENTATIONS]
 
 	if !ok {
 		t.Fatalf("Failed to load test strings")
@@ -92,7 +92,7 @@ func TestSetRepresentations(t *testing.T) {
 
 func TestGroupQualification(t *testing.T) {
 
-	valid, ok := Tests["group_qualification"]
+	valid, ok := Tests[GROUP_QUALIFICATION]
 
 	if !ok {
 		t.Fatalf("Failed to load test strings")
@@ -110,7 +110,7 @@ func TestGroupQualification(t *testing.T) {
 
 func TestIndividualQualification(t *testing.T) {
 
-	valid, ok := Tests["individual_qualification"]
+	valid, ok := Tests[INDIVIDUAL_QUALIFICATION]
 
 	if !ok {
 		t.Fatalf("Failed to load test strings")
@@ -128,7 +128,7 @@ func TestIndividualQualification(t *testing.T) {
 
 func TestUnspecifiedDigit(t *testing.T) {
 
-	valid, ok := Tests["unspecified_digit"]
+	valid, ok := Tests[UNSPECIFIED_DIGIT]
 
 	if !ok {
 		t.Fatalf("Failed to load test strings")
@@ -146,7 +146,7 @@ func TestUnspecifiedDigit(t *testing.T) {
 
 func TestInterval(t *testing.T) {
 
-	valid, ok := Tests["interval"]
+	valid, ok := Tests[INTERVAL]
 
 	if !ok {
 		t.Fatalf("Failed to load test strings")
