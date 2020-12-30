@@ -9,7 +9,7 @@ import (
 
 const LEVEL int = 2
 
-const PATTERN_EXPONENTIAL_YEAR string = `^(?i)Y(\-?\d+)E(\d+)$`
+const PATTERN_EXPONENTIAL_YEAR string = `^(?i)Y((?:(\-?)(\d+))E(\d+))$`
 const PATTERN_SIGNIFICANT_DIGITS string = `^(?:(\d{4})S(\d+)|Y(\d+)S(\d+)|Y(\d+)E(\d+)S(\d+))$`
 const PATTERN_SUB_YEAR string = `^(\d{4})\-(2[1-9]|3[0-9]|4[0-1])$`
 const PATTERN_SET_REPRESENTATIONS string = `^(\[|\{)(\.\.)?(?:(?:(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?)(,|\.\.)?)+(\.\.)?(\}|\])$`
@@ -30,7 +30,10 @@ var re_level2 *regexp.Regexp
 
 var Tests map[string][]string = map[string][]string{
 	"exponential_year": []string{
-		"Y-17E7",
+		// https://github.com/whosonfirst/go-edtf/issues/5
+		// "Y-17E7",
+		// "Y10E7",
+		"Y2E3",
 	},
 	"significant_digits": []string{
 		"1950S2",
@@ -147,30 +150,6 @@ func ParseString(edtf_str string) (*edtf.EDTFDate, error) {
 	}
 
 	return nil, errors.New("Invalid or unsupported Level 2 string")
-}
-
-/*
-
-Exponential year
-
-'Y' at the beginning of the string (which indicates "year", as in level 1) may be followed by an integer, followed by 'E' followed by a positive integer. This signifies "times 10 to the power of". Thus 17E8 means "17 times 10 to the eighth power".
-
-    Example        ‘Y-17E7’
-    the calendar year -17*10 to the seventh power= -170000000
-
-*/
-
-func IsExponentialYear(edtf_str string) bool {
-	return re_exponential_year.MatchString(edtf_str)
-}
-
-func ParseExponentialYear(edtf_str string) (*edtf.EDTFDate, error) {
-
-	if !re_exponential_year.MatchString(edtf_str) {
-		return nil, errors.New("Invalid Level 2 exponential year string")
-	}
-
-	return nil, nil
 }
 
 /*
