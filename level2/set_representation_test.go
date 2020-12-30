@@ -19,7 +19,7 @@ func TestSetRepresentations(t *testing.T) {
 
 		if err != nil {
 			if edtf.IsNotImplemented(err) {
-				t.Logf("Failed to parse '%s', %v", str, err)
+				t.Logf("Skipping '%s', %v", str, err)
 			} else {
 				t.Fatalf("Failed to parse '%s', %v", str, err)
 			}

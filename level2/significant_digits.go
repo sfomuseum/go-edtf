@@ -72,7 +72,7 @@ func ParseSignificantDigits(edtf_str string) (*edtf.EDTFDate, error) {
 
 	} else if str_year != "" {
 
-		if len(str_year) > len(string(edtf.MAX_YEARS)) {
+		if len(str_year) > 4 {
 			return nil, edtf.Unsupported(SIGNIFICANT_DIGITS, edtf_str)
 		}
 
@@ -98,6 +98,8 @@ func ParseSignificantDigits(edtf_str string) (*edtf.EDTFDate, error) {
 		return nil, edtf.Invalid(SIGNIFICANT_DIGITS, edtf_str)
 	}
 
+	fmt.Println("YYYY IS", yyyy)
+
 	if yyyy > edtf.MAX_YEARS {
 		return nil, edtf.Unsupported(SIGNIFICANT_DIGITS, edtf_str)
 	}
@@ -105,6 +107,4 @@ func ParseSignificantDigits(edtf_str string) (*edtf.EDTFDate, error) {
 	fmt.Println("DIGITS", edtf_str, yyyy, digits)
 
 	return nil, edtf.NotImplemented(SIGNIFICANT_DIGITS, edtf_str)
-
-	return nil, nil
 }

@@ -21,12 +21,12 @@ var Tests map[string][]string = map[string][]string{
 	EXPONENTIAL_YEAR: []string{
 		"Y-17E7", // TO DO - https://github.com/whosonfirst/go-edtf/issues/5
 		"Y10E7",  // TO DO
-		"Y2E3",
+		"Y20E2",
 	},
 	SIGNIFICANT_DIGITS: []string{
 		"1950S2",
 		"Y171010000S3",
-		"Y-1S3",
+		"Y-20E2S3",
 		"Y3388E2S3",
 		"Y-20E2S3",
 	},

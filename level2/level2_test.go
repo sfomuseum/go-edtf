@@ -63,7 +63,7 @@ func TestParseString(t *testing.T) {
 		if err != nil {
 
 			if edtf.IsNotImplemented(err) || edtf.IsUnsupported(err) {
-				t.Log(err)
+				t.Logf("Skipping '%s', %v", str, err)
 			} else {
 				t.Fatalf("Failed to parse '%s', %v", str, err)
 			}
