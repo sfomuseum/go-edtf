@@ -6,7 +6,7 @@ import (
 
 func TestSubYearGroupings(t *testing.T) {
 
-	valid, ok := Tests["sub_year_groupings"]
+	valid, ok := Tests[SUB_YEAR_GROUPINGS]
 
 	if !ok {
 		t.Fatalf("Failed to load test strings")

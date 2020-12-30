@@ -6,7 +6,7 @@ import (
 
 func TestSeason(t *testing.T) {
 
-	valid, ok := Tests["season"]
+	valid, ok := Tests[SEASON]
 
 	if !ok {
 		t.Fatalf("Failed to load test strings")

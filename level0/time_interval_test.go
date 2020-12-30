@@ -6,7 +6,7 @@ import (
 
 func TestParseTimeInterval(t *testing.T) {
 
-	valid, ok := Tests["time_interval"]
+	valid, ok := Tests[TIME_INTERVAL]
 
 	if !ok {
 		t.Fatal("Failed to load test strings")

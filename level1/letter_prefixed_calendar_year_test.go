@@ -6,7 +6,7 @@ import (
 
 func TestLetterPrefixedCalendarYear(t *testing.T) {
 
-	valid, ok := Tests["prefixed_calendar_year"]
+	valid, ok := Tests[LETTER_PREFIXED_CALENDAR_YEAR]
 
 	if !ok {
 		t.Fatalf("Failed to load test strings")

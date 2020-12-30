@@ -6,7 +6,7 @@ import (
 
 func TestSignificantDigits(t *testing.T) {
 
-	valid, ok := Tests["significant_digits"]
+	valid, ok := Tests[SIGNIFICANT_DIGITS]
 
 	if !ok {
 		t.Fatalf("Failed to load test strings")

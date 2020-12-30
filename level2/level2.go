@@ -59,7 +59,7 @@ var Tests map[string][]string = map[string][]string{
 	UNSPECIFIED_DIGIT: []string{
 		"156X-12-25",
 		"15XX-12-25",
-		// TO DO		
+		// TO DO
 		// "XXXX-12-XX",
 		"1XXX-XX",
 		"1XXX-12",

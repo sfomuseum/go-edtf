@@ -45,11 +45,11 @@ func Matches(edtf_str string) (string, error) {
 	}
 
 	if IsDateAndTime(edtf_str) {
-		return DATE_AND_TIME, nil		
+		return DATE_AND_TIME, nil
 	}
 
 	if IsTimeInterval(edtf_str) {
-		return TIME_INTERVAL, nil				
+		return TIME_INTERVAL, nil
 	}
 
 	return "", errors.New("Invalid Level 0 string")

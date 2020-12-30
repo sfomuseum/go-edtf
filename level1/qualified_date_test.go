@@ -6,7 +6,7 @@ import (
 
 func TestQualifiedDate(t *testing.T) {
 
-	valid, ok := Tests["qualified_date"]
+	valid, ok := Tests[QUALIFIED_DATE]
 
 	if !ok {
 		t.Fatalf("Failed to load test strings")

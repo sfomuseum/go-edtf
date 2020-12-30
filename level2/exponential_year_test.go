@@ -6,7 +6,7 @@ import (
 
 func TestExponentialYear(t *testing.T) {
 
-	valid, ok := Tests["exponential_year"]
+	valid, ok := Tests[EXPONENTIAL_YEAR]
 
 	if !ok {
 		t.Fatalf("Failed to load test strings")

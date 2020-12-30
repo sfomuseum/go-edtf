@@ -6,7 +6,7 @@ import (
 
 func TestNegativeCalendarYear(t *testing.T) {
 
-	valid, ok := Tests["negative_calendar_year"]
+	valid, ok := Tests[NEGATIVE_CALENDAR_YEAR]
 
 	if !ok {
 		t.Fatalf("Failed to load test strings")

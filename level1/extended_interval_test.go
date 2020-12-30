@@ -6,7 +6,7 @@ import (
 
 func TestExtendedIntervalEnd(t *testing.T) {
 
-	valid, ok := Tests["extended_interval_end"]
+	valid, ok := Tests[EXTENDED_INTERVAL_END]
 
 	if !ok {
 		t.Fatalf("Failed to load test strings")
@@ -25,7 +25,7 @@ func TestExtendedIntervalEnd(t *testing.T) {
 
 func TestExtendedIntervalStart(t *testing.T) {
 
-	valid, ok := Tests["extended_interval_start"]
+	valid, ok := Tests[EXTENDED_INTERVAL_START]
 
 	if !ok {
 		t.Fatalf("Failed to load test strings")

@@ -89,7 +89,7 @@ func Matches(edtf_str string) (string, error) {
 	if IsNegativeCalendarYear(edtf_str) {
 		return NEGATIVE_CALENDAR_YEAR, nil
 	}
-	
+
 	if IsExtendedInterval(edtf_str) {
 
 		if re.IntervalStart.MatchString(edtf_str) {
@@ -98,7 +98,7 @@ func Matches(edtf_str string) (string, error) {
 
 		if re.IntervalEnd.MatchString(edtf_str) {
 			return EXTENDED_INTERVAL_END, nil
-		}				
+		}
 	}
 
 	return "", errors.New("Invalid Level 1 string")

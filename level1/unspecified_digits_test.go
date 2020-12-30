@@ -6,7 +6,7 @@ import (
 
 func TestUnspecifiedDigits(t *testing.T) {
 
-	valid, ok := Tests["unspecified_digits"]
+	valid, ok := Tests[UNSPECIFIED_DIGITS]
 
 	if !ok {
 		t.Fatalf("Failed to load test strings")

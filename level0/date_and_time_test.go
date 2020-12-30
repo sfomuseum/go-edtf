@@ -6,7 +6,7 @@ import (
 
 func TestParseDateAndTime(t *testing.T) {
 
-	valid, ok := Tests["date_and_time"]
+	valid, ok := Tests[DATE_AND_TIME]
 
 	if !ok {
 		t.Fatal("Failed to load test strings")
