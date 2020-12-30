@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/common"
+	"github.com/whosonfirst/go-edtf/re"
 )
 
 /*
@@ -54,11 +55,11 @@ Time interval with unknown start
 
 func IsExtendedInterval(edtf_str string) bool {
 
-	if re_interval_end.MatchString(edtf_str) {
+	if re.IntervalEnd.MatchString(edtf_str) {
 		return true
 	}
 
-	if re_interval_start.MatchString(edtf_str) {
+	if re.IntervalStart.MatchString(edtf_str) {
 		return true
 	}
 
@@ -67,11 +68,11 @@ func IsExtendedInterval(edtf_str string) bool {
 
 func ParseExtendedInterval(edtf_str string) (*edtf.EDTFDate, error) {
 
-	if re_interval_start.MatchString(edtf_str) {
+	if re.IntervalStart.MatchString(edtf_str) {
 		return ParseExtendedIntervalStart(edtf_str)
 	}
 
-	if re_interval_end.MatchString(edtf_str) {
+	if re.IntervalEnd.MatchString(edtf_str) {
 		return ParseExtendedIntervalEnd(edtf_str)
 	}
 
@@ -91,7 +92,7 @@ func ParseExtendedIntervalStart(edtf_str string) (*edtf.EDTFDate, error) {
 
 	*/
 
-	m := re_interval_start.FindStringSubmatch(edtf_str)
+	m := re.IntervalStart.FindStringSubmatch(edtf_str)
 
 	if len(m) != 5 {
 		return nil, errors.New("Invalid Level 1 extended interval (start) string")
@@ -141,7 +142,7 @@ func ParseExtendedIntervalEnd(edtf_str string) (*edtf.EDTFDate, error) {
 		END 5 1985/,1985,,,
 	*/
 
-	m := re_interval_end.FindStringSubmatch(edtf_str)
+	m := re.IntervalEnd.FindStringSubmatch(edtf_str)
 
 	if len(m) != 5 {
 		return nil, errors.New("Invalid Level 1 extended interval (end) string")

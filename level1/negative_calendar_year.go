@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/common"
+	"github.com/whosonfirst/go-edtf/re"
 )
 
 /*
@@ -17,12 +18,12 @@ Note: ISO 8601 Part 1 does not support negative year.
 */
 
 func IsNegativeCalendarYear(edtf_str string) bool {
-	return re_negative_year.MatchString(edtf_str)
+	return re.NegativeYear.MatchString(edtf_str)
 }
 
 func ParseNegativeCalendarYear(edtf_str string) (*edtf.EDTFDate, error) {
 
-	m := re_negative_year.FindStringSubmatch(edtf_str)
+	m := re.NegativeYear.FindStringSubmatch(edtf_str)
 
 	if len(m) != 2 {
 		return nil, errors.New("Invalid Level 1 negative year string")

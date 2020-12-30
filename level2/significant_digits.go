@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"github.com/whosonfirst/go-edtf"
+	"github.com/whosonfirst/go-edtf/re"
 	"strings"
 )
 
@@ -23,24 +24,24 @@ A year (expressed in any of the three allowable forms: four-digit, 'Y' prefix, o
 */
 
 func IsSignificantDigits(edtf_str string) bool {
-	return re_significant_digits.MatchString(edtf_str)
+	return re.SignificantDigits.MatchString(edtf_str)
 }
 
 func ParseSignificantDigits(edtf_str string) (*edtf.EDTFDate, error) {
 
-	if !re_significant_digits.MatchString(edtf_str) {
+	if !re.SignificantDigits.MatchString(edtf_str) {
 		return nil, errors.New("Invalid Level 2 significant digits string")
 	}
 
 	/*
 
-		SIGN 8 1950S2,1950,2,,,,,
-		SIGN 8 Y171010000S3,,,171010000,3,,,
-		SIGN 8 Y3388E2S3,,,,,3388,2,3
+		SIGN 8 1950S2,1950,,,,,,2
+		SIGN 8 Y171010000S3,,Y,171010000,,,,3
+		SIGN 8 Y3388E2S3,,,,3388,E,2,3
 
 	*/
 
-	m := re_significant_digits.FindStringSubmatch(edtf_str)
+	m := re.SignificantDigits.FindStringSubmatch(edtf_str)
 
 	fmt.Println("SIGN", len(m), strings.Join(m, ","))
 	return nil, nil

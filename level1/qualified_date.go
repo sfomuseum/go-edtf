@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/common"
+	"github.com/whosonfirst/go-edtf/re"
 )
 
 /*
@@ -19,12 +20,12 @@ The characters '?', '~' and '%' are used to mean "uncertain", "approximate", and
 */
 
 func IsQualifiedDate(edtf_str string) bool {
-	return re_qualified.MatchString(edtf_str)
+	return re.QualifiedDate.MatchString(edtf_str)
 }
 
 func ParseQualifiedDate(edtf_str string) (*edtf.EDTFDate, error) {
 
-	m := re_qualified.FindStringSubmatch(edtf_str)
+	m := re.QualifiedDate.FindStringSubmatch(edtf_str)
 
 	if len(m) != 5 {
 		return nil, errors.New("Invalid Level 1 qualified date string")

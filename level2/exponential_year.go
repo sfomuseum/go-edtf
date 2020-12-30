@@ -5,6 +5,7 @@ import (
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/calendar"
 	"github.com/whosonfirst/go-edtf/common"
+	"github.com/whosonfirst/go-edtf/re"
 	"math/big"
 )
 
@@ -20,7 +21,7 @@ Exponential year
 */
 
 func IsExponentialYear(edtf_str string) bool {
-	return re_exponential_year.MatchString(edtf_str)
+	return re.ExponentialYear.MatchString(edtf_str)
 }
 
 func ParseExponentialYear(edtf_str string) (*edtf.EDTFDate, error) {
@@ -30,7 +31,7 @@ func ParseExponentialYear(edtf_str string) (*edtf.EDTFDate, error) {
 		EXP 5 Y10E7,10E7,,10,7
 	*/
 
-	m := re_exponential_year.FindStringSubmatch(edtf_str)
+	m := re.ExponentialYear.FindStringSubmatch(edtf_str)
 
 	if len(m) != 5 {
 		return nil, errors.New("Invalid Level 2 exponential year string")

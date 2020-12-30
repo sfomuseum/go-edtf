@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/common"
+	"github.com/whosonfirst/go-edtf/re"
 )
 
 /*
@@ -22,12 +23,12 @@ EDTF Level 0 adopts representations of a time interval where both the start and 
 */
 
 func IsTimeInterval(edtf_str string) bool {
-	return re_time_interval.MatchString(edtf_str)
+	return re.TimeInterval.MatchString(edtf_str)
 }
 
 func ParseTimeInterval(edtf_str string) (*edtf.EDTFDate, error) {
 
-	m := re_time_interval.FindStringSubmatch(edtf_str)
+	m := re.TimeInterval.FindStringSubmatch(edtf_str)
 
 	if len(m) != 7 {
 		return nil, errors.New("Invalid Level 0 time interval string")

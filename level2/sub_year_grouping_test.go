@@ -1,7 +1,7 @@
 package level2
 
 import (
-	"testing"	
+	"testing"
 )
 
 func TestSubYearGroupings(t *testing.T) {
@@ -21,4 +21,3 @@ func TestSubYearGroupings(t *testing.T) {
 		}
 	}
 }
-

@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/common"
+	"github.com/whosonfirst/go-edtf/re"
 )
 
 /*
@@ -20,12 +21,12 @@ Date
 */
 
 func IsDate(edtf_str string) bool {
-	return re_date.MatchString(edtf_str)
+	return re.Date.MatchString(edtf_str)
 }
 
 func ParseDate(edtf_str string) (*edtf.EDTFDate, error) {
 
-	m := re_date.FindStringSubmatch(edtf_str)
+	m := re.Date.FindStringSubmatch(edtf_str)
 
 	if len(m) != 4 {
 		return nil, errors.New("Invalid Level 0 date string")

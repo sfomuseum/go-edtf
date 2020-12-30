@@ -3,6 +3,7 @@ package level0
 import (
 	"errors"
 	"github.com/whosonfirst/go-edtf"
+	"github.com/whosonfirst/go-edtf/re"
 	"strings"
 	"time"
 )
@@ -27,12 +28,12 @@ Date and Time
 */
 
 func IsDateAndTime(edtf_str string) bool {
-	return re_date_time.MatchString(edtf_str)
+	return re.DateAndTime.MatchString(edtf_str)
 }
 
 func ParseDateAndTime(edtf_str string) (*edtf.EDTFDate, error) {
 
-	m := re_date_time.FindStringSubmatch(edtf_str)
+	m := re.DateAndTime.FindStringSubmatch(edtf_str)
 
 	if len(m) != 12 {
 		return nil, errors.New("Invalid Level 0 date and time string")

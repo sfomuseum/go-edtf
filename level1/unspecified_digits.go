@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/common"
+	"github.com/whosonfirst/go-edtf/re"
 	"strconv"
 	"strings"
 )
@@ -28,12 +29,12 @@ The character 'X' may be used in place of one or more rightmost digits to indica
 */
 
 func IsUnspecifiedDigits(edtf_str string) bool {
-	return re_unspecified.MatchString(edtf_str)
+	return re.UnspecifiedDigits.MatchString(edtf_str)
 }
 
 func ParseUnspecifiedDigits(edtf_str string) (*edtf.EDTFDate, error) {
 
-	m := re_unspecified.FindStringSubmatch(edtf_str)
+	m := re.UnspecifiedDigits.FindStringSubmatch(edtf_str)
 
 	if len(m) != 4 {
 		return nil, errors.New("Invalid Level 1 unspecified digits string")

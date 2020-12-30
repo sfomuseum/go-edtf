@@ -5,6 +5,7 @@ import (
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/calendar"
 	"github.com/whosonfirst/go-edtf/common"
+	"github.com/whosonfirst/go-edtf/re"
 )
 
 /*
@@ -17,7 +18,7 @@ import (
 */
 
 func IsLetterPrefixedCalendarYear(edtf_str string) bool {
-	return re_calendaryear.MatchString(edtf_str)
+	return re.LetterPrefixedCalendarYear.MatchString(edtf_str)
 }
 
 // Years must be in the range 0000..9999.
@@ -29,7 +30,7 @@ func IsLetterPrefixedCalendarYear(edtf_str string) bool {
 
 func ParseLetterPrefixedCalendarYear(edtf_str string) (*edtf.EDTFDate, error) {
 
-	m := re_calendaryear.FindStringSubmatch(edtf_str)
+	m := re.LetterPrefixedCalendarYear.FindStringSubmatch(edtf_str)
 
 	if len(m) != 3 {
 		return nil, errors.New("Invalid Level 1 letter prefixed calendar year string")

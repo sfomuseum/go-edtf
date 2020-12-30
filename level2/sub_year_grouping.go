@@ -3,6 +3,7 @@ package level2
 import (
 	"errors"
 	"github.com/whosonfirst/go-edtf"
+	"github.com/whosonfirst/go-edtf/re"
 )
 
 /*
@@ -37,12 +38,12 @@ Level 2 extends the season feature of Level 1 to include the following sub-year 
 */
 
 func IsSubYearGrouping(edtf_str string) bool {
-	return re_sub_year.MatchString(edtf_str)
+	return re.SubYear.MatchString(edtf_str)
 }
 
 func ParseSubYearGroupings(edtf_str string) (*edtf.EDTFDate, error) {
 
-	if !re_sub_year.MatchString(edtf_str) {
+	if !re.SubYear.MatchString(edtf_str) {
 		return nil, errors.New("Invalid Level 2 sub year groupings string")
 	}
 

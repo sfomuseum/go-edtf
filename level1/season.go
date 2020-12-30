@@ -5,6 +5,7 @@ import (
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/calendar"
 	"github.com/whosonfirst/go-edtf/common"
+	"github.com/whosonfirst/go-edtf/re"
 	"strconv"
 	"strings"
 )
@@ -20,7 +21,7 @@ The values 21, 22, 23, 24 may be used used to signify ' Spring', 'Summer', 'Autu
 */
 
 func IsSeason(edtf_str string) bool {
-	return re_season.MatchString(edtf_str)
+	return re.Season.MatchString(edtf_str)
 }
 
 func ParseSeason(edtf_str string) (*edtf.EDTFDate, error) {
@@ -32,7 +33,7 @@ func ParseSeason(edtf_str string) (*edtf.EDTFDate, error) {
 		SEASON 5 [winter, 2002   winter 2002]
 	*/
 
-	m := re_season.FindStringSubmatch(edtf_str)
+	m := re.Season.FindStringSubmatch(edtf_str)
 
 	if len(m) != 5 {
 		return nil, errors.New("Invalid Level 1 season string")
