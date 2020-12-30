@@ -11,6 +11,8 @@ const OPEN string = ".."
 const UNKNOWN string = ""
 const NEGATIVE string = "-"
 
+const MAX_YEARS int = 9999
+
 type EDTFDate struct {
 	Start *DateRange `json:"start"`
 	End   *DateRange `json:"end"`

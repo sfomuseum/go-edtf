@@ -1,10 +1,12 @@
 package level2
 
 import (
-	_ "fmt"
+	"fmt"
 	"github.com/whosonfirst/go-edtf"
+	"github.com/whosonfirst/go-edtf/common"
 	"github.com/whosonfirst/go-edtf/re"
-	_ "strings"
+	"strconv"
+	"strings"
 )
 
 /*
@@ -32,18 +34,77 @@ func ParseSignificantDigits(edtf_str string) (*edtf.EDTFDate, error) {
 		return nil, edtf.Invalid(SIGNIFICANT_DIGITS, edtf_str)
 	}
 
-	return nil, edtf.NotImplemented(SIGNIFICANT_DIGITS, edtf_str)
-
 	/*
 
-		SIGN 8 1950S2,1950,,,,,,2
-		SIGN 8 Y171010000S3,,Y,171010000,,,,3
-		SIGN 8 Y3388E2S3,,,,3388,E,2,3
+		SIGN 9 1950S2,1950,,,,,,,2
+		SIGN 9 Y171010000S3,,,171010000,,,,,3
+		SIGN 9 Y-1S3,,-,1,,,,,3
+		SIGN 9 Y3388E2S3,,,,3388E2,,3388,2,3
+		SIGN 9 Y-20E2S3,,,,-20E2,-,20,2,3
 
 	*/
 
-	// m := re.SignificantDigits.FindStringSubmatch(edtf_str)
+	m := re.SignificantDigits.FindStringSubmatch(edtf_str)
 
-	// fmt.Println("SIGN", len(m), strings.Join(m, ","))
+	fmt.Println("SIGN", len(m), strings.Join(m, ","))
+
+	if len(m) != 9 {
+		return nil, edtf.Invalid(SIGNIFICANT_DIGITS, edtf_str)
+	}
+
+	str_yyyy := m[1]
+	// prefix := m[3]
+	str_year := m[3]
+	notation := m[4]
+	digits := m[8]
+
+	var yyyy int
+
+	if str_yyyy != "" {
+
+		y, err := strconv.Atoi(str_yyyy)
+
+		if err != nil {
+			return nil, edtf.Invalid(SIGNIFICANT_DIGITS, edtf_str)
+		}
+
+		yyyy = y
+
+	} else if str_year != "" {
+
+		if len(str_year) > len(string(edtf.MAX_YEARS)) {
+			return nil, edtf.Unsupported(SIGNIFICANT_DIGITS, edtf_str)
+		}
+
+		y, err := strconv.Atoi(str_year)
+
+		if err != nil {
+			return nil, edtf.Invalid(SIGNIFICANT_DIGITS, edtf_str)
+		}
+
+		yyyy = y
+
+	} else if notation != "" {
+
+		y, err := common.ParseExponentialNotation(notation)
+
+		if err != nil {
+			return nil, err
+		}
+
+		yyyy = y
+
+	} else {
+		return nil, edtf.Invalid(SIGNIFICANT_DIGITS, edtf_str)
+	}
+
+	if yyyy > edtf.MAX_YEARS {
+		return nil, edtf.Unsupported(SIGNIFICANT_DIGITS, edtf_str)
+	}
+
+	fmt.Println("DIGITS", edtf_str, yyyy, digits)
+
+	return nil, edtf.NotImplemented(SIGNIFICANT_DIGITS, edtf_str)
+
 	return nil, nil
 }

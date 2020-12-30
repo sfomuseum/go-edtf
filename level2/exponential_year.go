@@ -5,7 +5,6 @@ import (
 	"github.com/whosonfirst/go-edtf/calendar"
 	"github.com/whosonfirst/go-edtf/common"
 	"github.com/whosonfirst/go-edtf/re"
-	"math/big"
 )
 
 /*
@@ -39,20 +38,11 @@ func ParseExponentialYear(edtf_str string) (*edtf.EDTFDate, error) {
 	notation := m[1]
 	prefix := m[2]
 
-	flt, _, err := big.ParseFloat(notation, 10, 0, big.ToNearestEven)
+	yyyy_i, err := common.ParseExponentialNotation(notation)
 
 	if err != nil {
 		return nil, err
 	}
-
-	var i = new(big.Int)
-	yyyy, _ := flt.Int(i)
-
-	if yyyy.Int64() > int64(9999) || yyyy.Int64() < 0 {
-		return nil, edtf.Unsupported(EXPONENTIAL_YEAR, edtf_str)
-	}
-
-	yyyy_i := int(yyyy.Int64())
 
 	start, err := common.DateRangeWithYMD(yyyy_i, 0, 0)
 
