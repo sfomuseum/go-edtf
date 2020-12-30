@@ -53,7 +53,19 @@ func DateRangeWithYMDString(str_yyyy string, str_mm string, str_dd string) (*edt
 	return DateRangeWithYMD(yyyy, mm, dd)
 }
 
+// To do: update to support negative years
+// (20201229/thisisaaronland)
+
 func DateRangeWithYMD(yyyy int, mm int, dd int) (*edtf.DateRange, error) {
+
+	lower_yyyy := yyyy
+	upper_yyyy := yyyy
+
+	lower_mm := 1
+	upper_mm := 12
+
+	lower_dd := 1
+	upper_dd := -1
 
 	if yyyy == 0 {
 		return nil, errors.New("Missing year")
@@ -63,11 +75,19 @@ func DateRangeWithYMD(yyyy int, mm int, dd int) (*edtf.DateRange, error) {
 		return nil, errors.New("Missing month")
 	}
 
-	if mm == 0 {
-		mm = 1
+	if mm != 0 {
+
+		if mm > 12 {
+			return nil, errors.New("Invalid month")
+		}
+
+		lower_mm = mm
+		upper_mm = mm
 	}
 
 	if dd == 0 {
+
+		lower_dd = 1
 
 		days, err := calendar.DaysInMonth(uint(yyyy), uint(mm))
 
@@ -75,7 +95,7 @@ func DateRangeWithYMD(yyyy int, mm int, dd int) (*edtf.DateRange, error) {
 			return nil, err
 		}
 
-		dd = int(days)
+		upper_dd = int(days)
 
 	} else {
 
@@ -88,13 +108,19 @@ func DateRangeWithYMD(yyyy int, mm int, dd int) (*edtf.DateRange, error) {
 		if uint(dd) > days {
 			return nil, errors.New("Invalid days for month")
 		}
+
+		lower_dd = int(dd)
+		upper_dd = lower_dd
 	}
 
 	lower_hms := "00:00:00"
 	upper_hms := "23:59:59"
 
-	lower_str := fmt.Sprintf("%04d-%02d-%02dT%s", yyyy, mm, dd, lower_hms)
-	upper_str := fmt.Sprintf("%04d-%02d-%02dT%s", yyyy, mm, dd, upper_hms)
+	lower_str := fmt.Sprintf("%04d-%02d-%02dT%s", lower_yyyy, lower_mm, lower_dd, lower_hms)
+	upper_str := fmt.Sprintf("%04d-%02d-%02dT%s", upper_yyyy, upper_mm, upper_dd, upper_hms)
+
+	// fmt.Println("LOWER", lower_str)
+	// fmt.Println("UPPER", upper_str)
 
 	lower_t, err := time.Parse("2006-01-02T15:04:05", lower_str)
 

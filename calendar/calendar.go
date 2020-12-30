@@ -53,3 +53,46 @@ func DaysInMonth(yyyy uint, mm uint) (uint, error) {
 
 	return uint(dd), nil
 }
+
+// https://stackoverflow.com/questions/51578482/parsing-dates-with-negative-year-in-go
+// This needs to be updated for YYYY-MM-DD strings (20201229/thisisaaronland)
+
+func ParseCEDate(value string) (time.Time, error) {
+
+	const layout = "_2 Jan 2006"
+
+	date, err := time.Parse(layout, value)
+
+	if err == nil {
+		return date, err
+	}
+
+	perr, ok := err.(*time.ParseError)
+
+	if !ok {
+		return time.Time{}, err
+	}
+
+	if perr.LayoutElem != "2006" {
+		return time.Time{}, err
+	}
+
+	if !strings.HasPrefix(perr.ValueElem, "-") {
+		return time.Time{}, err
+	}
+
+	value = strings.Replace(value, perr.ValueElem, perr.ValueElem[1:], 1)
+
+	date, derr := time.Parse(layout, value)
+
+	if derr != nil {
+		return time.Time{}, err
+	}
+
+	return date.AddDate(-2*date.Year(), 0, 0), derr
+}
+
+func ToBCE(d *time.Time) *time.Time {
+	new_d := d.AddDate(-2*d.Year(), 0, 0)
+	return &new_d
+}

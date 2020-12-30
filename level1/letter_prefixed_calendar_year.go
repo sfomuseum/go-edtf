@@ -2,10 +2,9 @@ package level1
 
 import (
 	"errors"
-	"fmt"
 	"github.com/whosonfirst/go-edtf"
+	"github.com/whosonfirst/go-edtf/calendar"
 	"github.com/whosonfirst/go-edtf/common"
-	"strings"
 )
 
 /*
@@ -21,11 +20,16 @@ func IsLetterPrefixedCalendarYear(edtf_str string) bool {
 	return re_calendaryear.MatchString(edtf_str)
 }
 
+// Years must be in the range 0000..9999.
+// https://golang.org/pkg/time/#Parse
+
+// sigh....
+// fmt.Printf("DEBUG %v\n", start.Add(time.Hour * 8760 * 1000))
+// ./prog.go:21:54: constant 31536000000000000000 overflows time.Duration
+
 func ParseLetterPrefixedCalendarYear(edtf_str string) (*edtf.EDTFDate, error) {
 
 	m := re_calendaryear.FindStringSubmatch(edtf_str)
-
-	fmt.Println("CALENDAR", len(m), strings.Join(m, ","))
 
 	if len(m) != 3 {
 		return nil, errors.New("Invalid Level 1 letter prefixed calendar year string")
@@ -37,6 +41,10 @@ func ParseLetterPrefixedCalendarYear(edtf_str string) (*edtf.EDTFDate, error) {
 	start_mm := ""
 	start_dd := ""
 
+	if len(start_yyyy) > 4 {
+		return nil, errors.New("Unsupported Level 1 letter prefixed calendar year string.")
+	}
+
 	start, err := common.DateRangeWithYMDString(start_yyyy, start_mm, start_dd)
 
 	if err != nil {
@@ -44,6 +52,8 @@ func ParseLetterPrefixedCalendarYear(edtf_str string) (*edtf.EDTFDate, error) {
 	}
 
 	if prefix == edtf.NEGATIVE {
+		start.Lower.Time = calendar.ToBCE(start.Lower.Time)
+		start.Upper.Time = calendar.ToBCE(start.Upper.Time)
 		start.Lower.BCE = true
 		start.Upper.BCE = true
 	}
