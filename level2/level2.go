@@ -154,34 +154,6 @@ func ParseString(edtf_str string) (*edtf.EDTFDate, error) {
 
 /*
 
-Significant digits
-
-A year (expressed in any of the three allowable forms: four-digit, 'Y' prefix, or exponential) may be followed by 'S', followed by a positive integer indicating the number of significant digits.
-
-    Example 1      ‘1950S2’
-    some year between 1900 and 1999, estimated to be 1950
-    Example 2      ‘Y171010000S3’
-    some year between 171010000 and 171010999, estimated to be 171010000
-    Example 3       ‘Y3388E2S3’
-    some year between 338000 and 338999, estimated to be 338800.
-
-*/
-
-func IsSignificantDigits(edtf_str string) bool {
-	return re_significant_digits.MatchString(edtf_str)
-}
-
-func ParseSignificantDigits(edtf_str string) (*edtf.EDTFDate, error) {
-
-	if !re_significant_digits.MatchString(edtf_str) {
-		return nil, errors.New("Invalid Level 2 significant digits string")
-	}
-
-	return nil, nil
-}
-
-/*
-
 Level 2 extends the season feature of Level 1 to include the following sub-year groupings.
 
 21     Spring (independent of location)
