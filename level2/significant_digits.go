@@ -2,10 +2,10 @@ package level2
 
 import (
 	"errors"
-	"fmt"
+	_ "fmt"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/re"
-	"strings"
+	_ "strings"
 )
 
 /*
@@ -41,8 +41,8 @@ func ParseSignificantDigits(edtf_str string) (*edtf.EDTFDate, error) {
 
 	*/
 
-	m := re.SignificantDigits.FindStringSubmatch(edtf_str)
+	// m := re.SignificantDigits.FindStringSubmatch(edtf_str)
 
-	fmt.Println("SIGN", len(m), strings.Join(m, ","))
+	// fmt.Println("SIGN", len(m), strings.Join(m, ","))
 	return nil, nil
 }
