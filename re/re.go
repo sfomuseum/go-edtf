@@ -22,11 +22,11 @@ const PATTERN_QUALIFIED_DATE string = PATTERN_DATE + `(\?|~|%)`
 
 const PATTERN_UNSPECIFIED_DIGITS string = `(?:([0-9X]{4})(?:-([0X][1-9X]|[1X][0-2X])(?:-([012X][1-9X]|[3X][01X]))?)?)`
 
-const PATTERN_INTERVAL_START = `(\.\.)?\/(?:(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?)`
+const PATTERN_INTERVAL_START = `(\.\.)?\/` + PATTERN_DATE
 
-const PATTERN_INTERVAL_END = `(?:(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?)\/(\.\.)?`
+const PATTERN_INTERVAL_END = PATTERN_DATE + `\/(\.\.)?`
 
-const PATTERN_NEGATIVE_YEAR = `\-(\d{4})`
+const PATTERN_NEGATIVE_YEAR = `\-` + PATTERN_YEAR
 
 // Level 2
 
