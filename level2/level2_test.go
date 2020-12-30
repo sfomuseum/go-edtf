@@ -1,6 +1,7 @@
 package level2
 
 import (
+	"github.com/whosonfirst/go-edtf"
 	"testing"
 )
 
@@ -60,104 +61,12 @@ func TestParseString(t *testing.T) {
 		_, err := ParseString(str)
 
 		if err != nil {
-			t.Fatalf("Failed to parse '%s', %v", str, err)
-		}
 
-		/*
-			if d.String() != str {
-				t.Fatalf("Failed to stringify '%s', %v", str, err)
+			if edtf.IsNotImplemented(err) || edtf.IsUnsupported(err) {
+				t.Log(err)
+			} else {
+				t.Fatalf("Failed to parse '%s', %v", str, err)
 			}
-		*/
-
-	}
-}
-
-func TestSetRepresentations(t *testing.T) {
-
-	valid, ok := Tests[SET_REPRESENTATIONS]
-
-	if !ok {
-		t.Fatalf("Failed to load test strings")
-	}
-
-	for _, str := range valid {
-
-		_, err := ParseSetRepresentations(str)
-
-		if err != nil {
-			t.Fatalf("Failed to parse '%s', %v", str, err)
-		}
-	}
-}
-
-func TestGroupQualification(t *testing.T) {
-
-	valid, ok := Tests[GROUP_QUALIFICATION]
-
-	if !ok {
-		t.Fatalf("Failed to load test strings")
-	}
-
-	for _, str := range valid {
-
-		_, err := ParseGroupQualification(str)
-
-		if err != nil {
-			t.Fatalf("Failed to parse '%s', %v", str, err)
-		}
-	}
-}
-
-func TestIndividualQualification(t *testing.T) {
-
-	valid, ok := Tests[INDIVIDUAL_QUALIFICATION]
-
-	if !ok {
-		t.Fatalf("Failed to load test strings")
-	}
-
-	for _, str := range valid {
-
-		_, err := ParseIndividualQualification(str)
-
-		if err != nil {
-			t.Fatalf("Failed to parse '%s', %v", str, err)
-		}
-	}
-}
-
-func TestUnspecifiedDigit(t *testing.T) {
-
-	valid, ok := Tests[UNSPECIFIED_DIGIT]
-
-	if !ok {
-		t.Fatalf("Failed to load test strings")
-	}
-
-	for _, str := range valid {
-
-		_, err := ParseUnspecifiedDigit(str)
-
-		if err != nil {
-			t.Fatalf("Failed to parse '%s', %v", str, err)
-		}
-	}
-}
-
-func TestInterval(t *testing.T) {
-
-	valid, ok := Tests[INTERVAL]
-
-	if !ok {
-		t.Fatalf("Failed to load test strings")
-	}
-
-	for _, str := range valid {
-
-		_, err := ParseInterval(str)
-
-		if err != nil {
-			t.Fatalf("Failed to parse '%s', %v", str, err)
 		}
 	}
 }

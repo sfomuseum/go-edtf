@@ -1,7 +1,6 @@
 package level2
 
 import (
-	"errors"
 	_ "fmt"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/re"
@@ -30,8 +29,10 @@ func IsSignificantDigits(edtf_str string) bool {
 func ParseSignificantDigits(edtf_str string) (*edtf.EDTFDate, error) {
 
 	if !re.SignificantDigits.MatchString(edtf_str) {
-		return nil, errors.New("Invalid Level 2 significant digits string")
+		return nil, edtf.Invalid(SIGNIFICANT_DIGITS, edtf_str)
 	}
+
+	return nil, edtf.NotImplemented(SIGNIFICANT_DIGITS, edtf_str)
 
 	/*
 

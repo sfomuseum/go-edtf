@@ -1,7 +1,6 @@
 package level2
 
 import (
-	"errors"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/calendar"
 	"github.com/whosonfirst/go-edtf/common"
@@ -34,7 +33,7 @@ func ParseExponentialYear(edtf_str string) (*edtf.EDTFDate, error) {
 	m := re.ExponentialYear.FindStringSubmatch(edtf_str)
 
 	if len(m) != 5 {
-		return nil, errors.New("Invalid Level 2 exponential year string")
+		return nil, edtf.Invalid(EXPONENTIAL_YEAR, edtf_str)
 	}
 
 	notation := m[1]
@@ -50,7 +49,7 @@ func ParseExponentialYear(edtf_str string) (*edtf.EDTFDate, error) {
 	yyyy, _ := flt.Int(i)
 
 	if yyyy.Int64() > int64(9999) || yyyy.Int64() < 0 {
-		return nil, errors.New("Unsupported level 2 exponential year string")
+		return nil, edtf.Unsupported(EXPONENTIAL_YEAR, edtf_str)
 	}
 
 	yyyy_i := int(yyyy.Int64())

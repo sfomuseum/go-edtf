@@ -1,7 +1,6 @@
 package level2
 
 import (
-	"errors"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/re"
 )
@@ -44,8 +43,8 @@ func IsSubYearGrouping(edtf_str string) bool {
 func ParseSubYearGroupings(edtf_str string) (*edtf.EDTFDate, error) {
 
 	if !re.SubYear.MatchString(edtf_str) {
-		return nil, errors.New("Invalid Level 2 sub year groupings string")
+		return nil, edtf.Invalid(SUB_YEAR_GROUPINGS, edtf_str)
 	}
 
-	return nil, nil
+	return nil, edtf.NotImplemented(SUB_YEAR_GROUPINGS, edtf_str)
 }

@@ -1,7 +1,6 @@
 package level1
 
 import (
-	"errors"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/common"
 	"github.com/whosonfirst/go-edtf/re"
@@ -37,7 +36,7 @@ func ParseUnspecifiedDigits(edtf_str string) (*edtf.EDTFDate, error) {
 	m := re.UnspecifiedDigits.FindStringSubmatch(edtf_str)
 
 	if len(m) != 4 {
-		return nil, errors.New("Invalid Level 1 unspecified digits string")
+		return nil, edtf.Invalid(UNSPECIFIED_DIGITS, edtf_str)
 	}
 
 	yyyy := m[1]
@@ -68,7 +67,7 @@ func ParseUnspecifiedDigits(edtf_str string) (*edtf.EDTFDate, error) {
 		end_y := int64(9)
 
 		if string(yyyy[0]) == "X" {
-			return nil, errors.New("X millenium not implemented")
+			return nil, edtf.NotImplemented(UNSPECIFIED_DIGITS, edtf_str)
 		} else {
 
 			m, err := strconv.ParseInt(string(yyyy[0]), 10, 32)
@@ -158,7 +157,7 @@ func ParseUnspecifiedDigits(edtf_str string) (*edtf.EDTFDate, error) {
 			start_dd = "30"
 			end_dd = ""
 		default:
-			return nil, errors.New("Invalid unspecified digit string")
+			return nil, edtf.Invalid(UNSPECIFIED_DIGITS, edtf_str)
 		}
 	}
 

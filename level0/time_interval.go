@@ -1,7 +1,6 @@
 package level0
 
 import (
-	"errors"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/common"
 	"github.com/whosonfirst/go-edtf/re"
@@ -31,7 +30,7 @@ func ParseTimeInterval(edtf_str string) (*edtf.EDTFDate, error) {
 	m := re.TimeInterval.FindStringSubmatch(edtf_str)
 
 	if len(m) != 7 {
-		return nil, errors.New("Invalid Level 0 time interval string")
+		return nil, edtf.Invalid(TIME_INTERVAL, edtf_str)
 	}
 
 	start_yyyy := m[1]

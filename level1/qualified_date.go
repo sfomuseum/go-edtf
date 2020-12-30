@@ -1,7 +1,6 @@
 package level1
 
 import (
-	"errors"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/common"
 	"github.com/whosonfirst/go-edtf/re"
@@ -28,7 +27,7 @@ func ParseQualifiedDate(edtf_str string) (*edtf.EDTFDate, error) {
 	m := re.QualifiedDate.FindStringSubmatch(edtf_str)
 
 	if len(m) != 5 {
-		return nil, errors.New("Invalid Level 1 qualified date string")
+		return nil, edtf.Invalid(QUALIFIED_DATE, edtf_str)
 	}
 
 	yyyy := m[1]
@@ -72,7 +71,7 @@ func ParseQualifiedDate(edtf_str string) (*edtf.EDTFDate, error) {
 		d.End.Lower.Approximate = true
 		d.End.Upper.Approximate = true
 	default:
-		return nil, errors.New("Invalid or unrecognized qualifier")
+		return nil, edtf.Invalid(QUALIFIED_DATE, edtf_str)
 	}
 
 	return d, nil

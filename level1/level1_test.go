@@ -1,6 +1,7 @@
 package level1
 
 import (
+	"github.com/whosonfirst/go-edtf"
 	"testing"
 )
 
@@ -60,13 +61,12 @@ func TestParseString(t *testing.T) {
 		_, err := ParseString(str)
 
 		if err != nil {
-			t.Fatalf("Failed to parse '%s', %v", str, err)
+			if edtf.IsNotImplemented(err) || edtf.IsUnsupported(err) {
+				t.Logf("Failed to parse '%s', %v", str, err)
+			} else {
+				t.Fatalf("Failed to parse '%s', %v", str, err)
+			}
 		}
 
-		/*
-			if d.String() != str {
-				t.Fatalf("Failed to stringify '%s', %v", str, err)
-			}
-		*/
 	}
 }

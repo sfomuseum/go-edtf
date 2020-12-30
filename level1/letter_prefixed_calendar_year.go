@@ -1,7 +1,6 @@
 package level1
 
 import (
-	"errors"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/calendar"
 	"github.com/whosonfirst/go-edtf/common"
@@ -33,7 +32,7 @@ func ParseLetterPrefixedCalendarYear(edtf_str string) (*edtf.EDTFDate, error) {
 	m := re.LetterPrefixedCalendarYear.FindStringSubmatch(edtf_str)
 
 	if len(m) != 3 {
-		return nil, errors.New("Invalid Level 1 letter prefixed calendar year string")
+		return nil, edtf.Invalid(LETTER_PREFIXED_CALENDAR_YEAR, edtf_str)
 	}
 
 	prefix := m[1]
@@ -43,7 +42,7 @@ func ParseLetterPrefixedCalendarYear(edtf_str string) (*edtf.EDTFDate, error) {
 	start_dd := ""
 
 	if len(start_yyyy) > 4 {
-		return nil, errors.New("Unsupported Level 1 letter prefixed calendar year string.")
+		return nil, edtf.Unsupported(LETTER_PREFIXED_CALENDAR_YEAR, edtf_str)
 	}
 
 	start, err := common.DateRangeWithYMDString(start_yyyy, start_mm, start_dd)

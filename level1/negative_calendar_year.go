@@ -1,7 +1,6 @@
 package level1
 
 import (
-	"errors"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/common"
 	"github.com/whosonfirst/go-edtf/re"
@@ -26,7 +25,7 @@ func ParseNegativeCalendarYear(edtf_str string) (*edtf.EDTFDate, error) {
 	m := re.NegativeYear.FindStringSubmatch(edtf_str)
 
 	if len(m) != 2 {
-		return nil, errors.New("Invalid Level 1 negative year string")
+		return nil, edtf.Invalid(NEGATIVE_CALENDAR_YEAR, edtf_str)
 	}
 
 	start_yyyy := m[1]

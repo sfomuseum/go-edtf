@@ -12,16 +12,15 @@ const LETTER_PREFIXED_CALENDAR_YEAR string = "letter prefixed calendar year"
 const SEASON string = "season"
 const QUALIFIED_DATE string = "qualified date"
 const UNSPECIFIED_DIGITS string = "unspecified digits"
+const EXTENDED_INTERVAL string = "extended interval"
 const EXTENDED_INTERVAL_START string = "extended interval start"
 const EXTENDED_INTERVAL_END string = "extended interval end"
 const NEGATIVE_CALENDAR_YEAR string = "negative calendar year"
 
 var Tests map[string][]string = map[string][]string{
 	LETTER_PREFIXED_CALENDAR_YEAR: []string{
-		// TO DO
-		// Go is incapable of parsing these dates
-		// "Y170000002",
-		// "Y-17000002",
+		"Y170000002", // TO DO
+		"Y-17000002", // TO DO
 		"Y1700",
 		"Y-1200",
 	},

@@ -1,7 +1,6 @@
 package level0
 
 import (
-	"errors"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/common"
 	"github.com/whosonfirst/go-edtf/re"
@@ -29,7 +28,7 @@ func ParseDate(edtf_str string) (*edtf.EDTFDate, error) {
 	m := re.Date.FindStringSubmatch(edtf_str)
 
 	if len(m) != 4 {
-		return nil, errors.New("Invalid Level 0 date string")
+		return nil, edtf.Invalid(DATE, edtf_str)
 	}
 
 	yyyy := m[1]

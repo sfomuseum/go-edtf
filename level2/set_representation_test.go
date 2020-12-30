@@ -5,9 +5,9 @@ import (
 	"testing"
 )
 
-func TestSubYearGroupings(t *testing.T) {
+func TestSetRepresentations(t *testing.T) {
 
-	valid, ok := Tests[SUB_YEAR_GROUPINGS]
+	valid, ok := Tests[SET_REPRESENTATIONS]
 
 	if !ok {
 		t.Fatalf("Failed to load test strings")
@@ -15,7 +15,7 @@ func TestSubYearGroupings(t *testing.T) {
 
 	for _, str := range valid {
 
-		_, err := ParseSubYearGroupings(str)
+		_, err := ParseSetRepresentations(str)
 
 		if err != nil {
 			if edtf.IsNotImplemented(err) {

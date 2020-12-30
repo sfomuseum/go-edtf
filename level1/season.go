@@ -1,7 +1,6 @@
 package level1
 
 import (
-	"errors"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/calendar"
 	"github.com/whosonfirst/go-edtf/common"
@@ -36,7 +35,7 @@ func ParseSeason(edtf_str string) (*edtf.EDTFDate, error) {
 	m := re.Season.FindStringSubmatch(edtf_str)
 
 	if len(m) != 5 {
-		return nil, errors.New("Invalid Level 1 season string")
+		return nil, edtf.Invalid(SEASON, edtf_str)
 	}
 
 	var start_yyyy int
@@ -96,7 +95,7 @@ func ParseSeason(edtf_str string) (*edtf.EDTFDate, error) {
 			end_mm = 12
 
 		default:
-			return nil, errors.New("Invalid season")
+			return nil, edtf.Invalid(SEASON, edtf_str)
 		}
 
 	} else {

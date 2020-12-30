@@ -1,6 +1,7 @@
 package level2
 
 import (
+	"github.com/whosonfirst/go-edtf"
 	"testing"
 )
 
@@ -17,7 +18,11 @@ func TestExponentialYear(t *testing.T) {
 		_, err := ParseExponentialYear(str)
 
 		if err != nil {
-			t.Fatalf("Failed to parse '%s', %v", str, err)
+			if edtf.IsNotImplemented(err) || edtf.IsUnsupported(err) {
+				t.Logf("Failed to parse '%s', %v", str, err)
+			} else {
+				t.Fatalf("Failed to parse '%s', %v", str, err)
+			}
 		}
 	}
 }
