@@ -2,11 +2,11 @@ package re
 
 // Common
 
-const PATTERN_YEAR string = `(\d{4})`
+const PATTERN_YEAR string = `(\-?\d{4})`
 
 // Level 0
 
-const PATTERN_DATE string = `(\d{4})(?:-([0][1-9]|1[0-2])(?:-([012][1-9]|3[01]))?)?`
+const PATTERN_DATE string = `(\-?\d{4})(?:-([0][1-9]|1[0-2])(?:-([012][1-9]|3[01]))?)?`
 
 const PATTERN_DATE_AND_TIME string = PATTERN_DATE + `T(\d{2}):(\d{2}):(\d{2})(Z|(\+|-)(\d{2})(\:(\d{2}))?)?`
 
@@ -14,9 +14,9 @@ const PATTERN_TIME_INTERVAL string = PATTERN_DATE + `/` + PATTERN_DATE
 
 // Level 1
 
-const PATTERN_LETTER_PREFIXED_CALENDAR_YEAR string = `Y(\-)?(\d+)`
+const PATTERN_LETTER_PREFIXED_CALENDAR_YEAR string = `Y` + PATTERN_YEAR
 
-const PATTERN_SEASON string = `(\d{4})-(0[1-9]|1[0-2]|2[1-4])|(?i)(spring|summer|fall|winter)\s*,\s*(\d{4})`
+const PATTERN_SEASON string = PATTERN_YEAR + `\-(0[1-9]|1[0-2]|2[1-4])|(?i)(spring|summer|fall|winter)\s*,\s*(\d{4})`
 
 const PATTERN_QUALIFIED_DATE string = PATTERN_DATE + `(\?|~|%)`
 

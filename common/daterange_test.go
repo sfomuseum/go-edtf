@@ -12,6 +12,8 @@ func TestDateRangeWithYMDString(t *testing.T) {
 		[]string{"2019", "02", ""}, // ensure 28 days
 		[]string{"1900", "", ""},
 		[]string{"1450", "03", ""},
+		[]string{"-1900", "05", ""},
+		[]string{"-1972", "03", "19"},
 	}
 
 	for _, ymd := range valid {

@@ -87,7 +87,7 @@ func TestParseString(t *testing.T) {
 			if err != nil {
 
 				if edtf.IsNotImplemented(err) || edtf.IsUnsupported(err) {
-					t.Logf("Failed to parse level 0 string '%s' (%s), %v", str, label, err)
+					t.Logf("Skipping level 0 string '%s' (%s), %v", str, label, err)
 				} else {
 					t.Fatalf("Failed to parse level 0 string '%s' (%s), %v", str, label, err)
 				}
@@ -104,7 +104,7 @@ func TestParseString(t *testing.T) {
 			if err != nil {
 
 				if edtf.IsNotImplemented(err) || edtf.IsUnsupported(err) {
-					t.Logf("Failed to parse level 1 string '%s' (%s), %v", str, label, err)
+					t.Logf("Skipping level 1 string '%s' (%s), %v", str, label, err)
 				} else {
 					t.Fatalf("Failed to parse level 1 string '%s' (%s), %v", str, label, err)
 				}
@@ -121,7 +121,7 @@ func TestParseString(t *testing.T) {
 			if err != nil {
 
 				if edtf.IsNotImplemented(err) || edtf.IsUnsupported(err) {
-					t.Logf("Failed to parse level 2 string '%s' (%s), %v", str, label, err)
+					t.Logf("Skipping level 2 string '%s' (%s), %v", str, label, err)
 				} else {
 					t.Fatalf("Failed to parse level 2 string '%s' (%s), %v", str, label, err)
 				}

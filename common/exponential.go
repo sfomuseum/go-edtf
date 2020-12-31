@@ -16,7 +16,7 @@ func ParseExponentialNotation(notation string) (int, error) {
 	var i = new(big.Int)
 	yyyy, _ := flt.Int(i)
 
-	if yyyy.Int64() > int64(9999) || yyyy.Int64() < 0 {
+	if yyyy.Int64() > int64(edtf.MAX_YEARS) || yyyy.Int64() < int64(0-edtf.MAX_YEARS) {
 		return 0, edtf.Unsupported("exponential notation", notation)
 	}
 

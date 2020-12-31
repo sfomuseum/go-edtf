@@ -53,10 +53,36 @@ func DateRangeWithYMDString(str_yyyy string, str_mm string, str_dd string) (*edt
 	return DateRangeWithYMD(yyyy, mm, dd)
 }
 
-// To do: update to support negative years
-// (20201229/thisisaaronland)
-
 func DateRangeWithYMD(yyyy int, mm int, dd int) (*edtf.DateRange, error) {
+
+	// See this? If yyyy < 0 then we are dealing with a BCE year
+	// which can't be parsed by the time.Parse() function so we're
+	// going to set a flag and convert yyyy to a positive number.
+	// After we've created time.Time instances below, we'll check to see
+	// whether the flag is set and if it is then we'll update the
+	// year to be BCE again. One possible gotcha in this approach is
+	// that the calendar.DaysInMonth method may return wonky results
+	// since it will calculating things on a CE year rather than a BCE
+	// year. (20201230/thisisaaronland)
+
+	is_bce := false
+
+	if yyyy < 0 {
+		is_bce = true
+		yyyy = yyyy - (yyyy * 2)
+	}
+
+	if yyyy == 0 {
+		return nil, errors.New("Missing year")
+	}
+
+	if yyyy > edtf.MAX_YEARS {
+		return nil, errors.New("Year exceeds Golang limit")
+	}
+
+	if mm == 0 && dd != 0 {
+		return nil, errors.New("Missing month")
+	}
 
 	lower_yyyy := yyyy
 	upper_yyyy := yyyy
@@ -66,14 +92,6 @@ func DateRangeWithYMD(yyyy int, mm int, dd int) (*edtf.DateRange, error) {
 
 	lower_dd := 1
 	upper_dd := -1
-
-	if yyyy == 0 {
-		return nil, errors.New("Missing year")
-	}
-
-	if mm == 0 && dd != 0 {
-		return nil, errors.New("Missing month")
-	}
 
 	if mm != 0 {
 
@@ -134,6 +152,14 @@ func DateRangeWithYMD(yyyy int, mm int, dd int) (*edtf.DateRange, error) {
 		return nil, err
 	}
 
+	if is_bce {
+		lower_t = toBCE(lower_t)
+		upper_t = toBCE(upper_t)
+	}
+
+	// fmt.Printf("lower %v\n", lower_t)
+	// fmt.Printf("upper %v\n", upper_t)
+
 	lower_d := &edtf.Date{
 		Time: &lower_t,
 	}
@@ -148,4 +174,8 @@ func DateRangeWithYMD(yyyy int, mm int, dd int) (*edtf.DateRange, error) {
 	}
 
 	return dt, nil
+}
+
+func toBCE(d time.Time) time.Time {
+	return d.AddDate(-2*d.Year(), 0, 0)
 }
