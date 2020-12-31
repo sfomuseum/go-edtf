@@ -30,7 +30,7 @@ const PATTERN_NEGATIVE_YEAR = `\-` + PATTERN_YEAR
 
 // Level 2
 
-const PATTERN_EXPONENTIAL_YEAR string = `(?i)Y((\-)?(\d+)E(\d+))`
+const PATTERN_EXPONENTIAL_YEAR string = `(?i)Y(\-?\d+E\d+)`
 
 const PATTERN_SIGNIFICANT_DIGITS string = `(?:` + PATTERN_YEAR + `|` + PATTERN_LETTER_PREFIXED_CALENDAR_YEAR + `|` + PATTERN_EXPONENTIAL_YEAR + `)S(\d+)`
 

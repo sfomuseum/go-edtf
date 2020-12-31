@@ -30,7 +30,7 @@ func ParseExponentialYear(edtf_str string) (*edtf.EDTFDate, error) {
 
 	m := re.ExponentialYear.FindStringSubmatch(edtf_str)
 
-	if len(m) != 4 {
+	if len(m) != 2 {
 		return nil, edtf.Invalid(EXPONENTIAL_YEAR, edtf_str)
 	}
 

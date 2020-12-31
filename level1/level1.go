@@ -27,8 +27,11 @@ var Tests map[string][]string = map[string][]string{
 	SEASON: []string{
 		"2001-01",
 		"2001-24",
+		// "-0011-24",	// TO DO
+		// "-0301-05",	// TO DO
 		"Spring, 2002",
 		"winter, 2002",
+		// "Summer, -1980",	// TO DO
 	},
 	QUALIFIED_DATE: []string{
 		"1984?",
