@@ -77,7 +77,7 @@ func DateRangeWithYMD(yyyy int, mm int, dd int) (*edtf.DateRange, error) {
 	}
 
 	if yyyy > edtf.MAX_YEARS {
-		return nil, errors.New("Year exceeds Golang limit")
+		return nil, edtf.Unsupported("year", strconv.Itoa(yyyy))
 	}
 
 	if mm == 0 && dd != 0 {
