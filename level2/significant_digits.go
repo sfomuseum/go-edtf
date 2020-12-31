@@ -1,12 +1,12 @@
 package level2
 
 import (
-	"fmt"
+	// "fmt"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/common"
 	"github.com/whosonfirst/go-edtf/re"
 	"strconv"
-	"strings"
+	// "strings"
 )
 
 /*
@@ -36,27 +36,28 @@ func ParseSignificantDigits(edtf_str string) (*edtf.EDTFDate, error) {
 
 	/*
 
-		SIGN 9 1950S2,1950,,,,,,,2
-		SIGN 9 Y171010000S3,,,171010000,,,,,3
-		SIGN 9 Y-1S3,,-,1,,,,,3
-		SIGN 9 Y3388E2S3,,,,3388E2,,3388,2,3
-		SIGN 9 Y-20E2S3,,,,-20E2,-,20,2,3
+	SIGN 5 1950S2,1950,,,2
+	SIGN 5 Y171010000S3,,171010000,,3
+	SIGN 5 Y-20E2S3,,,-20E2,3
+	SIGN 5 Y3388E2S3,,,3388E2,3
+	SIGN 5 Y-20E2S3,,,-20E2,3
 
 	*/
 
 	m := re.SignificantDigits.FindStringSubmatch(edtf_str)
 
-	fmt.Println("SIGN", len(m), strings.Join(m, ","))
+	// fmt.Println("SIGN", len(m), strings.Join(m, ","))
 
-	if len(m) != 9 {
+	if len(m) != 5 {
 		return nil, edtf.Invalid(SIGNIFICANT_DIGITS, edtf_str)
 	}
 
 	str_yyyy := m[1]
-	// prefix := m[3]
-	str_year := m[3]
-	notation := m[4]
-	digits := m[8]
+	str_year := m[2]
+	notation := m[3]
+	// digits := m[4]
+
+	// fmt.Printf("YYYY '%s' YEAR '%s' NOTATION '%s'\n", str_yyyy, str_year, notation)
 
 	var yyyy int
 
@@ -98,13 +99,11 @@ func ParseSignificantDigits(edtf_str string) (*edtf.EDTFDate, error) {
 		return nil, edtf.Invalid(SIGNIFICANT_DIGITS, edtf_str)
 	}
 
-	fmt.Println("YYYY IS", yyyy)
-
 	if yyyy > edtf.MAX_YEARS {
 		return nil, edtf.Unsupported(SIGNIFICANT_DIGITS, edtf_str)
 	}
 
-	fmt.Println("DIGITS", edtf_str, yyyy, digits)
+	// fmt.Println("DIGITS", edtf_str, yyyy, digits)
 
 	return nil, edtf.NotImplemented(SIGNIFICANT_DIGITS, edtf_str)
 }
