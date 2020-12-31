@@ -8,7 +8,7 @@ import (
 var ExponentialYear *regexp.Regexp
 
 var SignificantDigits *regexp.Regexp
-var SubYear *regexp.Regexp
+var SubYearGrouping *regexp.Regexp
 var SetRepresentations *regexp.Regexp
 var GroupQualification *regexp.Regexp
 var IndividualQualification *regexp.Regexp
@@ -22,7 +22,7 @@ func init() {
 
 	SignificantDigits = regexp.MustCompile(`^` + PATTERN_SIGNIFICANT_DIGITS + `$`)
 
-	SubYear = regexp.MustCompile(`^` + PATTERN_SUB_YEAR + `$`)
+	SubYearGrouping = regexp.MustCompile(`^` + PATTERN_SUB_YEAR_GROUPING + `$`)
 
 	SetRepresentations = regexp.MustCompile(`^` + PATTERN_SET_REPRESENTATIONS + `$`)
 
@@ -37,7 +37,7 @@ func init() {
 	level2_patterns := []string{
 		PATTERN_EXPONENTIAL_YEAR,
 		PATTERN_SIGNIFICANT_DIGITS,
-		PATTERN_SUB_YEAR,
+		PATTERN_SUB_YEAR_GROUPING,
 		PATTERN_SET_REPRESENTATIONS,
 		PATTERN_GROUP_QUALIFICATION,
 		PATTERN_INDIVIDUAL_QUALIFICATION,

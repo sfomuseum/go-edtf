@@ -45,8 +45,6 @@ func ParseSignificantDigits(edtf_str string) (*edtf.EDTFDate, error) {
 
 	m := re.SignificantDigits.FindStringSubmatch(edtf_str)
 
-	// fmt.Println("SIGN", len(m), strings.Join(m, ","))
-
 	if len(m) != 5 {
 		return nil, edtf.Invalid(SIGNIFICANT_DIGITS, edtf_str)
 	}
@@ -55,8 +53,6 @@ func ParseSignificantDigits(edtf_str string) (*edtf.EDTFDate, error) {
 	str_year := m[2]
 	notation := m[3]
 	str_digits := m[4]
-
-	// fmt.Printf("YYYY '%s' YEAR '%s' NOTATION '%s'\n", str_yyyy, str_year, notation)
 
 	var yyyy int
 

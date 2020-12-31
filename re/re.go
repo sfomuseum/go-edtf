@@ -34,7 +34,7 @@ const PATTERN_EXPONENTIAL_YEAR string = `(?i)Y(\-?\d+E\d+)`
 
 const PATTERN_SIGNIFICANT_DIGITS string = `(?:` + PATTERN_YEAR + `|` + PATTERN_LETTER_PREFIXED_CALENDAR_YEAR + `|` + PATTERN_EXPONENTIAL_YEAR + `)S(\d+)`
 
-const PATTERN_SUB_YEAR string = `(\d{4})\-(1[0-2]|2[1-9]|3[0-9]|4[0-1])`
+const PATTERN_SUB_YEAR_GROUPING string = `(\d{4})\-(1[0-2]|2[1-9]|3[0-9]|4[0-1])`
 
 const PATTERN_SET_REPRESENTATIONS string = `(\[|\{)(\.\.)?(?:(?:(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?)(,|\.\.)?)+(\.\.)?(\}|\])`
 
