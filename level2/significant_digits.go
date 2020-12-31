@@ -1,12 +1,11 @@
 package level2
 
 import (
-	// "fmt"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/common"
 	"github.com/whosonfirst/go-edtf/re"
 	"strconv"
-	// "strings"
+	"strings"
 )
 
 /*
@@ -36,11 +35,11 @@ func ParseSignificantDigits(edtf_str string) (*edtf.EDTFDate, error) {
 
 	/*
 
-	SIGN 5 1950S2,1950,,,2
-	SIGN 5 Y171010000S3,,171010000,,3
-	SIGN 5 Y-20E2S3,,,-20E2,3
-	SIGN 5 Y3388E2S3,,,3388E2,3
-	SIGN 5 Y-20E2S3,,,-20E2,3
+		SIGN 5 1950S2,1950,,,2
+		SIGN 5 Y171010000S3,,171010000,,3
+		SIGN 5 Y-20E2S3,,,-20E2,3
+		SIGN 5 Y3388E2S3,,,3388E2,3
+		SIGN 5 Y-20E2S3,,,-20E2,3
 
 	*/
 
@@ -55,7 +54,7 @@ func ParseSignificantDigits(edtf_str string) (*edtf.EDTFDate, error) {
 	str_yyyy := m[1]
 	str_year := m[2]
 	notation := m[3]
-	// digits := m[4]
+	str_digits := m[4]
 
 	// fmt.Printf("YYYY '%s' YEAR '%s' NOTATION '%s'\n", str_yyyy, str_year, notation)
 
@@ -103,7 +102,45 @@ func ParseSignificantDigits(edtf_str string) (*edtf.EDTFDate, error) {
 		return nil, edtf.Unsupported(SIGNIFICANT_DIGITS, edtf_str)
 	}
 
-	// fmt.Println("DIGITS", edtf_str, yyyy, digits)
+	digits, err := strconv.Atoi(str_digits)
 
-	return nil, edtf.NotImplemented(SIGNIFICANT_DIGITS, edtf_str)
+	if err != nil {
+		return nil, edtf.Invalid(SIGNIFICANT_DIGITS, edtf_str)
+	}
+
+	if len(strconv.Itoa(digits)) > len(strconv.Itoa(yyyy)) {
+		return nil, edtf.Invalid(SIGNIFICANT_DIGITS, edtf_str)
+	}
+
+	str_yyyy = strconv.Itoa(yyyy)
+	prefix_yyyy := str_yyyy[0 : len(str_yyyy)-digits]
+
+	first := strings.Repeat("0", digits)
+	last := strings.Repeat("9", digits)
+
+	start_yyyy := prefix_yyyy + first
+	end_yyyy := prefix_yyyy + last
+
+	start, err := common.DateRangeWithYMDString(start_yyyy, "", "")
+
+	if err != nil {
+		return nil, err
+	}
+
+	end, err := common.DateRangeWithYMDString(end_yyyy, "", "")
+
+	if err != nil {
+		return nil, err
+	}
+
+	d := &edtf.EDTFDate{
+		Start: start,
+		End:   end,
+		EDTF:  edtf_str,
+		Level: LEVEL,
+	}
+
+	// fmt.Printf("%s %v - %v\n", edtf_str, d.Start.Lower.Time, d.End.Upper.Time)
+
+	return d, nil
 }
