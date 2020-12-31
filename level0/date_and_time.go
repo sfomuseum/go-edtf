@@ -1,7 +1,9 @@
 package level0
 
 import (
+	"fmt"
 	"github.com/whosonfirst/go-edtf"
+	"github.com/whosonfirst/go-edtf/common"
 	"github.com/whosonfirst/go-edtf/re"
 	"strings"
 	"time"
@@ -53,10 +55,22 @@ func ParseDateAndTime(edtf_str string) (*edtf.EDTFDate, error) {
 		}
 	}
 
+	is_bce := false
+
+	if strings.HasPrefix(edtf_str, "-") {
+		is_bce = true
+
+		t_fmt = fmt.Sprintf("-%s", t_fmt)
+	}
+
 	t, err := time.Parse(t_fmt, edtf_str)
 
 	if err != nil {
 		return nil, err
+	}
+
+	if is_bce {
+		t = common.TimeToBCE(t)
 	}
 
 	upper_date := &edtf.Date{

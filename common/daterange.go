@@ -69,7 +69,7 @@ func DateRangeWithYMD(yyyy int, mm int, dd int) (*edtf.DateRange, error) {
 
 	if yyyy < 0 {
 		is_bce = true
-		yyyy = yyyy - (yyyy * 2)
+		yyyy = FlipYear(yyyy)
 	}
 
 	if yyyy == 0 {
@@ -153,8 +153,8 @@ func DateRangeWithYMD(yyyy int, mm int, dd int) (*edtf.DateRange, error) {
 	}
 
 	if is_bce {
-		lower_t = toBCE(lower_t)
-		upper_t = toBCE(upper_t)
+		lower_t = TimeToBCE(lower_t)
+		upper_t = TimeToBCE(upper_t)
 	}
 
 	// fmt.Printf("lower %v\n", lower_t)
@@ -174,8 +174,4 @@ func DateRangeWithYMD(yyyy int, mm int, dd int) (*edtf.DateRange, error) {
 	}
 
 	return dt, nil
-}
-
-func toBCE(d time.Time) time.Time {
-	return d.AddDate(-2*d.Year(), 0, 0)
 }
