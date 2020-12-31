@@ -2,7 +2,6 @@ package level2
 
 import (
 	"github.com/whosonfirst/go-edtf"
-	"github.com/whosonfirst/go-edtf/calendar"
 	"github.com/whosonfirst/go-edtf/common"
 	"github.com/whosonfirst/go-edtf/re"
 )
@@ -31,12 +30,11 @@ func ParseExponentialYear(edtf_str string) (*edtf.EDTFDate, error) {
 
 	m := re.ExponentialYear.FindStringSubmatch(edtf_str)
 
-	if len(m) != 5 {
+	if len(m) != 4 {
 		return nil, edtf.Invalid(EXPONENTIAL_YEAR, edtf_str)
 	}
 
 	notation := m[1]
-	prefix := m[2]
 
 	yyyy_i, err := common.ParseExponentialNotation(notation)
 
@@ -48,13 +46,6 @@ func ParseExponentialYear(edtf_str string) (*edtf.EDTFDate, error) {
 
 	if err != nil {
 		return nil, err
-	}
-
-	if prefix == edtf.NEGATIVE {
-		start.Lower.Time = calendar.ToBCE(start.Lower.Time)
-		start.Upper.Time = calendar.ToBCE(start.Upper.Time)
-		start.Lower.BCE = true
-		start.Upper.BCE = true
 	}
 
 	end := start

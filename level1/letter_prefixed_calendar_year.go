@@ -2,9 +2,9 @@ package level1
 
 import (
 	"github.com/whosonfirst/go-edtf"
-	"github.com/whosonfirst/go-edtf/calendar"
 	"github.com/whosonfirst/go-edtf/common"
 	"github.com/whosonfirst/go-edtf/re"
+	"strings"
 )
 
 /*
@@ -31,17 +31,21 @@ func ParseLetterPrefixedCalendarYear(edtf_str string) (*edtf.EDTFDate, error) {
 
 	m := re.LetterPrefixedCalendarYear.FindStringSubmatch(edtf_str)
 
-	if len(m) != 3 {
+	if len(m) != 2 {
 		return nil, edtf.Invalid(LETTER_PREFIXED_CALENDAR_YEAR, edtf_str)
 	}
 
-	prefix := m[1]
-
-	start_yyyy := m[2]
+	start_yyyy := m[1]
 	start_mm := ""
 	start_dd := ""
 
-	if len(start_yyyy) > 4 {
+	max_length := 4
+
+	if strings.HasPrefix(start_yyyy, "-") {
+		max_length = 5
+	}
+
+	if len(start_yyyy) > max_length {
 		return nil, edtf.Unsupported(LETTER_PREFIXED_CALENDAR_YEAR, edtf_str)
 	}
 
@@ -49,13 +53,6 @@ func ParseLetterPrefixedCalendarYear(edtf_str string) (*edtf.EDTFDate, error) {
 
 	if err != nil {
 		return nil, err
-	}
-
-	if prefix == edtf.NEGATIVE {
-		start.Lower.Time = calendar.ToBCE(start.Lower.Time)
-		start.Upper.Time = calendar.ToBCE(start.Upper.Time)
-		start.Lower.BCE = true
-		start.Upper.BCE = true
 	}
 
 	end := start

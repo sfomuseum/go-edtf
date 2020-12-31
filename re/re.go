@@ -14,7 +14,7 @@ const PATTERN_TIME_INTERVAL string = PATTERN_DATE + `/` + PATTERN_DATE
 
 // Level 1
 
-const PATTERN_LETTER_PREFIXED_CALENDAR_YEAR string = `Y` + PATTERN_YEAR
+const PATTERN_LETTER_PREFIXED_CALENDAR_YEAR string = `Y(\-?\d+)`
 
 const PATTERN_SEASON string = PATTERN_YEAR + `\-(0[1-9]|1[0-2]|2[1-4])|(?i)(spring|summer|fall|winter)\s*,\s*(\d{4})`
 
