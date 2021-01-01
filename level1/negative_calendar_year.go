@@ -38,9 +38,6 @@ func ParseNegativeCalendarYear(edtf_str string) (*edtf.EDTFDate, error) {
 		return nil, err
 	}
 
-	start.Lower.BCE = true
-	start.Upper.BCE = true
-
 	end := start
 
 	d := &edtf.EDTFDate{

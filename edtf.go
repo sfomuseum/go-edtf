@@ -11,7 +11,11 @@ const OPEN string = ".."
 const UNKNOWN string = ""
 const NEGATIVE string = "-"
 
-const MAX_YEARS int = 9999
+const NONE int = 0
+const ALL int = 1
+const ANY int = 2
+
+const MAX_YEARS int = 9999 // This is a Golang thing
 
 type EDTFDate struct {
 	Start *DateRange `json:"start"`
@@ -19,6 +23,14 @@ type EDTFDate struct {
 	EDTF  string     `json:"edtf"`
 	Level int        `json:"level"`
 	Label string     `json:"label"`
+}
+
+func (d *EDTFDate) Lower() *time.Time {
+	return d.Start.Lower.Time
+}
+
+func (d *EDTFDate) Upper() *time.Time {
+	return d.End.Upper.Time
 }
 
 type DateRange struct {
@@ -34,8 +46,7 @@ type Date struct {
 	Unspecified bool       `json:"unspecified,omitempty"`
 	Open        bool       `json:"open,omitempty"`
 	Unknown     bool       `json:"unknown,omitempty"`
-	BCE         bool       `json:"bce,omitempty"`
-	// Precision   string     `json:"precision,omitempty"`
+	Inclusivity int        `json:"inclusivity,omitempty"`
 }
 
 /*

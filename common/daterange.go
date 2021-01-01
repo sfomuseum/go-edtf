@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/calendar"
-	"strings"
 	"strconv"
+	"strings"
 	"time"
 )
 
@@ -21,7 +21,7 @@ func DateRangeWithYMDStringCombined(ymd string) (*edtf.DateRange, error) {
 	case 2:
 		return DateRangeWithYMDString(parts[0], parts[1], "")
 	case 1:
-		return DateRangeWithYMDString(parts[0], "", "")	
+		return DateRangeWithYMDString(parts[0], "", "")
 	default:
 		return nil, errors.New("Invalid YYYY-MM-DD string")
 	}

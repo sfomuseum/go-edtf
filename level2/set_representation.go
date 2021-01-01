@@ -72,14 +72,25 @@ func ParseSetRepresentations(edtf_str string) (*edtf.EDTFDate, error) {
 		return nil, edtf.Invalid(SET_REPRESENTATIONS, edtf_str)
 	}
 
+	class := m[1]
+	candidates := m[2]
+
 	start_ymd := ""
 	end_ymd := ""
 
 	start_open := false
 	end_open := false
 
-	// class := m[1]
-	candidates := m[2]
+	inclusivity := edtf.NONE
+
+	switch class {
+	case "[":
+		inclusivity = edtf.ANY
+	case "{":
+		inclusivity = edtf.ALL
+	default:
+		return nil, edtf.Invalid(SET_REPRESENTATIONS, edtf_str)
+	}
 
 	// this should be moved in to a separate method for getting
 	// the list of all possible dates - we only care about the
@@ -143,16 +154,17 @@ func ParseSetRepresentations(edtf_str string) (*edtf.EDTFDate, error) {
 		end_ymd = possible[count-1]
 	}
 
-	// CHECK FOR OPEN/UNKNOWN HERE
-
 	var start *edtf.DateRange
 	var end *edtf.DateRange
 
 	if start_open {
 
 		start = common.EmptyDateRange()
-		start.Lower.Unknown = true
-		start.Upper.Unknown = true
+		start.Lower.Open = true
+		start.Upper.Open = true
+
+		start.Lower.Inclusivity = inclusivity
+		start.Upper.Inclusivity = inclusivity
 
 	} else {
 
@@ -168,8 +180,11 @@ func ParseSetRepresentations(edtf_str string) (*edtf.EDTFDate, error) {
 	if end_open {
 
 		end = common.EmptyDateRange()
-		end.Lower.Unknown = true
-		end.Upper.Unknown = true
+		end.Lower.Open = true
+		end.Upper.Open = true
+
+		end.Lower.Inclusivity = inclusivity
+		end.Upper.Inclusivity = inclusivity
 
 	} else {
 
