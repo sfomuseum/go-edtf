@@ -1,10 +1,12 @@
 # go-edtf
 
-A Go package for parsing Extended DateTime Format (EDTF) dates.
+A Go package for parsing Extended DateTime Format (EDTF) date strings.
 
 ## Important
 
-This is a work in progress and does not work yet. It is, currently, a naive parser using regular expressions. Help is welcome :D
+This is a work in progress and documentation is incomplete.
+
+Level 0 and Level 1 have been implemented. Level 2 is in progress. Help is welcome :-)
 
 ## Background
 
