@@ -5,9 +5,27 @@ import (
 	"fmt"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/calendar"
+	"strings"
 	"strconv"
 	"time"
 )
+
+func DateRangeWithYMDStringCombined(ymd string) (*edtf.DateRange, error) {
+
+	parts := strings.Split(ymd, "-")
+	count := len(parts)
+
+	switch count {
+	case 3:
+		return DateRangeWithYMDString(parts[0], parts[1], parts[2])
+	case 2:
+		return DateRangeWithYMDString(parts[0], parts[1], "")
+	case 1:
+		return DateRangeWithYMDString(parts[0], "", "")	
+	default:
+		return nil, errors.New("Invalid YYYY-MM-DD string")
+	}
+}
 
 func DateRangeWithYMDString(str_yyyy string, str_mm string, str_dd string) (*edtf.DateRange, error) {
 
@@ -174,4 +192,17 @@ func DateRangeWithYMD(yyyy int, mm int, dd int) (*edtf.DateRange, error) {
 	}
 
 	return dt, nil
+}
+
+func EmptyDateRange() *edtf.DateRange {
+
+	lower_d := &edtf.Date{}
+	upper_d := &edtf.Date{}
+
+	dt := &edtf.DateRange{
+		Lower: lower_d,
+		Upper: upper_d,
+	}
+
+	return dt
 }

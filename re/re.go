@@ -36,7 +36,9 @@ const PATTERN_SIGNIFICANT_DIGITS string = `(?:` + PATTERN_YEAR + `|` + PATTERN_L
 
 const PATTERN_SUB_YEAR_GROUPING string = `(\d{4})\-(1[0-2]|2[1-9]|3[0-9]|4[0-1])`
 
-const PATTERN_SET_REPRESENTATIONS string = `(\[|\{)(\.\.)?(?:(?:(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?)(,|\.\.)?)+(\.\.)?(\}|\])`
+// PLEASE FIX ME TO ENSURE CLOSING EL IS THE SAME AS OPENING EL : {}, (), []
+
+const PATTERN_SET_REPRESENTATIONS string = `(\[|\{)((?:\.\.)?(?:(?:` + PATTERN_DATE + `(?:,|\.\.)?)+(?:\.\.)?))[\}\]]`
 
 const PATTERN_GROUP_QUALIFICATION string = `(?:(\d{4})(%|~|\?)?(?:-(\d{2})(%|~|\?)?(?:-(\d{2})(%|~|\?)?)?)?)`
 
