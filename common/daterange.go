@@ -4,52 +4,72 @@ import (
 	"errors"
 	"fmt"
 	"github.com/whosonfirst/go-edtf"
+	"regexp"
 	"strconv"
 	"strings"
-	"regexp"
 )
 
 // move these in to the re package
 
+var re_ymd_string *regexp.Regexp
+
 var re_qualifier_prefix *regexp.Regexp
 var re_qualifier_suffix *regexp.Regexp
 
-func init () {
+func init() {
 
-	pattern_date := `(\-?[0-9X]{4}|[0-3X][0-9X])`
-	pattern_qualifier := `(\[|\{)`
-	
-	re_qualifier_prefix = regexp.MustCompile(`^` + pattern_qualifier + `?` + pattern_date + `$`)
-	re_qualifier_suffix = regexp.MustCompile(`^` + pattern_date + pattern_qualifier + `?$`)	
+	// move this in to the re package
+
+	qualifiers := []string{
+		`\` + edtf.UNCERTAIN,
+		edtf.APPROXIMATE,
+		edtf.UNCERTAIN_AND_APPROXIMATE,
+	}
+
+	pattern_qualifier := `[` + strings.Join(qualifiers, "") + `]`
+
+	pattern_year := `\-?[0-9X]{4}`
+	pattern_month := `(?:[0X][1-9X]|[1X][0-2X])`
+	pattern_day := `(?:[012X][1-9X]|[3X][01X])`
+
+	pattern_yyyy := `(` + pattern_qualifier + `?` + pattern_year + `|` + pattern_year + pattern_qualifier + `?)`
+	pattern_mm := `(` + pattern_qualifier + `?` + pattern_month + `|` + pattern_month + pattern_qualifier + `?)`
+	pattern_dd := `(` + pattern_qualifier + `?` + pattern_day + `|` + pattern_day + pattern_qualifier + `?)`
+
+	pattern_ymd := `^` + pattern_yyyy + `(?:\-` + pattern_mm + `(?:\-` + pattern_dd + `)?)?$`
+
+	pattern_date := `(` + pattern_year + `|(?:` + pattern_month + `)|(?:` + pattern_day + `))`
+
+	re_ymd_string = regexp.MustCompile(pattern_ymd)
+
+	re_qualifier_prefix = regexp.MustCompile(`^(` + pattern_qualifier + `)?` + pattern_date + `$`)
+	re_qualifier_suffix = regexp.MustCompile(`^` + pattern_date + `(` + pattern_qualifier + `)?$`)
 }
+
+// PLEASE RENAME ME TO BE DateRangeWithYMDString
 
 func DateRangeWithString(edtf_str string) (*edtf.DateRange, error) {
 
-	yyyy := ""
-	mm := ""
-	dd := ""
+	precision := edtf.NONE
+
+	parts := re_ymd_string.FindStringSubmatch(edtf_str)
+	count := len(parts)
+
+	if count != 4 {
+		return nil, edtf.Invalid("date", edtf_str)
+	}
+
+	yyyy := parts[1]
+	mm := parts[2]
+	dd := parts[3]
 
 	yyyy_q := ""
 	mm_q := ""
-	dd_q := ""	
+	dd_q := ""
 
-	start_yyyy := ""
-	start_mm := ""
-	start_dd := ""
+	if yyyy != "" {
 
-	end_yyyy := ""
-	end_mm := ""
-	end_dd := ""
-
-	precision := edtf.NONE
-	
-	parts := strings.Split(edtf_str, "-")
-	count := len(parts)
-
-	switch count {
-	case 3:
-		
-		y, q, err := parseDate(parts[0])
+		y, q, err := parseDate(yyyy)
 
 		if err != nil {
 			return nil, err
@@ -57,8 +77,11 @@ func DateRangeWithString(edtf_str string) (*edtf.DateRange, error) {
 
 		yyyy = y
 		yyyy_q = q
+	}
 
-		m, q, err := parseDate(parts[1])
+	if mm != "" {
+
+		m, q, err := parseDate(mm)
 
 		if err != nil {
 			return nil, err
@@ -66,50 +89,27 @@ func DateRangeWithString(edtf_str string) (*edtf.DateRange, error) {
 
 		mm = m
 		mm_q = q
+	}
 
-		d, q, err := parseDate(parts[2])
+	if dd != "" {
+
+		d, q, err := parseDate(dd)
 
 		if err != nil {
 			return nil, err
 		}
-		
+
 		dd = d
 		dd_q = q
-		
-	case 2:
+	}
 
-		y, q, err := parseDate(parts[0])
+	start_yyyy := yyyy
+	start_mm := mm
+	start_dd := dd
 
-		if err != nil {
-			return nil, err
-		}
-
-		yyyy = y
-		yyyy_q = q
-
-		m, q, err := parseDate(parts[1])
-
-		if err != nil {
-			return nil, err
-		}
-
-		mm = m
-		mm_q = q
-		
-	case 1:
-
-		y, q, err := parseDate(parts[0])
-
-		if err != nil {
-			return nil, err
-		}
-
-		yyyy = y
-		yyyy_q = q
-		
-	default:
-		return nil, edtf.Invalid("date string", edtf_str)
-	}	
+	end_yyyy := start_yyyy
+	end_mm := start_mm
+	end_dd := start_dd
 
 	if strings.HasSuffix(yyyy, "X") {
 
@@ -236,7 +236,7 @@ func DateRangeWithString(edtf_str string) (*edtf.DateRange, error) {
 
 	if err != nil {
 		return nil, err
-	}	
+	}
 
 	lower_d := &edtf.Date{
 		Time: lower_t,
@@ -251,16 +251,14 @@ func DateRangeWithString(edtf_str string) (*edtf.DateRange, error) {
 		Upper: upper_d,
 	}
 
-	fmt.Println(yyyy_q, mm_q, dd_q)
+	// SET precision here
+
+	fmt.Println("DEBUG", yyyy_q, mm_q, dd_q)
+
 	return dt, nil
 }
 
-// DEPRECATED
-
-func DateRangeWithYMDStringCombined(ymd string) (*edtf.DateRange, error) {
-
-	return DateRangeWithString(ymd)
-}
+// PLEASE RENAME ME (20210104/thisisaaronland)
 
 func DateRangeWithYMDString(str_yyyy string, str_mm string, str_dd string) (*edtf.DateRange, error) {
 
@@ -318,8 +316,7 @@ func DateRangeWithYMD(yyyy int, mm int, dd int) (*edtf.DateRange, error) {
 
 	if err != nil {
 		return nil, err
-	}	
-	
+	}
 
 	lower_d := &edtf.Date{
 		Time: lower_t,
@@ -336,7 +333,6 @@ func DateRangeWithYMD(yyyy int, mm int, dd int) (*edtf.DateRange, error) {
 
 	return dt, nil
 }
-
 
 func EmptyDateRange() *edtf.DateRange {
 
@@ -355,16 +351,15 @@ func parseDate(date string) (string, string, error) {
 
 	m := re_qualifier_prefix.FindStringSubmatch(date)
 
-	if len(m) == 2 {
-		return m[1], m[0], nil
+	if len(m) == 3 {
+		return m[2], m[1], nil
 	}
 
 	m = re_qualifier_suffix.FindStringSubmatch(date)
 
-	if len(m) == 2 {
-		return m[0], m[1], nil
+	if len(m) == 3 {
+		return m[1], m[2], nil
 	}
 
 	return "", "", edtf.Invalid("date", date)
 }
-

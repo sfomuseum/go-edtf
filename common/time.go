@@ -1,16 +1,16 @@
 package common
 
 import (
-	"fmt"
-	"strconv"
 	"errors"
+	"fmt"
+	"github.com/whosonfirst/go-edtf"
+	"github.com/whosonfirst/go-edtf/calendar"
+	"strconv"
 	"time"
-	"github.com/whosonfirst/go-edtf"		
-	"github.com/whosonfirst/go-edtf/calendar"	
 )
 
 func TimeWithYMDString(str_yyyy string, str_mm string, str_dd string, hms string) (*time.Time, error) {
-	
+
 	if str_yyyy == "" {
 		return nil, errors.New("Missing year")
 	}
@@ -49,7 +49,7 @@ func TimeWithYMDString(str_yyyy string, str_mm string, str_dd string, hms string
 
 		dd = d
 	}
-	
+
 	return TimeWithYMD(yyyy, mm, dd, hms)
 }
 
@@ -85,7 +85,7 @@ func TimeWithYMD(yyyy int, mm int, dd int, hms string) (*time.Time, error) {
 	}
 
 	if mm == 0 {
-		mm = 1		
+		mm = 1
 	} else {
 
 		if mm > 12 {

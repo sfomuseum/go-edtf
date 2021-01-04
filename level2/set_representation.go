@@ -168,7 +168,7 @@ func ParseSetRepresentations(edtf_str string) (*edtf.EDTFDate, error) {
 
 	} else {
 
-		dr, err := common.DateRangeWithYMDStringCombined(start_ymd)
+		dr, err := common.DateRangeWithString(start_ymd)
 
 		if err != nil {
 			return nil, err
@@ -188,7 +188,7 @@ func ParseSetRepresentations(edtf_str string) (*edtf.EDTFDate, error) {
 
 	} else {
 
-		dr, err := common.DateRangeWithYMDStringCombined(end_ymd)
+		dr, err := common.DateRangeWithString(end_ymd)
 
 		if err != nil {
 			return nil, err

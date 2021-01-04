@@ -4,17 +4,21 @@ import (
 	"testing"
 )
 
-func TestDateRangeWithYMDStringCombined(t *testing.T) {
+func TestDateRangeWithString(t *testing.T) {
 
 	valid := []string{
+		"1984-05-31",
 		"2020",
 		"1972-11",
-		"1984-05-31",
+		"1972-XX-31",
+		"1972-12-15?",
+		"~1972-12-15",
+		"-1967",
 	}
 
 	for _, ymd := range valid {
 
-		_, err := DateRangeWithYMDStringCombined(ymd)
+		_, err := DateRangeWithString(ymd)
 
 		if err != nil {
 			t.Fatalf("Failed to parse %s, %v", ymd, err)
