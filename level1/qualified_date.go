@@ -52,24 +52,24 @@ func ParseQualifiedDate(edtf_str string) (*edtf.EDTFDate, error) {
 
 	switch q {
 	case edtf.UNCERTAIN:
-		d.Start.Lower.Uncertain = true
-		d.Start.Upper.Uncertain = true
-		d.End.Lower.Uncertain = true
-		d.End.Upper.Uncertain = true
+		d.Start.Lower.Uncertain = edtf.DAILY
+		d.Start.Upper.Uncertain = edtf.DAILY
+		d.End.Lower.Uncertain = edtf.DAILY
+		d.End.Upper.Uncertain = edtf.DAILY
 	case edtf.APPROXIMATE:
-		d.Start.Lower.Approximate = true
-		d.Start.Upper.Approximate = true
-		d.End.Lower.Approximate = true
-		d.End.Upper.Approximate = true
+		d.Start.Lower.Approximate = edtf.DAILY
+		d.Start.Upper.Approximate = edtf.DAILY
+		d.End.Lower.Approximate = edtf.DAILY
+		d.End.Upper.Approximate = edtf.DAILY
 	case edtf.UNCERTAIN_AND_APPROXIMATE:
-		d.Start.Lower.Uncertain = true
-		d.Start.Upper.Uncertain = true
-		d.End.Lower.Uncertain = true
-		d.End.Upper.Uncertain = true
-		d.Start.Lower.Approximate = true
-		d.Start.Upper.Approximate = true
-		d.End.Lower.Approximate = true
-		d.End.Upper.Approximate = true
+		d.Start.Lower.Uncertain = edtf.DAILY
+		d.Start.Upper.Uncertain = edtf.DAILY
+		d.End.Lower.Uncertain = edtf.DAILY
+		d.End.Upper.Uncertain = edtf.DAILY
+		d.Start.Lower.Approximate = edtf.DAILY
+		d.Start.Upper.Approximate = edtf.DAILY
+		d.End.Lower.Approximate = edtf.DAILY
+		d.End.Upper.Approximate = edtf.DAILY
 	default:
 		return nil, edtf.Invalid(QUALIFIED_DATE, edtf_str)
 	}

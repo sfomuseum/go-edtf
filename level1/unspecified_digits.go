@@ -52,6 +52,8 @@ func ParseUnspecifiedDigits(edtf_str string) (*edtf.EDTFDate, error) {
 	end_mm := mm
 	end_dd := dd
 
+	precision := edtf.NONE
+
 	if strings.HasSuffix(yyyy, "X") {
 
 		start_m := int64(0)
@@ -124,6 +126,8 @@ func ParseUnspecifiedDigits(edtf_str string) (*edtf.EDTFDate, error) {
 
 		start_yyyy = strconv.FormatInt(start_ymd, 10)
 		end_yyyy = strconv.FormatInt(end_ymd, 10)
+
+		precision = edtf.ANNUAL
 	}
 
 	if strings.HasSuffix(mm, "X") {
@@ -139,6 +143,8 @@ func ParseUnspecifiedDigits(edtf_str string) (*edtf.EDTFDate, error) {
 			start_mm = "10"
 			end_mm = "12"
 		}
+
+		precision = edtf.MONTHLY
 	}
 
 	if strings.HasSuffix(dd, "X") {
@@ -159,6 +165,8 @@ func ParseUnspecifiedDigits(edtf_str string) (*edtf.EDTFDate, error) {
 		default:
 			return nil, edtf.Invalid(UNSPECIFIED_DIGITS, edtf_str)
 		}
+
+		precision = edtf.DAILY
 	}
 
 	start, err := common.DateRangeWithYMDString(start_yyyy, start_mm, start_dd)
@@ -173,11 +181,14 @@ func ParseUnspecifiedDigits(edtf_str string) (*edtf.EDTFDate, error) {
 		return nil, err
 	}
 
-	start.Lower.Unspecified = true
-	start.Upper.Unspecified = true
+	if precision != edtf.NONE {
 
-	end.Lower.Unspecified = true
-	end.Upper.Unspecified = true
+		start.Lower.Unspecified = precision
+		start.Upper.Unspecified = precision
+
+		end.Lower.Unspecified = precision
+		end.Upper.Unspecified = precision
+	}
 
 	d := &edtf.EDTFDate{
 		Start: start,

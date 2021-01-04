@@ -15,6 +15,10 @@ const NONE int = 0
 const ALL int = 1
 const ANY int = 2
 
+const ANNUAL int = 1
+const MONTHLY int = 2
+const DAILY int = 3
+
 const MAX_YEARS int = 9999 // This is a Golang thing
 
 type EDTFDate struct {
@@ -41,9 +45,9 @@ type DateRange struct {
 type Date struct {
 	EDTF        string     `json:"edtf"`
 	Time        *time.Time `json:"time,omitempty"`
-	Uncertain   bool       `json:"uncertain,omitempty"`
-	Approximate bool       `json:"approximate,omitempty"`
-	Unspecified bool       `json:"unspecified,omitempty"`
+	Uncertain   int        `json:"uncertain,omitempty"`
+	Approximate int        `json:"approximate,omitempty"`
+	Unspecified int        `json:"unspecified,omitempty"`
 	Open        bool       `json:"open,omitempty"`
 	Unknown     bool       `json:"unknown,omitempty"`
 	Inclusivity int        `json:"inclusivity,omitempty"`
