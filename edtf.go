@@ -11,6 +11,9 @@ const OPEN string = ".."
 const UNKNOWN string = ""
 const NEGATIVE string = "-"
 
+const HMS_LOWER string = "00:00:00"
+const HMS_UPPER string = "23:59:59"
+
 const (
 	NONE Precision = 0
 	ALL  Precision = 1 << iota

@@ -1,10 +1,10 @@
 package level2
 
 import (
-	_ "fmt"
+	"fmt"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/re"
-	_ "strings"
+	"strings"
 )
 
 /*
@@ -25,7 +25,18 @@ func IsInterval(edtf_str string) bool {
 
 func ParseInterval(edtf_str string) (*edtf.EDTFDate, error) {
 
-	if !re.Interval.MatchString(edtf_str) {
+	/*
+
+		INTERVAL 2004-06-~01/2004-06-~20 13 2004-06-~01/2004-06-~20,,2004,,06,~,01,,2004,,06,~,20
+		INTERVAL 2004-06-XX/2004-07-03 13 2004-06-XX/2004-07-03,,2004,,06,,XX,,2004,,07,,03
+
+	*/
+
+	m := re.Interval.FindStringSubmatch(edtf_str)
+
+	fmt.Println("INTERVAL", edtf_str, len(m), strings.Join(m, ","))
+
+	if len(m) != 13 {
 		return nil, edtf.Invalid(INTERVAL, edtf_str)
 	}
 
