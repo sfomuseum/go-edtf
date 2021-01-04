@@ -11,13 +11,14 @@ const OPEN string = ".."
 const UNKNOWN string = ""
 const NEGATIVE string = "-"
 
-const NONE int = 0
-const ALL int = 1
-const ANY int = 2
-
-const ANNUAL int = 1
-const MONTHLY int = 2
-const DAILY int = 3
+const (
+	NONE Precision = 0
+	ALL  Precision = 1 << iota
+	ANY
+	ANNUAL
+	MONTHLY
+	DAILY
+)
 
 const MAX_YEARS int = 9999 // This is a Golang thing
 
@@ -45,12 +46,12 @@ type DateRange struct {
 type Date struct {
 	EDTF        string     `json:"edtf"`
 	Time        *time.Time `json:"time,omitempty"`
-	Uncertain   int        `json:"uncertain,omitempty"`
-	Approximate int        `json:"approximate,omitempty"`
-	Unspecified int        `json:"unspecified,omitempty"`
+	Uncertain   Precision  `json:"uncertain,omitempty"`
+	Approximate Precision  `json:"approximate,omitempty"`
+	Unspecified Precision  `json:"unspecified,omitempty"`
 	Open        bool       `json:"open,omitempty"`
 	Unknown     bool       `json:"unknown,omitempty"`
-	Inclusivity int        `json:"inclusivity,omitempty"`
+	Inclusivity Precision  `json:"inclusivity,omitempty"`
 }
 
 /*
@@ -64,3 +65,12 @@ do for now (20201223/thisisaaronland)
 func (d *EDTFDate) String() string {
 	return d.EDTF
 }
+
+// https://stackoverflow.com/questions/48050522/using-bitsets-in-golang-to-represent-capabilities
+
+type Precision uint32
+
+func (f Precision) HasFlag(flag Precision) bool { return f&flag != 0 }
+func (f *Precision) AddFlag(flag Precision)     { *f |= flag }
+func (f *Precision) ClearFlag(flag Precision)   { *f &= ^flag }
+func (f *Precision) ToggleFlag(flag Precision)  { *f ^= flag }

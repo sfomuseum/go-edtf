@@ -1,16 +1,12 @@
 package level2
 
 import (
-	"fmt"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/common"
 	"github.com/whosonfirst/go-edtf/re"
-	"strings"
 )
 
 /*
-
-Qualification
 
 Group Qualification
 
@@ -57,13 +53,34 @@ func ParseGroupQualification(edtf_str string) (*edtf.EDTFDate, error) {
 	dd := m[5]
 	dd_q := m[6]
 
-	if dd_q != "" {
-		mm_q = dd_q
-		yyyy_q = dd_q
+	precision := edtf.NONE
+	q := ""
+
+	if yyyy_q != "" {
+
+		q = yyyy_q
+
+		precision.AddFlag(edtf.ANNUAL)
 	}
 
 	if mm_q != "" {
+
 		yyyy_q = mm_q
+		q = mm_q
+
+		precision.AddFlag(edtf.ANNUAL)
+		precision.AddFlag(edtf.MONTHLY)
+	}
+
+	if dd_q != "" {
+
+		mm_q = dd_q
+		yyyy_q = dd_q
+		q = dd_q
+
+		precision.AddFlag(edtf.ANNUAL)
+		precision.AddFlag(edtf.MONTHLY)
+		precision.AddFlag(edtf.DAILY)
 	}
 
 	start, err := common.DateRangeWithYMDString(yyyy, mm, dd)
@@ -81,74 +98,26 @@ func ParseGroupQualification(edtf_str string) (*edtf.EDTFDate, error) {
 		Level: LEVEL,
 	}
 
-	switch yyyy_q {
+	switch q {
 	case edtf.UNCERTAIN:
-		d.Start.Lower.Uncertain = edtf.ANNUAL
-		d.Start.Upper.Uncertain = edtf.ANNUAL
-		d.End.Lower.Uncertain = edtf.ANNUAL
-		d.End.Upper.Uncertain = edtf.ANNUAL
+		d.Start.Lower.Uncertain = precision
+		d.Start.Upper.Uncertain = precision
+		d.End.Lower.Uncertain = precision
+		d.End.Upper.Uncertain = precision
 	case edtf.APPROXIMATE:
-		d.Start.Lower.Approximate = edtf.ANNUAL
-		d.Start.Upper.Approximate = edtf.ANNUAL
-		d.End.Lower.Approximate = edtf.ANNUAL
-		d.End.Upper.Approximate = edtf.ANNUAL
+		d.Start.Lower.Approximate = precision
+		d.Start.Upper.Approximate = precision
+		d.End.Lower.Approximate = precision
+		d.End.Upper.Approximate = precision
 	case edtf.UNCERTAIN_AND_APPROXIMATE:
-		d.Start.Lower.Uncertain = edtf.ANNUAL
-		d.Start.Upper.Uncertain = edtf.ANNUAL
-		d.End.Lower.Uncertain = edtf.ANNUAL
-		d.End.Upper.Uncertain = edtf.ANNUAL
-		d.Start.Lower.Approximate = edtf.ANNUAL
-		d.Start.Upper.Approximate = edtf.ANNUAL
-		d.End.Lower.Approximate = edtf.ANNUAL
-		d.End.Upper.Approximate = edtf.ANNUAL
-	default:
-		// pass
-	}
-
-	switch mm_q {
-	case edtf.UNCERTAIN:
-		d.Start.Lower.Uncertain = edtf.MONTHLY
-		d.Start.Upper.Uncertain = edtf.MONTHLY
-		d.End.Lower.Uncertain = edtf.MONTHLY
-		d.End.Upper.Uncertain = edtf.MONTHLY
-	case edtf.APPROXIMATE:
-		d.Start.Lower.Approximate = edtf.MONTHLY
-		d.Start.Upper.Approximate = edtf.MONTHLY
-		d.End.Lower.Approximate = edtf.MONTHLY
-		d.End.Upper.Approximate = edtf.MONTHLY
-	case edtf.UNCERTAIN_AND_APPROXIMATE:
-		d.Start.Lower.Uncertain = edtf.MONTHLY
-		d.Start.Upper.Uncertain = edtf.MONTHLY
-		d.End.Lower.Uncertain = edtf.MONTHLY
-		d.End.Upper.Uncertain = edtf.MONTHLY
-		d.Start.Lower.Approximate = edtf.MONTHLY
-		d.Start.Upper.Approximate = edtf.MONTHLY
-		d.End.Lower.Approximate = edtf.MONTHLY
-		d.End.Upper.Approximate = edtf.MONTHLY
-	default:
-		// pass
-	}
-
-	switch dd_q {
-	case edtf.UNCERTAIN:
-		d.Start.Lower.Uncertain = edtf.DAILY
-		d.Start.Upper.Uncertain = edtf.DAILY
-		d.End.Lower.Uncertain = edtf.DAILY
-		d.End.Upper.Uncertain = edtf.DAILY
-	case edtf.APPROXIMATE:
-		d.Start.Lower.Approximate = edtf.DAILY
-		d.Start.Upper.Approximate = edtf.DAILY
-		d.End.Lower.Approximate = edtf.DAILY
-		d.End.Upper.Approximate = edtf.DAILY
-	case edtf.UNCERTAIN_AND_APPROXIMATE:
-		d.Start.Lower.Uncertain = edtf.DAILY
-		d.Start.Upper.Uncertain = edtf.DAILY
-		d.End.Lower.Uncertain = edtf.DAILY
-		d.End.Upper.Uncertain = edtf.DAILY
-		d.Start.Lower.Approximate = edtf.DAILY
-		d.Start.Upper.Approximate = edtf.DAILY
-		d.End.Lower.Approximate = edtf.DAILY
-		d.End.Upper.Approximate = edtf.DAILY
+		d.Start.Lower.Uncertain = precision
+		d.Start.Upper.Uncertain = precision
+		d.End.Lower.Uncertain = precision
+		d.End.Upper.Uncertain = precision
+		d.Start.Lower.Approximate = precision
+		d.Start.Upper.Approximate = precision
+		d.End.Lower.Approximate = precision
+		d.End.Upper.Approximate = precision
 	default:
 		// pass
 	}
@@ -184,8 +153,6 @@ func ParseIndividualQualification(edtf_str string) (*edtf.EDTFDate, error) {
 
 	m := re.IndividualQualification.FindStringSubmatch(edtf_str)
 
-	fmt.Println("INDIVIDUAL", edtf_str, len(m), strings.Join(m, ","))
-
 	if len(m) != 7 {
 		return nil, edtf.Invalid(INDIVIDUAL_QUALIFICATION, edtf_str)
 	}
@@ -214,78 +181,57 @@ func ParseIndividualQualification(edtf_str string) (*edtf.EDTFDate, error) {
 		Level: LEVEL,
 	}
 
-	// FIX ME : account for multiple values...
+	uncertain := edtf.NONE
+	approximate := edtf.NONE
 
 	switch yyyy_q {
 	case edtf.UNCERTAIN:
-		d.Start.Lower.Uncertain = edtf.ANNUAL
-		d.Start.Upper.Uncertain = edtf.ANNUAL
-		d.End.Lower.Uncertain = edtf.ANNUAL
-		d.End.Upper.Uncertain = edtf.ANNUAL
+		uncertain.AddFlag(edtf.ANNUAL)
 	case edtf.APPROXIMATE:
-		d.Start.Lower.Approximate = edtf.ANNUAL
-		d.Start.Upper.Approximate = edtf.ANNUAL
-		d.End.Lower.Approximate = edtf.ANNUAL
-		d.End.Upper.Approximate = edtf.ANNUAL
+		approximate.AddFlag(edtf.ANNUAL)
 	case edtf.UNCERTAIN_AND_APPROXIMATE:
-		d.Start.Lower.Uncertain = edtf.ANNUAL
-		d.Start.Upper.Uncertain = edtf.ANNUAL
-		d.End.Lower.Uncertain = edtf.ANNUAL
-		d.End.Upper.Uncertain = edtf.ANNUAL
-		d.Start.Lower.Approximate = edtf.ANNUAL
-		d.Start.Upper.Approximate = edtf.ANNUAL
-		d.End.Lower.Approximate = edtf.ANNUAL
-		d.End.Upper.Approximate = edtf.ANNUAL
+		uncertain.AddFlag(edtf.ANNUAL)
+		approximate.AddFlag(edtf.ANNUAL)
 	default:
 		// pass
 	}
 
 	switch mm_q {
 	case edtf.UNCERTAIN:
-		d.Start.Lower.Uncertain = edtf.MONTHLY
-		d.Start.Upper.Uncertain = edtf.MONTHLY
-		d.End.Lower.Uncertain = edtf.MONTHLY
-		d.End.Upper.Uncertain = edtf.MONTHLY
+		uncertain.AddFlag(edtf.MONTHLY)
 	case edtf.APPROXIMATE:
-		d.Start.Lower.Approximate = edtf.MONTHLY
-		d.Start.Upper.Approximate = edtf.MONTHLY
-		d.End.Lower.Approximate = edtf.MONTHLY
-		d.End.Upper.Approximate = edtf.MONTHLY
+		approximate.AddFlag(edtf.MONTHLY)
 	case edtf.UNCERTAIN_AND_APPROXIMATE:
-		d.Start.Lower.Uncertain = edtf.MONTHLY
-		d.Start.Upper.Uncertain = edtf.MONTHLY
-		d.End.Lower.Uncertain = edtf.MONTHLY
-		d.End.Upper.Uncertain = edtf.MONTHLY
-		d.Start.Lower.Approximate = edtf.MONTHLY
-		d.Start.Upper.Approximate = edtf.MONTHLY
-		d.End.Lower.Approximate = edtf.MONTHLY
-		d.End.Upper.Approximate = edtf.MONTHLY
+		uncertain.AddFlag(edtf.MONTHLY)
+		approximate.AddFlag(edtf.MONTHLY)
 	default:
 		// pass
 	}
 
 	switch dd_q {
 	case edtf.UNCERTAIN:
-		d.Start.Lower.Uncertain = edtf.DAILY
-		d.Start.Upper.Uncertain = edtf.DAILY
-		d.End.Lower.Uncertain = edtf.DAILY
-		d.End.Upper.Uncertain = edtf.DAILY
+		uncertain.AddFlag(edtf.DAILY)
 	case edtf.APPROXIMATE:
-		d.Start.Lower.Approximate = edtf.DAILY
-		d.Start.Upper.Approximate = edtf.DAILY
-		d.End.Lower.Approximate = edtf.DAILY
-		d.End.Upper.Approximate = edtf.DAILY
+		approximate.AddFlag(edtf.DAILY)
 	case edtf.UNCERTAIN_AND_APPROXIMATE:
-		d.Start.Lower.Uncertain = edtf.DAILY
-		d.Start.Upper.Uncertain = edtf.DAILY
-		d.End.Lower.Uncertain = edtf.DAILY
-		d.End.Upper.Uncertain = edtf.DAILY
-		d.Start.Lower.Approximate = edtf.DAILY
-		d.Start.Upper.Approximate = edtf.DAILY
-		d.End.Lower.Approximate = edtf.DAILY
-		d.End.Upper.Approximate = edtf.DAILY
+		uncertain.AddFlag(edtf.DAILY)
+		approximate.AddFlag(edtf.DAILY)
 	default:
 		// pass
+	}
+
+	if uncertain != edtf.NONE {
+		d.Start.Lower.Uncertain = uncertain
+		d.Start.Upper.Uncertain = uncertain
+		d.End.Lower.Uncertain = uncertain
+		d.End.Upper.Uncertain = uncertain
+	}
+
+	if approximate != edtf.NONE {
+		d.Start.Lower.Approximate = approximate
+		d.Start.Upper.Approximate = approximate
+		d.End.Lower.Approximate = approximate
+		d.End.Upper.Approximate = approximate
 	}
 
 	return d, nil

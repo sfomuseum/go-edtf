@@ -127,7 +127,7 @@ func ParseUnspecifiedDigits(edtf_str string) (*edtf.EDTFDate, error) {
 		start_yyyy = strconv.FormatInt(start_ymd, 10)
 		end_yyyy = strconv.FormatInt(end_ymd, 10)
 
-		precision = edtf.ANNUAL
+		precision.AddFlag(edtf.ANNUAL)
 	}
 
 	if strings.HasSuffix(mm, "X") {
@@ -144,7 +144,7 @@ func ParseUnspecifiedDigits(edtf_str string) (*edtf.EDTFDate, error) {
 			end_mm = "12"
 		}
 
-		precision = edtf.MONTHLY
+		precision.AddFlag(edtf.MONTHLY)
 	}
 
 	if strings.HasSuffix(dd, "X") {
@@ -166,7 +166,7 @@ func ParseUnspecifiedDigits(edtf_str string) (*edtf.EDTFDate, error) {
 			return nil, edtf.Invalid(UNSPECIFIED_DIGITS, edtf_str)
 		}
 
-		precision = edtf.DAILY
+		precision.AddFlag(edtf.DAILY)
 	}
 
 	start, err := common.DateRangeWithYMDString(start_yyyy, start_mm, start_dd)
