@@ -12,7 +12,7 @@ func TestParseDateAndTime(t *testing.T) {
 		t.Fatal("Failed to load test strings")
 	}
 
-	for input, _ := range valid {
+	for input, tr := range valid {
 
 		d, err := ParseDateAndTime(input)
 
@@ -20,8 +20,13 @@ func TestParseDateAndTime(t *testing.T) {
 			t.Fatalf("Failed to parse '%s', %v", input, err)
 		}
 
-		if d.String() != input {
-			t.Fatalf("Failed to stringify '%s', %v", input, err)
+		if tr != nil {
+
+			err := tr.TestDate(d)
+
+			if err != nil {
+				t.Fatalf("Results failed tests '%s', %v", input, err)
+			}
 		}
 	}
 }

@@ -13,16 +13,27 @@ func TestSetRepresentations(t *testing.T) {
 		t.Fatalf("Failed to load test strings")
 	}
 
-	for input, _ := range valid {
+	for input, tr := range valid {
 
-		_, err := ParseSetRepresentations(input)
+		d, err := ParseSetRepresentations(input)
 
 		if err != nil {
 			if edtf.IsNotImplemented(err) {
 				t.Logf("Skipping '%s', %v", input, err)
+				continue
 			} else {
 				t.Fatalf("Failed to parse '%s', %v", input, err)
 			}
 		}
+
+		if tr != nil {
+
+			err := tr.TestDate(d)
+
+			if err != nil {
+				t.Fatalf("Results failed tests '%s', %v", input, err)
+			}
+		}
+
 	}
 }
