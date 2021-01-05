@@ -14,6 +14,7 @@ func TestDateRangeWithString(t *testing.T) {
 		"1972-12-15?",
 		"~1972-12-15",
 		"-1967",
+		"2004-06-~20",
 	}
 
 	for _, ymd := range valid {

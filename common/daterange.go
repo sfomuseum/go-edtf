@@ -2,7 +2,7 @@ package common
 
 import (
 	"errors"
-	_ "fmt"
+	// "fmt"
 	"github.com/whosonfirst/go-edtf"
 	"regexp"
 	"strconv"
@@ -25,23 +25,17 @@ func init() {
 
 	// move this in to the re package
 
-	qualifiers := []string{
-		`\` + edtf.UNCERTAIN,
-		edtf.APPROXIMATE,
-		edtf.UNCERTAIN_AND_APPROXIMATE,
-	}
-
-	pattern_qualifier := `[` + strings.Join(qualifiers, "") + `]`
+	pattern_qualifier := `[\` + edtf.UNCERTAIN + edtf.APPROXIMATE + edtf.UNCERTAIN_AND_APPROXIMATE + `]`
 
 	pattern_year := `\-?[0-9X]{4}`
 	pattern_month := `(?:[0X][1-9X]|[1X][0-2X])`
-	pattern_day := `(?:[012X][1-9X]|[3X][01X])`
+	pattern_day := `(?:[012X][0-9X]|[3X][01X])`
 
 	pattern_yyyy := `(` + pattern_qualifier + `?` + pattern_year + `|` + pattern_year + pattern_qualifier + `?)`
 	pattern_mm := `(` + pattern_qualifier + `?` + pattern_month + `|` + pattern_month + pattern_qualifier + `?)`
 	pattern_dd := `(` + pattern_qualifier + `?` + pattern_day + `|` + pattern_day + pattern_qualifier + `?)`
 
-	pattern_ymd := `^` + pattern_yyyy + `(?:\-` + pattern_mm + `(?:\-` + pattern_dd + `)?)?$`
+	pattern_ymd := `^` + pattern_yyyy + `(?:\-` + pattern_mm + `(?:\-` + pattern_dd + `)?` + `)?$`
 
 	pattern_date := `(` + pattern_year + `|(?:` + pattern_month + `)|(?:` + pattern_day + `))`
 
@@ -69,6 +63,8 @@ func DateRangeWithString(edtf_str string) (*edtf.DateRange, error) {
 	yyyy := parts[1]
 	mm := parts[2]
 	dd := parts[3]
+
+	// fmt.Printf("DATE Y: '%s' M: '%s' D: '%s'\n", yyyy, mm, dd)
 
 	var yyyy_q *Qualifier
 	var mm_q *Qualifier
@@ -108,6 +104,66 @@ func DateRangeWithString(edtf_str string) (*edtf.DateRange, error) {
 
 		dd = d
 		dd_q = q
+	}
+
+	if dd_q != nil && dd_q.Type == "Group" {
+		precision.AddFlag(edtf.ANNUAL)
+		precision.AddFlag(edtf.MONTHLY)
+		precision.AddFlag(edtf.DAILY)
+	}
+
+	if mm_q != nil && dd_q.Type == "Group" {
+		precision.AddFlag(edtf.ANNUAL)
+		precision.AddFlag(edtf.MONTHLY)
+	}
+
+	if mm_q != nil && dd_q.Type == "Group" {
+		precision.AddFlag(edtf.ANNUAL)
+	}
+
+	if yyyy_q != nil && yyyy_q.Type == "Individual" {
+
+		switch yyyy_q.Value {
+		case edtf.UNCERTAIN:
+			uncertain.AddFlag(edtf.ANNUAL)
+		case edtf.APPROXIMATE:
+			approximate.AddFlag(edtf.ANNUAL)
+		case edtf.UNCERTAIN_AND_APPROXIMATE:
+			uncertain.AddFlag(edtf.ANNUAL)
+			approximate.AddFlag(edtf.ANNUAL)
+		default:
+			// pass
+		}
+	}
+
+	if mm_q != nil && mm_q.Type == "Individual" {
+
+		switch mm_q.Value {
+		case edtf.UNCERTAIN:
+			uncertain.AddFlag(edtf.MONTHLY)
+		case edtf.APPROXIMATE:
+			approximate.AddFlag(edtf.MONTHLY)
+		case edtf.UNCERTAIN_AND_APPROXIMATE:
+			uncertain.AddFlag(edtf.MONTHLY)
+			approximate.AddFlag(edtf.MONTHLY)
+		default:
+			// pass
+		}
+	}
+
+	if dd_q != nil && dd_q.Type == "Individual" {
+
+		switch dd_q.Value {
+		case edtf.UNCERTAIN:
+			uncertain.AddFlag(edtf.DAILY)
+		case edtf.APPROXIMATE:
+			approximate.AddFlag(edtf.DAILY)
+		case edtf.UNCERTAIN_AND_APPROXIMATE:
+			uncertain.AddFlag(edtf.DAILY)
+			approximate.AddFlag(edtf.DAILY)
+		default:
+			// pass
+		}
 	}
 
 	start_yyyy := yyyy
@@ -256,51 +312,6 @@ func DateRangeWithString(edtf_str string) (*edtf.DateRange, error) {
 	dr := &edtf.DateRange{
 		Lower: lower_d,
 		Upper: upper_d,
-	}
-
-	if yyyy_q != nil {
-
-		switch yyyy_q.Value {
-		case edtf.UNCERTAIN:
-			uncertain.AddFlag(edtf.ANNUAL)
-		case edtf.APPROXIMATE:
-			approximate.AddFlag(edtf.ANNUAL)
-		case edtf.UNCERTAIN_AND_APPROXIMATE:
-			uncertain.AddFlag(edtf.ANNUAL)
-			approximate.AddFlag(edtf.ANNUAL)
-		default:
-			// pass
-		}
-	}
-
-	if mm_q != nil {
-
-		switch mm_q.Value {
-		case edtf.UNCERTAIN:
-			uncertain.AddFlag(edtf.MONTHLY)
-		case edtf.APPROXIMATE:
-			approximate.AddFlag(edtf.MONTHLY)
-		case edtf.UNCERTAIN_AND_APPROXIMATE:
-			uncertain.AddFlag(edtf.MONTHLY)
-			approximate.AddFlag(edtf.MONTHLY)
-		default:
-			// pass
-		}
-	}
-
-	if dd_q != nil {
-
-		switch dd_q.Value {
-		case edtf.UNCERTAIN:
-			uncertain.AddFlag(edtf.DAILY)
-		case edtf.APPROXIMATE:
-			approximate.AddFlag(edtf.DAILY)
-		case edtf.UNCERTAIN_AND_APPROXIMATE:
-			uncertain.AddFlag(edtf.DAILY)
-			approximate.AddFlag(edtf.DAILY)
-		default:
-			// pass
-		}
 	}
 
 	if uncertain != edtf.NONE {
