@@ -6,7 +6,7 @@ A Go package for parsing Extended DateTime Format (EDTF) date strings.
 
 This is a work in progress and documentation is incomplete.
 
-Level 0 and Level 1 have been implemented. Level 2 is in progress. Help is welcome :-)
+Code to parse Level 0, Level 1 and Level 2 strings has been implemented but testing is still in progress.
 
 ## Background
 
