@@ -12,33 +12,6 @@ const DATE string = "date"
 const DATE_AND_TIME string = "date and time"
 const TIME_INTERVAL string = "time interval"
 
-var Tests map[string][]string = map[string][]string{
-	DATE: []string{
-		"1985-04-12",
-		"1985-04",
-		"1985",
-		"-0400",
-		"-1200-06",
-	},
-	DATE_AND_TIME: []string{
-		"1985-04-12T23:20:30",
-		"1985-04-12T23:20:30Z",
-		"1985-04-12T23:20:30-04",
-		"1985-04-12T23:20:30+04:30",
-		"-1972-04-12T23:20:28",
-	},
-	TIME_INTERVAL: []string{
-		"1964/2008",
-		"2004-06/2006-08",
-		"2004-02-01/2005-02-08",
-		"2004-02-01/2005-02",
-		"2004-02-01/2005",
-		"2005/2006-02",
-		"-0200/0200",
-		"-1200-06/0200-05-02",
-	},
-}
-
 func IsLevel0(edtf_str string) bool {
 	return re.Level0.MatchString(edtf_str)
 }

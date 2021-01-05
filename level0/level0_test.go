@@ -10,8 +10,8 @@ func TestIsLevel0(t *testing.T) {
 
 	for _, candidates := range Tests {
 
-		for _, str := range candidates {
-			valid = append(valid, str)
+		for input, _ := range candidates {
+			valid = append(valid, input)
 		}
 	}
 
@@ -22,23 +22,23 @@ func TestIsLevel0(t *testing.T) {
 		"c 1960",
 	}
 
-	for _, str := range valid {
+	for _, input := range valid {
 
-		ok := IsLevel0(str)
+		ok := IsLevel0(input)
 
 		if !ok {
-			t.Fatalf("Expected '%s' to parse as Level 0 string", str)
+			t.Fatalf("Expected '%s' to parse as Level 0 string", input)
 		}
 
-		ParseString(str)
+		ParseString(input)
 	}
 
-	for _, str := range invalid {
+	for _, input := range invalid {
 
-		ok := IsLevel0(str)
+		ok := IsLevel0(input)
 
 		if ok {
-			t.Fatalf("Expected '%s' to not parse as Level 0 string", str)
+			t.Fatalf("Expected '%s' to not parse as Level 0 string", input)
 		}
 	}
 
@@ -50,21 +50,21 @@ func TestParseString(t *testing.T) {
 
 	for _, candidates := range Tests {
 
-		for _, str := range candidates {
-			valid = append(valid, str)
+		for input, _ := range candidates {
+			valid = append(valid, input)
 		}
 	}
 
-	for _, str := range valid {
+	for _, input := range valid {
 
-		d, err := ParseString(str)
+		d, err := ParseString(input)
 
 		if err != nil {
-			t.Fatalf("Failed to parse '%s', %v", str, err)
+			t.Fatalf("Failed to parse '%s', %v", input, err)
 		}
 
-		if d.String() != str {
-			t.Fatalf("Failed to stringify '%s', %v", str, err)
+		if d.String() != input {
+			t.Fatalf("Failed to stringify '%s', %v", input, err)
 		}
 
 	}
