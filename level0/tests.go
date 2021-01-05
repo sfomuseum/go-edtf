@@ -19,24 +19,24 @@ var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests
 			EndUpperTimeRFC3339:   "1985-04-30T23:59:59Z",
 		}),
 		/*
-		"1985": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "1985-01-01T00:00:00Z",
-			StartUpperTimeRFC3339: "1985-01-01T23:59:59Z",
-			EndLowerTimeRFC3339:   "1985-12-31T00:00:00Z",
-			EndUpperTimeRFC3339:   "1985-12-31T23:59:59Z",
-		}),
-		"-0400": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "-0400-01-01T00:00:00Z",
-			StartUpperTimeRFC3339: "-0400-01-01T23:59:59Z",
-			EndLowerTimeRFC3339:   "-0400-12-31T00:00:00Z",
-			EndUpperTimeRFC3339:   "-0400-12-31T23:59:59Z",
-		}),
-		"-1200-06": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "-1200-06-01T00:00:00Z",
-			StartUpperTimeRFC3339: "-1200-06-01T23:59:59Z",
-			EndLowerTimeRFC3339:   "-1200-06-30T00:00:00Z",
-			EndUpperTimeRFC3339:   "-1200-06-30T23:59:59Z",
-		}),
+			"1985": tests.NewTestResult(tests.TestResultOptions{
+				StartLowerTimeRFC3339: "1985-01-01T00:00:00Z",
+				StartUpperTimeRFC3339: "1985-01-01T23:59:59Z",
+				EndLowerTimeRFC3339:   "1985-12-31T00:00:00Z",
+				EndUpperTimeRFC3339:   "1985-12-31T23:59:59Z",
+			}),
+			"-0400": tests.NewTestResult(tests.TestResultOptions{
+				StartLowerTimeRFC3339: "-0400-01-01T00:00:00Z",
+				StartUpperTimeRFC3339: "-0400-01-01T23:59:59Z",
+				EndLowerTimeRFC3339:   "-0400-12-31T00:00:00Z",
+				EndUpperTimeRFC3339:   "-0400-12-31T23:59:59Z",
+			}),
+			"-1200-06": tests.NewTestResult(tests.TestResultOptions{
+				StartLowerTimeRFC3339: "-1200-06-01T00:00:00Z",
+				StartUpperTimeRFC3339: "-1200-06-01T23:59:59Z",
+				EndLowerTimeRFC3339:   "-1200-06-30T00:00:00Z",
+				EndUpperTimeRFC3339:   "-1200-06-30T23:59:59Z",
+			}),
 		*/
 	},
 	DATE_AND_TIME: map[string]*tests.TestResult{

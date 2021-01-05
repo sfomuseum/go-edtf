@@ -3,6 +3,7 @@ package common
 import (
 	"fmt"
 	"github.com/whosonfirst/go-edtf"
+	"github.com/whosonfirst/go-edtf/calendar"
 	"github.com/whosonfirst/go-edtf/re"
 	"strconv"
 	"strings"
@@ -299,6 +300,31 @@ func StringRangeFromEDTF(edtf_str string) (*StringRange, error) {
 		precision.AddFlag(edtf.DAILY)
 	}
 
+	if start_mm == "" {
+		start_mm = "01"
+	}
+
+	if start_dd == "" {
+		start_dd = "01"
+	}
+
+	if end_mm == "" {
+		end_mm = "12"
+	}
+
+	if end_dd == "" {
+
+		yyyymm := fmt.Sprintf("%s-%s", end_yyyy, end_mm)
+
+		dd, err := calendar.DaysInMonthWithString(yyyymm)
+
+		if err != nil {
+			return nil, err
+		}
+
+		end_dd = strconv.Itoa(int(dd))
+	}
+
 	start := &StringDate{
 		Year:  start_yyyy,
 		Month: start_mm,
@@ -345,7 +371,7 @@ func DateRangeWithStringRange(r *StringRange) (*edtf.DateRange, error) {
 	}
 
 	fmt.Println("DATERANGE START", start_ymd, r.Start)
-	
+
 	end_ymd, err := YMDFromStrings(end_yyyy, end_mm, end_dd)
 
 	if err != nil {
