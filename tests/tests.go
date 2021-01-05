@@ -32,6 +32,26 @@ func NewTestResult(opts TestResultOptions) *TestResult {
 
 func (r *TestResult) TestDate(d *edtf.EDTFDate) error {
 
+	/*
+
+		if d.Start.Lower.Time != nil {
+			fmt.Printf("[%s][start.lower] %s %d\n", d.String(), d.Start.Lower.Time.Format(time.RFC3339), d.Start.Lower.Time.Unix())
+		}
+
+		if d.Start.Upper.Time != nil {
+			fmt.Printf("[%s][start.upper] %s %d\n", d.String(), d.Start.Lower.Time.Format(time.RFC3339), d.Start.Lower.Time.Unix())
+		}
+
+		if d.End.Lower.Time != nil {
+			fmt.Printf("[%s][end.lower] %s %d\n", d.String(), d.End.Lower.Time.Format(time.RFC3339), d.End.Lower.Time.Unix())
+		}
+
+		if d.End.Upper.Time != nil {
+			fmt.Printf("[%s][end.upper] %s %d\n", d.String(), d.End.Lower.Time.Format(time.RFC3339), d.End.Lower.Time.Unix())
+		}
+
+	*/
+
 	err := r.testRFC3339All(d)
 
 	if err != nil {
