@@ -8,9 +8,9 @@ var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests
 	DATE: map[string]*tests.TestResult{
 		"1985-04-12": tests.NewTestResult(tests.TestResultOptions{
 			StartLowerTimeRFC3339: "1985-04-12T00:00:00Z",
-			StartUpperTimeRFC3339: "1985-04-12T23:59:59Z",
-			EndLowerTimeRFC3339:   "1985-04-12T00:00:00Z",
-			EndUpperTimeRFC3339:   "1985-04-12T00:00:00Z",
+			StartUpperTimeRFC3339: "1985-04-12T00:00:00Z",
+			EndLowerTimeRFC3339:   "1985-04-12T23:59:59Z",
+			EndUpperTimeRFC3339:   "1985-04-12T23:59:59Z",
 		}),
 		"1985-04": tests.NewTestResult(tests.TestResultOptions{
 			StartLowerTimeRFC3339: "1985-04-01T00:00:00Z",
