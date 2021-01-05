@@ -31,31 +31,76 @@ func ParseDate(edtf_str string) (*edtf.EDTFDate, error) {
 		return nil, edtf.Invalid(DATE, edtf_str)
 	}
 
-	sp, err := common.DateSpanWithString(edtf_str)
+	r, err := common.StringRangeFromEDTF(edtf_str)
+
+	if err != nil {
+		return nil, err
+	}
+	
+	r_start := r.Start
+	r_end := r.End
+	
+	start_ymd, err := common.YMDFromStringDate(r_start)
+
+	if err != nil {
+		return nil, err
+	}
+	
+	end_ymd, err := common.YMDFromStringDate(r_end)
 
 	if err != nil {
 		return nil, err
 	}
 
-	fmt.Println(sp.Start.Upper.YMD, sp.Start.Lower.YMD)
+	fmt.Println(edtf_str, start_ymd, end_ymd)
+	
+	lower_t, err := common.TimeWithYMD(start_ymd, edtf.HMS_LOWER)
 
-	/*
-		start, err := common.DateRangeWithString(edtf_str)
+	if err != nil {
+		return nil, err
+	}
 
-		if err != nil {
-			return nil, err
-		}
+	upper_t, err := common.TimeWithYMD(end_ymd, edtf.HMS_UPPER)
 
-		fmt.Println("WTF", edtf_str, start.Lower.Time.Format(time.RFC3339))
-		end := start
-	*/
+	if err != nil {
+		return nil, err
+	}
+	
+	start_lower := &edtf.Date{
+		YMD: start_ymd,
+	}
+
+	start_upper := &edtf.Date{
+		YMD: start_ymd,
+	}
+
+	end_lower := &edtf.Date{
+		YMD: end_ymd,
+	}
+
+	end_upper := &edtf.Date{
+		YMD: end_ymd,
+	}
+
+	start_lower.Time = lower_t
+	start_upper.Time = lower_t		
+	
+	end_lower.Time = upper_t
+	end_upper.Time = upper_t
+		
+	start := &edtf.DateRange{
+		Lower: start_lower,
+		Upper: start_upper,
+	}
+
+	end := &edtf.DateRange{
+		Lower: end_lower,
+		Upper: end_upper,
+	}
 
 	d := &edtf.EDTFDate{
-		// Start: start,
-		// End:   end,
-		// Span: sp,
-		Start: sp.Start,
-		End:   sp.End,
+		Start: start,
+		End:   end,
 		EDTF:  edtf_str,
 		Level: LEVEL,
 	}

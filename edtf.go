@@ -1,6 +1,7 @@
 package edtf
 
 import (
+	"fmt"
 	"time"
 )
 
@@ -47,10 +48,18 @@ type DateSpan struct {
 	End   *DateRange `json:"end"`
 }
 
+func (s *DateSpan) String() string {
+	return fmt.Sprintf("[[%T] Start: '%v' End: '%v']", s, s.Start, s.End)
+}
+
 type DateRange struct {
 	EDTF  string `json:"edtf"`
 	Lower *Date  `json:"lower"`
 	Upper *Date  `json:"upper"`
+}
+
+func (r *DateRange) String() string {
+	return fmt.Sprintf("[[%T] Lower: '%v' Upper: '%v'[", r, r.Lower, r.Upper)
 }
 
 type Date struct {
@@ -65,10 +74,35 @@ type Date struct {
 	Inclusivity Precision `json:"inclusivity,omitempty"`
 }
 
+func (d *Date) String() string {
+	return fmt.Sprintf("[[%T] Time: '%v' YMD: '%v']", d, d.Time, d.YMD)
+}
+
 type YMD struct {
 	Year  int `json:"year"`
 	Month int `json:"month"`
 	Day   int `json:"day"`
+}
+
+func (ymd *YMD) String() string {
+	return fmt.Sprintf("[%T] Y: '%d' M: '%d' D: '%d'", ymd, ymd.Year, ymd.Month, ymd.Day)
+}
+
+func (ymd *YMD) Equals(other_ymd *YMD) bool {
+
+	if ymd.Year != other_ymd.Year {
+		return false
+	}
+
+	if ymd.Month != other_ymd.Month {
+		return false
+	}
+
+	if ymd.Day != other_ymd.Day {
+		return false
+	}
+
+	return true
 }
 
 /*

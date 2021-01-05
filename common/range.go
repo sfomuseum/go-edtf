@@ -6,7 +6,7 @@ import (
 	"github.com/whosonfirst/go-edtf/re"
 	"strconv"
 	"strings"
-	"time"
+	//"time"
 )
 
 type Qualifier struct {
@@ -14,10 +14,34 @@ type Qualifier struct {
 	Type  string
 }
 
+// StringWhatever is a bad naming convention - please make me better
+// (20210105/thisisaaronland)
+
 type StringDate struct {
 	Year  string
 	Month string
 	Day   string
+}
+
+func (d *StringDate) String() string {
+	return fmt.Sprintf("[[%T] Y: '%s' M: '%s' D: '%s']", d, d.Year, d.Month, d.Day)
+}
+
+func (d *StringDate) Equals(other_d *StringDate) bool {
+
+	if d.Year != other_d.Year {
+		return false
+	}
+
+	if d.Month != other_d.Month {
+		return false
+	}
+
+	if d.Day != other_d.Day {
+		return false
+	}
+
+	return true
 }
 
 type StringRange struct {
@@ -29,7 +53,9 @@ type StringRange struct {
 	EDTF        string
 }
 
-// PLEASE RENAME ME TO BE DateRangeWithYMDString
+func (r *StringRange) String() string {
+	return fmt.Sprintf("[[%T] Start: '%s' End: '%s']", r, r.Start, r.End)
+}
 
 func StringRangeFromEDTF(edtf_str string) (*StringRange, error) {
 
@@ -309,8 +335,8 @@ func DateRangeWithStringRange(r *StringRange) (*edtf.DateRange, error) {
 
 	edtf_str := r.EDTF
 
-	fmt.Println("LOWER", edtf_str, start_yyyy, start_mm, start_dd, edtf.HMS_LOWER)
-	fmt.Println("UPPER", edtf_str, end_yyyy, end_mm, end_dd, edtf.HMS_UPPER)
+	// fmt.Println("LOWER", edtf_str, start_yyyy, start_mm, start_dd, edtf.HMS_LOWER)
+	// fmt.Println("UPPER", edtf_str, end_yyyy, end_mm, end_dd, edtf.HMS_UPPER)
 
 	start_ymd, err := YMDFromStrings(start_yyyy, start_mm, start_dd)
 
@@ -318,6 +344,8 @@ func DateRangeWithStringRange(r *StringRange) (*edtf.DateRange, error) {
 		return nil, err
 	}
 
+	fmt.Println("DATERANGE START", start_ymd, r.Start)
+	
 	end_ymd, err := YMDFromStrings(end_yyyy, end_mm, end_dd)
 
 	if err != nil {
@@ -336,8 +364,8 @@ func DateRangeWithStringRange(r *StringRange) (*edtf.DateRange, error) {
 		return nil, err
 	}
 
-	fmt.Println("LOWER", edtf_str, lower_t.Format(time.RFC3339))
-	fmt.Println("UPPER", edtf_str, upper_t.Format(time.RFC3339))
+	// fmt.Println("LOWER", edtf_str, lower_t.Format(time.RFC3339))
+	// fmt.Println("UPPER", edtf_str, upper_t.Format(time.RFC3339))
 
 	lower_d := &edtf.Date{
 		Time: lower_t,

@@ -5,7 +5,44 @@ import (
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/calendar"
 	"strconv"
+	"strings"
+	"fmt"
 )
+
+func YMDFromStringDate(d *StringDate) (*edtf.YMD, error) {
+	return YMDFromStrings(d.Year, d.Month, d.Day)
+}
+
+func YMDFromString(str_ymd string) (*edtf.YMD, error) {
+
+	yyyy := ""
+	mm := ""
+	dd := ""
+	
+	parts := strings.Split(str_ymd, "-")
+
+	switch len(parts) {
+	case 4:
+		yyyy = "-" + parts[1]
+		mm = parts[2]
+		dd = parts[3]		
+	case 3:
+		yyyy = parts[0]
+		mm = parts[1]
+		dd = parts[2]
+	case 2:
+		yyyy = parts[0]
+		mm = parts[1]
+	case 1:
+		yyyy = parts[0]
+	default:
+		return nil, errors.New("Invalid YMD string")
+	}
+
+	fmt.Println("YEAR", yyyy)
+	
+	return YMDFromStrings(yyyy, mm, dd)
+}
 
 func YMDFromStrings(str_yyyy string, str_mm string, str_dd string) (*edtf.YMD, error) {
 
@@ -23,8 +60,15 @@ func YMDFromStrings(str_yyyy string, str_mm string, str_dd string) (*edtf.YMD, e
 		return nil, err
 	}
 
-	mm := 1
-	dd := 1
+	is_bce := false
+
+	if yyyy < 0 {
+		is_bce = true
+		yyyy = FlipYear(yyyy)
+	}
+	
+	mm := 0
+	dd := 0
 
 	if str_mm != "" {
 
@@ -90,10 +134,12 @@ func YMDFromStrings(str_yyyy string, str_mm string, str_dd string) (*edtf.YMD, e
 		if uint(dd) > days {
 			return nil, errors.New("Invalid days for month")
 		}
-
-		dd = int(days)
 	}
 
+	if is_bce {
+		yyyy = FlipYear(yyyy)
+	}
+	
 	ymd := &edtf.YMD{
 		Year:  yyyy,
 		Month: mm,

@@ -18,6 +18,7 @@ var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests
 			EndLowerTimeRFC3339:   "1985-04-30T00:00:00Z",
 			EndUpperTimeRFC3339:   "1985-04-30T23:59:59Z",
 		}),
+		/*
 		"1985": tests.NewTestResult(tests.TestResultOptions{
 			StartLowerTimeRFC3339: "1985-01-01T00:00:00Z",
 			StartUpperTimeRFC3339: "1985-01-01T23:59:59Z",
@@ -36,6 +37,7 @@ var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests
 			EndLowerTimeRFC3339:   "-1200-06-30T00:00:00Z",
 			EndUpperTimeRFC3339:   "-1200-06-30T23:59:59Z",
 		}),
+		*/
 	},
 	DATE_AND_TIME: map[string]*tests.TestResult{
 		"1985-04-12T23:20:30":       tests.NewTestResult(tests.TestResultOptions{}),
