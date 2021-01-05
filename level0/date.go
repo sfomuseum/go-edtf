@@ -5,7 +5,7 @@ import (
 	"github.com/whosonfirst/go-edtf/common"
 	"github.com/whosonfirst/go-edtf/re"
 	// "time"
-	// "fmt"
+	"fmt"
 )
 
 /*
@@ -37,6 +37,9 @@ func ParseDate(edtf_str string) (*edtf.EDTFDate, error) {
 		return nil, err
 	}
 
+	fmt.Println(sp.Start, sp.End)
+
+	
 	/*
 		start, err := common.DateRangeWithString(edtf_str)
 

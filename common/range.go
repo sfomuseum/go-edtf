@@ -260,14 +260,26 @@ func DateRangeWithString(edtf_str string) (*edtf.DateRange, error) {
 
 	fmt.Println("LOWER", edtf_str, start_yyyy, start_mm, start_dd, edtf.HMS_LOWER)
 	fmt.Println("UPPER", edtf_str, end_yyyy, end_mm, end_dd, edtf.HMS_UPPER)
-
-	lower_t, err := TimeWithYMDString(start_yyyy, start_mm, start_dd, edtf.HMS_LOWER)
+	
+	start_yyyy_i, start_mm_i, start_dd_i, err := YMDFromStrings(start_yyyy, start_mm, start_dd)
 
 	if err != nil {
 		return nil, err
 	}
 
-	upper_t, err := TimeWithYMDString(end_yyyy, end_mm, end_dd, edtf.HMS_UPPER)
+	end_yyyy_i, end_mm_i, end_dd_i, err := YMDFromStrings(end_yyyy, end_mm, end_dd)
+
+	if err != nil {
+		return nil, err
+	}
+	
+	lower_t, err := TimeWithYMD(start_yyyy_i, start_mm_i, start_dd_i, edtf.HMS_LOWER)
+
+	if err != nil {
+		return nil, err
+	}
+
+	upper_t, err := TimeWithYMD(end_yyyy_i, end_mm_i, end_dd_i, edtf.HMS_UPPER)
 
 	if err != nil {
 		return nil, err
@@ -278,13 +290,20 @@ func DateRangeWithString(edtf_str string) (*edtf.DateRange, error) {
 
 	lower_d := &edtf.Date{
 		Time: lower_t,
+		Year: start_yyyy_i,
+		Month: start_mm_i,
+		Day: start_dd_i,
 	}
 
 	upper_d := &edtf.Date{
 		Time: upper_t,
+		Year: end_yyyy_i,
+		Month: end_mm_i,
+		Day: end_dd_i,		
 	}
 
 	dr := &edtf.DateRange{
+		EDTF: edtf_str,
 		Lower: lower_d,
 		Upper: upper_d,
 	}

@@ -48,13 +48,17 @@ type DateSpan struct {
 }
 
 type DateRange struct {
+	EDTF        string     `json:"edtf"`	
 	Lower *Date `json:"lower"`
 	Upper *Date `json:"upper"`
 }
 
 type Date struct {
-	EDTF        string     `json:"edtf"`
 	Time        *time.Time `json:"time,omitempty"`
+	Year int `json:"year"`
+	Month int `json:"month"`
+	Day int `json:"day"`
+	HMS string `json:"hms,omitempty"`
 	Uncertain   Precision  `json:"uncertain,omitempty"`
 	Approximate Precision  `json:"approximate,omitempty"`
 	Unspecified Precision  `json:"unspecified,omitempty"`

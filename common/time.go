@@ -11,45 +11,12 @@ import (
 
 func TimeWithYMDString(str_yyyy string, str_mm string, str_dd string, hms string) (*time.Time, error) {
 
-	if str_yyyy == "" {
-		return nil, errors.New("Missing year")
-	}
-
-	if str_mm == "" && str_dd != "" {
-		return nil, errors.New("Missing month")
-	}
-
-	yyyy, err := strconv.Atoi(str_yyyy)
+	yyyy, mm, dd, err := YMDFromStrings(str_yyyy, str_mm, str_dd)
 
 	if err != nil {
 		return nil, err
 	}
-
-	mm := 1
-	dd := 1
-
-	if str_mm != "" {
-
-		m, err := strconv.Atoi(str_mm)
-
-		if err != nil {
-			return nil, err
-		}
-
-		mm = m
-	}
-
-	if str_dd != "" {
-
-		d, err := strconv.Atoi(str_dd)
-
-		if err != nil {
-			return nil, err
-		}
-
-		dd = d
-	}
-
+	
 	return TimeWithYMD(yyyy, mm, dd, hms)
 }
 
