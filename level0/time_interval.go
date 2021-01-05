@@ -4,7 +4,6 @@ import (
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/common"
 	"github.com/whosonfirst/go-edtf/re"
-	"strings"
 )
 
 /*
@@ -32,26 +31,34 @@ func ParseTimeInterval(edtf_str string) (*edtf.EDTFDate, error) {
 		return nil, edtf.Invalid(TIME_INTERVAL, edtf_str)
 	}
 
-	parts := strings.Split(edtf_str, "/")
-
-	start, err := common.DateRangeWithString(parts[0])
+	sp, err := common.DateSpanWithString(edtf_str)
 
 	if err != nil {
 		return nil, err
 	}
 
-	end, err := common.DateRangeWithString(parts[1])
+	/*
+		parts := strings.Split(edtf_str, "/")
 
-	if err != nil {
-		return nil, err
-	}
+		start, err := common.DateRangeWithString(parts[0])
+
+		if err != nil {
+			return nil, err
+		}
+
+		end, err := common.DateRangeWithString(parts[1])
+
+		if err != nil {
+			return nil, err
+		}
+	*/
 
 	d := &edtf.EDTFDate{
-		Start: start,
-		End:   end,
+		// Span: sp,
+		Start: sp.Start,
+		End:   sp.End,
 		EDTF:  edtf_str,
 		Level: LEVEL,
-		// Label: "TimeInterval",
 	}
 
 	return d, nil

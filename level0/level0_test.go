@@ -27,7 +27,9 @@ func TestIsLevel0(t *testing.T) {
 		ok := IsLevel0(input)
 
 		if !ok {
-			t.Fatalf("Expected '%s' to parse as Level 0 string", input)
+			t.Logf("Expected '%s' to parse as Level 0 string", input)
+			t.Fail()
+			continue
 		}
 
 		ParseString(input)
@@ -38,7 +40,9 @@ func TestIsLevel0(t *testing.T) {
 		ok := IsLevel0(input)
 
 		if ok {
-			t.Fatalf("Expected '%s' to not parse as Level 0 string", input)
+			t.Logf("Expected '%s' to not parse as Level 0 string", input)
+			t.Fail()
+			continue
 		}
 	}
 
@@ -57,15 +61,12 @@ func TestParseString(t *testing.T) {
 
 	for _, input := range valid {
 
-		d, err := ParseString(input)
+		_, err := ParseString(input)
 
 		if err != nil {
-			t.Fatalf("Failed to parse '%s', %v", input, err)
+			t.Logf("Failed to parse '%s', %v", input, err)
+			t.Fail()
+			continue
 		}
-
-		if d.String() != input {
-			t.Fatalf("Failed to stringify '%s', %v", input, err)
-		}
-
 	}
 }

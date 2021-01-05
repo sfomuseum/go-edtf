@@ -14,9 +14,24 @@ type Qualifier struct {
 	Type  string
 }
 
+type StringDate struct {
+	Year  string
+	Month string
+	Day   string
+}
+
+type StringRange struct {
+	Start       *StringDate
+	End         *StringDate
+	Precision   edtf.Precision
+	Uncertain   edtf.Precision
+	Approximate edtf.Precision
+	EDTF        string
+}
+
 // PLEASE RENAME ME TO BE DateRangeWithYMDString
 
-func DateRangeWithString(edtf_str string) (*edtf.DateRange, error) {
+func StringRangeFromEDTF(edtf_str string) (*StringRange, error) {
 
 	precision := edtf.NONE
 	uncertain := edtf.NONE
@@ -258,6 +273,42 @@ func DateRangeWithString(edtf_str string) (*edtf.DateRange, error) {
 		precision.AddFlag(edtf.DAILY)
 	}
 
+	start := &StringDate{
+		Year:  start_yyyy,
+		Month: start_mm,
+		Day:   start_dd,
+	}
+
+	end := &StringDate{
+		Year:  end_yyyy,
+		Month: end_mm,
+		Day:   end_dd,
+	}
+
+	r := &StringRange{
+		Start:       start,
+		End:         end,
+		Precision:   precision,
+		Uncertain:   uncertain,
+		Approximate: approximate,
+		EDTF:        edtf_str,
+	}
+
+	return r, nil
+}
+
+func DateRangeWithStringRange(r *StringRange) (*edtf.DateRange, error) {
+
+	start_yyyy := r.Start.Year
+	start_mm := r.Start.Month
+	start_dd := r.Start.Day
+
+	end_yyyy := r.End.Year
+	end_mm := r.End.Month
+	end_dd := r.End.Day
+
+	edtf_str := r.EDTF
+
 	fmt.Println("LOWER", edtf_str, start_yyyy, start_mm, start_dd, edtf.HMS_LOWER)
 	fmt.Println("UPPER", edtf_str, end_yyyy, end_mm, end_dd, edtf.HMS_UPPER)
 
@@ -304,90 +355,22 @@ func DateRangeWithString(edtf_str string) (*edtf.DateRange, error) {
 		Upper: upper_d,
 	}
 
-	if uncertain != edtf.NONE {
-		dr.Lower.Uncertain = uncertain
-		dr.Upper.Uncertain = uncertain
+	if r.Uncertain != edtf.NONE {
+		dr.Lower.Uncertain = r.Uncertain
+		dr.Upper.Uncertain = r.Uncertain
 	}
 
-	if approximate != edtf.NONE {
-		dr.Lower.Approximate = approximate
-		dr.Upper.Approximate = approximate
+	if r.Approximate != edtf.NONE {
+		dr.Lower.Approximate = r.Approximate
+		dr.Upper.Approximate = r.Approximate
 	}
 
-	if precision != edtf.NONE {
-		dr.Lower.Unspecified = precision
-		dr.Upper.Unspecified = precision
+	if r.Precision != edtf.NONE {
+		dr.Lower.Unspecified = r.Precision
+		dr.Upper.Unspecified = r.Precision
 	}
 
 	return dr, nil
-}
-
-// DEPRECATED
-
-func DateRangeWithYMDString(str_yyyy string, str_mm string, str_dd string) (*edtf.DateRange, error) {
-
-	parts := []string{
-		str_yyyy,
-	}
-
-	if str_mm != "" {
-		parts = append(parts, str_mm)
-	}
-
-	if str_dd != "" {
-		parts = append(parts, str_dd)
-	}
-
-	ymd := strings.Join(parts, "-")
-	return DateRangeWithString(ymd)
-}
-
-// DEPRECATED
-
-/*
-
-> git grep DateRangeWithYMD | grep -v DateRangeWithYMDString
-common/daterange.go:func DateRangeWithYMD(yyyy int, mm int, dd int) (*edtf.DateRange, error) {
-level1/season.go:	start, err := common.DateRangeWithYMD(start_yyyy, start_mm, start_dd)
-level1/season.go:	end, err := common.DateRangeWithYMD(end_yyyy, end_mm, end_dd)
-level2/exponential_year.go:	start, err := common.DateRangeWithYMD(yyyy_i, 0, 0)
-
-*/
-
-func DateRangeWithYMD(yyyy int, mm int, dd int) (*edtf.DateRange, error) {
-
-	ymd := &edtf.YMD{
-		Year:  yyyy,
-		Month: mm,
-		Day:   dd,
-	}
-
-	lower_t, err := TimeWithYMD(ymd, edtf.HMS_LOWER)
-
-	if err != nil {
-		return nil, err
-	}
-
-	upper_t, err := TimeWithYMD(ymd, edtf.HMS_UPPER)
-
-	if err != nil {
-		return nil, err
-	}
-
-	lower_d := &edtf.Date{
-		Time: lower_t,
-	}
-
-	upper_d := &edtf.Date{
-		Time: upper_t,
-	}
-
-	dt := &edtf.DateRange{
-		Lower: lower_d,
-		Upper: upper_d,
-	}
-
-	return dt, nil
 }
 
 func EmptyDateRange() *edtf.DateRange {

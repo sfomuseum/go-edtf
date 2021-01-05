@@ -37,7 +37,7 @@ func ParseDate(edtf_str string) (*edtf.EDTFDate, error) {
 		return nil, err
 	}
 
-	fmt.Println(sp.Start, sp.End)
+	fmt.Println(sp.Start.Upper.YMD, sp.Start.Lower.YMD)
 
 	/*
 		start, err := common.DateRangeWithString(edtf_str)
