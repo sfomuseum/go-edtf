@@ -2,19 +2,24 @@ package common
 
 import (
 	"errors"
-	"fmt"
+	_ "fmt"
 	"github.com/whosonfirst/go-edtf"
 	"regexp"
 	"strconv"
 	"strings"
 )
 
+type Qualifier struct {
+	Value string
+	Type  string
+}
+
 // move these in to the re package
 
 var re_ymd_string *regexp.Regexp
 
-var re_qualifier_prefix *regexp.Regexp
-var re_qualifier_suffix *regexp.Regexp
+var re_qualifier_individual *regexp.Regexp
+var re_qualifier_group *regexp.Regexp
 
 func init() {
 
@@ -42,8 +47,8 @@ func init() {
 
 	re_ymd_string = regexp.MustCompile(pattern_ymd)
 
-	re_qualifier_prefix = regexp.MustCompile(`^(` + pattern_qualifier + `)?` + pattern_date + `$`)
-	re_qualifier_suffix = regexp.MustCompile(`^` + pattern_date + `(` + pattern_qualifier + `)?$`)
+	re_qualifier_individual = regexp.MustCompile(`^(` + pattern_qualifier + `)?` + pattern_date + `$`)
+	re_qualifier_group = regexp.MustCompile(`^` + pattern_date + `(` + pattern_qualifier + `)?$`)
 }
 
 // PLEASE RENAME ME TO BE DateRangeWithYMDString
@@ -51,6 +56,8 @@ func init() {
 func DateRangeWithString(edtf_str string) (*edtf.DateRange, error) {
 
 	precision := edtf.NONE
+	uncertain := edtf.NONE
+	approximate := edtf.NONE
 
 	parts := re_ymd_string.FindStringSubmatch(edtf_str)
 	count := len(parts)
@@ -63,13 +70,13 @@ func DateRangeWithString(edtf_str string) (*edtf.DateRange, error) {
 	mm := parts[2]
 	dd := parts[3]
 
-	yyyy_q := ""
-	mm_q := ""
-	dd_q := ""
+	var yyyy_q *Qualifier
+	var mm_q *Qualifier
+	var dd_q *Qualifier
 
 	if yyyy != "" {
 
-		y, q, err := parseDate(yyyy)
+		y, q, err := parseYMDComponent(yyyy)
 
 		if err != nil {
 			return nil, err
@@ -81,7 +88,7 @@ func DateRangeWithString(edtf_str string) (*edtf.DateRange, error) {
 
 	if mm != "" {
 
-		m, q, err := parseDate(mm)
+		m, q, err := parseYMDComponent(mm)
 
 		if err != nil {
 			return nil, err
@@ -93,7 +100,7 @@ func DateRangeWithString(edtf_str string) (*edtf.DateRange, error) {
 
 	if dd != "" {
 
-		d, q, err := parseDate(dd)
+		d, q, err := parseYMDComponent(dd)
 
 		if err != nil {
 			return nil, err
@@ -246,16 +253,72 @@ func DateRangeWithString(edtf_str string) (*edtf.DateRange, error) {
 		Time: upper_t,
 	}
 
-	dt := &edtf.DateRange{
+	dr := &edtf.DateRange{
 		Lower: lower_d,
 		Upper: upper_d,
 	}
 
-	// SET precision here
+	if yyyy_q != nil {
 
-	fmt.Println("DEBUG", yyyy_q, mm_q, dd_q)
+		switch yyyy_q.Value {
+		case edtf.UNCERTAIN:
+			uncertain.AddFlag(edtf.ANNUAL)
+		case edtf.APPROXIMATE:
+			approximate.AddFlag(edtf.ANNUAL)
+		case edtf.UNCERTAIN_AND_APPROXIMATE:
+			uncertain.AddFlag(edtf.ANNUAL)
+			approximate.AddFlag(edtf.ANNUAL)
+		default:
+			// pass
+		}
+	}
 
-	return dt, nil
+	if mm_q != nil {
+
+		switch mm_q.Value {
+		case edtf.UNCERTAIN:
+			uncertain.AddFlag(edtf.MONTHLY)
+		case edtf.APPROXIMATE:
+			approximate.AddFlag(edtf.MONTHLY)
+		case edtf.UNCERTAIN_AND_APPROXIMATE:
+			uncertain.AddFlag(edtf.MONTHLY)
+			approximate.AddFlag(edtf.MONTHLY)
+		default:
+			// pass
+		}
+	}
+
+	if dd_q != nil {
+
+		switch dd_q.Value {
+		case edtf.UNCERTAIN:
+			uncertain.AddFlag(edtf.DAILY)
+		case edtf.APPROXIMATE:
+			approximate.AddFlag(edtf.DAILY)
+		case edtf.UNCERTAIN_AND_APPROXIMATE:
+			uncertain.AddFlag(edtf.DAILY)
+			approximate.AddFlag(edtf.DAILY)
+		default:
+			// pass
+		}
+	}
+
+	if uncertain != edtf.NONE {
+		dr.Lower.Uncertain = uncertain
+		dr.Upper.Uncertain = uncertain
+	}
+
+	if approximate != edtf.NONE {
+		dr.Lower.Approximate = approximate
+		dr.Upper.Approximate = approximate
+	}
+
+	if precision != edtf.NONE {
+		dr.Lower.Unspecified = precision
+		dr.Upper.Unspecified = precision
+	}
+
+	return dr, nil
 }
 
 // PLEASE RENAME ME (20210104/thisisaaronland)
@@ -347,19 +410,41 @@ func EmptyDateRange() *edtf.DateRange {
 	return dt
 }
 
-func parseDate(date string) (string, string, error) {
+func parseYMDComponent(date string) (string, *Qualifier, error) {
 
-	m := re_qualifier_prefix.FindStringSubmatch(date)
-
-	if len(m) == 3 {
-		return m[2], m[1], nil
-	}
-
-	m = re_qualifier_suffix.FindStringSubmatch(date)
+	m := re_qualifier_individual.FindStringSubmatch(date)
 
 	if len(m) == 3 {
-		return m[1], m[2], nil
+
+		var q *Qualifier
+
+		if m[1] != "" {
+
+			q = &Qualifier{
+				Type:  "Individual",
+				Value: m[1],
+			}
+		}
+
+		return m[2], q, nil
 	}
 
-	return "", "", edtf.Invalid("date", date)
+	m = re_qualifier_group.FindStringSubmatch(date)
+
+	if len(m) == 3 {
+
+		var q *Qualifier
+
+		if m[2] != "" {
+
+			q = &Qualifier{
+				Type:  "Individual",
+				Value: m[1],
+			}
+		}
+
+		return m[1], q, nil
+	}
+
+	return "", nil, edtf.Invalid("date", date)
 }
