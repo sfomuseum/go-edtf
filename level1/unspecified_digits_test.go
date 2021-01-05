@@ -12,12 +12,12 @@ func TestUnspecifiedDigits(t *testing.T) {
 		t.Fatalf("Failed to load test strings")
 	}
 
-	for _, str := range valid {
+	for input, _ := range valid {
 
-		_, err := ParseUnspecifiedDigits(str)
+		_, err := ParseUnspecifiedDigits(input)
 
 		if err != nil {
-			t.Fatalf("Failed to parse '%s', %v", str, err)
+			t.Fatalf("Failed to parse '%s', %v", input, err)
 		}
 	}
 

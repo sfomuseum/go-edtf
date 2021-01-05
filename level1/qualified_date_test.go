@@ -12,12 +12,12 @@ func TestQualifiedDate(t *testing.T) {
 		t.Fatalf("Failed to load test strings")
 	}
 
-	for _, str := range valid {
+	for input, _ := range valid {
 
-		_, err := ParseQualifiedDate(str)
+		_, err := ParseQualifiedDate(input)
 
 		if err != nil {
-			t.Fatalf("Failed to parse '%s', %v", str, err)
+			t.Fatalf("Failed to parse '%s', %v", input, err)
 		}
 	}
 

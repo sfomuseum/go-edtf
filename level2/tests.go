@@ -1,52 +1,55 @@
 package level2
 
-var Tests map[string][]string = map[string][]string{
-	EXPONENTIAL_YEAR: []string{
-		"Y-17E7", // TO DO - https://github.com/whosonfirst/go-edtf/issues/5
-		"Y10E7",  // TO DO
-		"Y20E2",
+import (
+	"github.com/whosonfirst/go-edtf/tests"
+)
+
+var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests.TestResult{
+	EXPONENTIAL_YEAR: map[string]*tests.TestResult{
+		"Y-17E7": nil, // TO DO - https://github.com/whosonfirst/go-edtf/issues/5
+		"Y10E7":  nil, // TO DO
+		"Y20E2":  nil,
 	},
-	SIGNIFICANT_DIGITS: []string{
-		"1950S2",
-		"Y171010000S3",
-		"Y-20E2S3",
-		"Y3388E2S3",
-		"Y-20E2S3",
+	SIGNIFICANT_DIGITS: map[string]*tests.TestResult{
+		"1950S2":       nil,
+		"Y171010000S3": nil,
+		"Y-20E2S3":     nil,
+		"Y3388E2S3":    nil,
 	},
-	SUB_YEAR_GROUPINGS: []string{
-		"2001-34",
-		// "second quarter of 2001",	// TO DO
+	SUB_YEAR_GROUPINGS: map[string]*tests.TestResult{
+		"2001-34": nil,
+		// "second quarter of 2001": nil,	// TO DO
 	},
-	SET_REPRESENTATIONS: []string{
-		"[1667,1668,1670..1672]",
-		"[..1760-12-03]",
-		"[1760-12..]",
-		"[1760-01,1760-02,1760-12..]",
-		"[1667,1760-12]",
-		"[..1984]",
-		"{1667,1668,1670..1672}",
-		"{1960,1961-12}",
-		"{..1984}",
+	SET_REPRESENTATIONS: map[string]*tests.TestResult{
+		"[1667,1668,1670..1672]":      nil,
+		"[..1760-12-03]":              nil,
+		"[1760-12..]":                 nil,
+		"[1760-01,1760-02,1760-12..]": nil,
+		"[1667,1760-12]":              nil,
+		"[..1984]":                    nil,
+		"{1667,1668,1670..1672}":      nil,
+		"{1960,1961-12}":              nil,
+		"{..1984}":                    nil,
 	},
-	GROUP_QUALIFICATION: []string{
-		"2004-06-11%",
-		"2004-06~-11",
-		"2004?-06-11",
+	GROUP_QUALIFICATION: map[string]*tests.TestResult{
+		"2004-06-11%": nil,
+		"2004-06~-11": nil,
+		"2004?-06-11": nil,
 	},
-	INDIVIDUAL_QUALIFICATION: []string{
-		"?2004-06-~11",
-		"2004-%06-11",
+	INDIVIDUAL_QUALIFICATION: map[string]*tests.TestResult{
+		"?2004-06-~11": nil,
+		"2004-%06-11":  nil,
 	},
-	UNSPECIFIED_DIGIT: []string{
-		"156X-12-25",
-		"15XX-12-25",
-		// "XXXX-12-XX",	// TO DO
-		"1XXX-XX",
-		"1XXX-12",
-		"1984-1X",
+	UNSPECIFIED_DIGIT: map[string]*tests.TestResult{
+		"156X-12-25": nil,
+		"15XX-12-25": nil,
+		// "XXXX-12-XX": nil,	// TO DO
+		"1XXX-XX": nil,
+		"1XXX-12": nil,
+		"1984-1X": nil,
 	},
-	INTERVAL: []string{
-		"2004-06-~01/2004-06-~20",
-		"2004-06-XX/2004-07-03",
+	INTERVAL: map[string]*tests.TestResult{
+		"2004-06-~01/2004-06-~20": nil,
+		"2004-06-XX/2004-07-03":   nil,
 	},
 }

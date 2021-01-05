@@ -22,20 +22,20 @@ func TestLevels(t *testing.T) {
 
 	for label, tests := range level1.Tests {
 
-		for _, str := range tests {
+		for input, _ := range tests {
 
-			if !level1.IsLevel1(str) {
-				t.Fatalf("Invalid level 1 string '%s' (%s)", str, label)
+			if !level1.IsLevel1(input) {
+				t.Fatalf("Invalid level 1 string '%s' (%s)", input, label)
 			}
 		}
 	}
 
 	for label, tests := range level2.Tests {
 
-		for _, str := range tests {
+		for input, _ := range tests {
 
-			if !level2.IsLevel2(str) {
-				t.Fatalf("Invalid level 2 string '%s' (%s)", str, label)
+			if !level2.IsLevel2(input) {
+				t.Fatalf("Invalid level 2 string '%s' (%s)", input, label)
 			}
 		}
 	}
@@ -56,20 +56,20 @@ func TestIsValid(t *testing.T) {
 
 	for label, tests := range level1.Tests {
 
-		for _, str := range tests {
+		for input, _ := range tests {
 
-			if !IsValid(str) {
-				t.Fatalf("Invalid level 1 string '%s' (%s)", str, label)
+			if !IsValid(input) {
+				t.Fatalf("Invalid level 1 string '%s' (%s)", input, label)
 			}
 		}
 	}
 
 	for label, tests := range level2.Tests {
 
-		for _, str := range tests {
+		for input, _ := range tests {
 
-			if !IsValid(str) {
-				t.Fatalf("Invalid level 2 string '%s' (%s)", str, label)
+			if !IsValid(input) {
+				t.Fatalf("Invalid level 2 string '%s' (%s)", input, label)
 			}
 		}
 	}
@@ -97,16 +97,16 @@ func TestParseString(t *testing.T) {
 
 	for label, tests := range level1.Tests {
 
-		for _, str := range tests {
+		for input, _ := range tests {
 
-			_, err := ParseString(str)
+			_, err := ParseString(input)
 
 			if err != nil {
 
 				if edtf.IsNotImplemented(err) || edtf.IsUnsupported(err) {
-					t.Logf("Skipping level 1 string '%s' (%s), %v", str, label, err)
+					t.Logf("Skipping level 1 string '%s' (%s), %v", input, label, err)
 				} else {
-					t.Fatalf("Failed to parse level 1 string '%s' (%s), %v", str, label, err)
+					t.Fatalf("Failed to parse level 1 string '%s' (%s), %v", input, label, err)
 				}
 			}
 		}
@@ -114,16 +114,16 @@ func TestParseString(t *testing.T) {
 
 	for label, tests := range level2.Tests {
 
-		for _, str := range tests {
+		for input, _ := range tests {
 
-			_, err := ParseString(str)
+			_, err := ParseString(input)
 
 			if err != nil {
 
 				if edtf.IsNotImplemented(err) || edtf.IsUnsupported(err) {
-					t.Logf("Skipping level 2 string '%s' (%s), %v", str, label, err)
+					t.Logf("Skipping level 2 string '%s' (%s), %v", input, label, err)
 				} else {
-					t.Fatalf("Failed to parse level 2 string '%s' (%s), %v", str, label, err)
+					t.Fatalf("Failed to parse level 2 string '%s' (%s), %v", input, label, err)
 				}
 			}
 		}

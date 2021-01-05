@@ -13,15 +13,15 @@ func TestGroupQualification(t *testing.T) {
 		t.Fatalf("Failed to load test strings")
 	}
 
-	for _, str := range valid {
+	for input, _ := range valid {
 
-		_, err := ParseGroupQualification(str)
+		_, err := ParseGroupQualification(input)
 
 		if err != nil {
 			if edtf.IsNotImplemented(err) {
-				t.Logf("Skipping '%s', %v", str, err)
+				t.Logf("Skipping '%s', %v", input, err)
 			} else {
-				t.Fatalf("Failed to parse '%s', %v", str, err)
+				t.Fatalf("Failed to parse '%s', %v", input, err)
 			}
 		}
 	}
@@ -35,15 +35,15 @@ func TestIndividualQualification(t *testing.T) {
 		t.Fatalf("Failed to load test strings")
 	}
 
-	for _, str := range valid {
+	for input, _ := range valid {
 
-		_, err := ParseIndividualQualification(str)
+		_, err := ParseIndividualQualification(input)
 
 		if err != nil {
 			if edtf.IsNotImplemented(err) {
-				t.Logf("Skipping '%s', %v", str, err)
+				t.Logf("Skipping '%s', %v", input, err)
 			} else {
-				t.Fatalf("Failed to parse '%s', %v", str, err)
+				t.Fatalf("Failed to parse '%s', %v", input, err)
 			}
 		}
 	}

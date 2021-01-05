@@ -11,8 +11,8 @@ func TestIsLevel2(t *testing.T) {
 
 	for _, candidates := range Tests {
 
-		for _, str := range candidates {
-			valid = append(valid, str)
+		for input, _ := range candidates {
+			valid = append(valid, input)
 		}
 	}
 
@@ -23,23 +23,23 @@ func TestIsLevel2(t *testing.T) {
 		"c 1960",
 	}
 
-	for _, str := range valid {
+	for _, input := range valid {
 
-		ok := IsLevel2(str)
+		ok := IsLevel2(input)
 
 		if !ok {
-			t.Fatalf("Expected '%s' to parse as Level 2 string", str)
+			t.Fatalf("Expected '%s' to parse as Level 2 string", input)
 		}
 
-		ParseString(str)
+		ParseString(input)
 	}
 
-	for _, str := range invalid {
+	for _, input := range invalid {
 
-		ok := IsLevel2(str)
+		ok := IsLevel2(input)
 
 		if ok {
-			t.Fatalf("Expected '%s' to not parse as Level 2 string", str)
+			t.Fatalf("Expected '%s' to not parse as Level 2 string", input)
 		}
 	}
 
@@ -51,21 +51,21 @@ func TestParseString(t *testing.T) {
 
 	for _, candidates := range Tests {
 
-		for _, str := range candidates {
-			valid = append(valid, str)
+		for input, _ := range candidates {
+			valid = append(valid, input)
 		}
 	}
 
-	for _, str := range valid {
+	for _, input := range valid {
 
-		_, err := ParseString(str)
+		_, err := ParseString(input)
 
 		if err != nil {
 
 			if edtf.IsNotImplemented(err) || edtf.IsUnsupported(err) {
-				t.Logf("Skipping '%s', %v", str, err)
+				t.Logf("Skipping '%s', %v", input, err)
 			} else {
-				t.Fatalf("Failed to parse '%s', %v", str, err)
+				t.Fatalf("Failed to parse '%s', %v", input, err)
 			}
 		}
 	}

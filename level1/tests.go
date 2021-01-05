@@ -1,50 +1,54 @@
 package level1
 
-var Tests map[string][]string = map[string][]string{
-	LETTER_PREFIXED_CALENDAR_YEAR: []string{
-		"Y170000002", // TO DO
-		"Y-17000002", // TO DO
-		"Y1700",
-		"Y-1200",
+import (
+	"github.com/whosonfirst/go-edtf/tests"
+)
+
+var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests.TestResult{
+	LETTER_PREFIXED_CALENDAR_YEAR: map[string]*tests.TestResult{
+		"Y170000002": nil, // TO DO
+		"Y-17000002": nil, // TO DO
+		"Y1700":      nil,
+		"Y-1200":     nil,
 	},
-	SEASON: []string{
-		"2001-01",
-		"2001-24",
-		// "-0011-24",	// TO DO
-		// "-0301-05",	// TO DO
-		"Spring, 2002",
-		"winter, 2002",
-		// "Summer, -1980",	// TO DO
+	SEASON: map[string]*tests.TestResult{
+		"2001-01": nil,
+		"2001-24": nil,
+		// "-0011-24": nil,	// TO DO
+		// "-0301-05": nil,	// TO DO
+		"Spring, 2002": nil,
+		"winter, 2002": nil,
+		// "Summer, -1980": nil,	// TO DO
 	},
-	QUALIFIED_DATE: []string{
-		"1984?",
-		"2004-06~",
-		"2004-06-11%",
+	QUALIFIED_DATE: map[string]*tests.TestResult{
+		"1984?":       nil,
+		"2004-06~":    nil,
+		"2004-06-11%": nil,
 	},
-	UNSPECIFIED_DIGITS: []string{
-		"201X",
-		"20XX",
-		"2004-XX",
-		"1985-04-XX",
-		"1985-XX-XX",
+	UNSPECIFIED_DIGITS: map[string]*tests.TestResult{
+		"201X":       nil,
+		"20XX":       nil,
+		"2004-XX":    nil,
+		"1985-04-XX": nil,
+		"1985-XX-XX": nil,
 	},
-	EXTENDED_INTERVAL_START: []string{
-		"../1985-04-12",
-		"../1985-04",
-		"../1985",
-		"/1985-04-12",
-		"/1985-04",
-		"/1985",
+	EXTENDED_INTERVAL_START: map[string]*tests.TestResult{
+		"../1985-04-12": nil,
+		"../1985-04":    nil,
+		"../1985":       nil,
+		"/1985-04-12":   nil,
+		"/1985-04":      nil,
+		"/1985":         nil,
 	},
-	EXTENDED_INTERVAL_END: []string{
-		"1985-04-12/..",
-		"1985-04/..",
-		"1985/..",
-		"1985-04-12/",
-		"1985-04/",
-		"1985/",
+	EXTENDED_INTERVAL_END: map[string]*tests.TestResult{
+		"1985-04-12/..": nil,
+		"1985-04/..":    nil,
+		"1985/..":       nil,
+		"1985-04-12/":   nil,
+		"1985-04/":      nil,
+		"1985/":         nil,
 	},
-	NEGATIVE_CALENDAR_YEAR: []string{
-		"-1985",
+	NEGATIVE_CALENDAR_YEAR: map[string]*tests.TestResult{
+		"-1985": nil,
 	},
 }
