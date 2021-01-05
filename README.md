@@ -8,6 +8,28 @@ This is a work in progress and documentation is incomplete.
 
 Code to parse Level 0, Level 1 and Level 2 strings has been implemented but testing is still in progress.
 
+## Nomenclature
+
+### Date span
+
+```
+The full extent of something from end to end; the amount of space that something covers:
+```
+
+An `edtf.EDTFDate` instance encompasses a date span in the form of `Start` and `End` properties which are themselves `edtf.DateRange` instances.
+
+### Date range
+
+```
+The area of variation between upper and lower limits on a particular scale
+```
+
+An `edtf.DateRange` instance encompasses upper and lower dates (for an EDTF string) in the form of `Lower` and `Upper` properties which are themselves `edtf.Date` instances.
+
+### Date
+
+_To be written_
+
 ## Background
 
 The following is taken from the [EDTF website](https://www.loc.gov/standards/datetime/background.html):

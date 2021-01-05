@@ -2,11 +2,11 @@ package common
 
 import (
 	"fmt"
-	"time"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/re"
 	"strconv"
 	"strings"
+	"time"
 )
 
 type Qualifier struct {
@@ -260,7 +260,7 @@ func DateRangeWithString(edtf_str string) (*edtf.DateRange, error) {
 
 	fmt.Println("LOWER", edtf_str, start_yyyy, start_mm, start_dd, edtf.HMS_LOWER)
 	fmt.Println("UPPER", edtf_str, end_yyyy, end_mm, end_dd, edtf.HMS_UPPER)
-	
+
 	lower_t, err := TimeWithYMDString(start_yyyy, start_mm, start_dd, edtf.HMS_LOWER)
 
 	if err != nil {
@@ -274,8 +274,8 @@ func DateRangeWithString(edtf_str string) (*edtf.DateRange, error) {
 	}
 
 	fmt.Println("LOWER", edtf_str, lower_t.Format(time.RFC3339))
-	fmt.Println("UPPER", edtf_str, upper_t.Format(time.RFC3339))	
-	
+	fmt.Println("UPPER", edtf_str, upper_t.Format(time.RFC3339))
+
 	lower_d := &edtf.Date{
 		Time: lower_t,
 	}
