@@ -39,7 +39,6 @@ func ParseDate(edtf_str string) (*edtf.EDTFDate, error) {
 
 	fmt.Println(sp.Start, sp.End)
 
-	
 	/*
 		start, err := common.DateRangeWithString(edtf_str)
 
