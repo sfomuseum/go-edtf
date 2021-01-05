@@ -1,8 +1,9 @@
 package level2
 
 import (
-	"fmt"
+	// "fmt"
 	"github.com/whosonfirst/go-edtf"
+	"github.com/whosonfirst/go-edtf/common"
 	"github.com/whosonfirst/go-edtf/re"
 	"strings"
 )
@@ -32,13 +33,33 @@ func ParseInterval(edtf_str string) (*edtf.EDTFDate, error) {
 
 	*/
 
-	m := re.Interval.FindStringSubmatch(edtf_str)
+	// m := re.Interval.FindStringSubmatch(edtf_str)
 
-	fmt.Println("INTERVAL", edtf_str, len(m), strings.Join(m, ","))
-
-	if len(m) != 13 {
+	if !re.Interval.MatchString(edtf_str) {
 		return nil, edtf.Invalid(INTERVAL, edtf_str)
 	}
 
-	return nil, edtf.NotImplemented(INTERVAL, edtf_str)
+	parts := strings.Split(edtf_str, "/")
+
+	start, err := common.DateRangeWithString(parts[0])
+
+	if err != nil {
+		return nil, err
+	}
+
+	end, err := common.DateRangeWithString(parts[1])
+
+	if err != nil {
+		return nil, err
+	}
+
+	d := &edtf.EDTFDate{
+		Start: start,
+		End:   end,
+		Level: LEVEL,
+		Label: INTERVAL,
+		EDTF:  edtf_str,
+	}
+
+	return d, nil
 }
