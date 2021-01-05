@@ -1,8 +1,28 @@
 package re
 
+import (
+	"github.com/whosonfirst/go-edtf"
+)
+
 // Common
 
 const PATTERN_YEAR string = `(\-?\d{4})`
+
+// these are used by common.DateRangeWithString
+
+const PATTERN_QUALIFIER string = `[\` + edtf.UNCERTAIN + edtf.APPROXIMATE + edtf.UNCERTAIN_AND_APPROXIMATE + `]`
+
+const PATTERN_YEAR_X string = `\-?[0-9X]{4}`
+const PATTERN_MONTH_X string = `(?:[0X][1-9X]|[1X][0-2X])`
+const PATTERN_DAY_X string = `(?:[012X][0-9X]|[3X][01X])`
+
+const PATTERN_YYYY string = `(` + PATTERN_QUALIFIER + `?` + PATTERN_YEAR_X + `|` + PATTERN_YEAR_X + PATTERN_QUALIFIER + `?)`
+const PATTERN_MM string = `(` + PATTERN_QUALIFIER + `?` + PATTERN_MONTH_X + `|` + PATTERN_MONTH_X + PATTERN_QUALIFIER + `?)`
+const PATTERN_DD string = `(` + PATTERN_QUALIFIER + `?` + PATTERN_DAY_X + `|` + PATTERN_DAY_X + PATTERN_QUALIFIER + `?)`
+
+const PATTERN_YMD_X string = `^` + PATTERN_YYYY + `(?:\-` + PATTERN_MM + `(?:\-` + PATTERN_DD + `)?` + `)?$`
+
+const PATTERN_DATE_X string = `(` + PATTERN_YEAR_X + `|(?:` + PATTERN_MONTH_X + `)|(?:` + PATTERN_DAY_X + `))`
 
 // Level 0
 

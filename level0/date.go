@@ -25,17 +25,11 @@ func IsDate(edtf_str string) bool {
 
 func ParseDate(edtf_str string) (*edtf.EDTFDate, error) {
 
-	m := re.Date.FindStringSubmatch(edtf_str)
-
-	if len(m) != 4 {
+	if !re.Date.MatchString(edtf_str) {
 		return nil, edtf.Invalid(DATE, edtf_str)
 	}
 
-	yyyy := m[1]
-	mm := m[2]
-	dd := m[3]
-
-	start, err := common.DateRangeWithYMDString(yyyy, mm, dd)
+	start, err := common.DateRangeWithString(edtf_str)
 
 	if err != nil {
 		return nil, err

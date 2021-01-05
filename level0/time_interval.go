@@ -4,6 +4,7 @@ import (
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/common"
 	"github.com/whosonfirst/go-edtf/re"
+	"strings"
 )
 
 /*
@@ -27,27 +28,19 @@ func IsTimeInterval(edtf_str string) bool {
 
 func ParseTimeInterval(edtf_str string) (*edtf.EDTFDate, error) {
 
-	m := re.TimeInterval.FindStringSubmatch(edtf_str)
-
-	if len(m) != 7 {
+	if !re.TimeInterval.MatchString(edtf_str) {
 		return nil, edtf.Invalid(TIME_INTERVAL, edtf_str)
 	}
 
-	start_yyyy := m[1]
-	start_mm := m[2]
-	start_dd := m[3]
+	parts := strings.Split(edtf_str, "/")
 
-	end_yyyy := m[4]
-	end_mm := m[5]
-	end_dd := m[6]
-
-	start, err := common.DateRangeWithYMDString(start_yyyy, start_mm, start_dd)
+	start, err := common.DateRangeWithString(parts[0])
 
 	if err != nil {
 		return nil, err
 	}
 
-	end, err := common.DateRangeWithYMDString(end_yyyy, end_mm, end_dd)
+	end, err := common.DateRangeWithString(parts[1])
 
 	if err != nil {
 		return nil, err

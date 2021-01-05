@@ -4,7 +4,7 @@ import (
 	"errors"
 	// "fmt"
 	"github.com/whosonfirst/go-edtf"
-	"regexp"
+	"github.com/whosonfirst/go-edtf/re"
 	"strconv"
 	"strings"
 )
@@ -12,37 +12,6 @@ import (
 type Qualifier struct {
 	Value string
 	Type  string
-}
-
-// move these in to the re package
-
-var re_ymd_string *regexp.Regexp
-
-var re_qualifier_individual *regexp.Regexp
-var re_qualifier_group *regexp.Regexp
-
-func init() {
-
-	// move this in to the re package
-
-	pattern_qualifier := `[\` + edtf.UNCERTAIN + edtf.APPROXIMATE + edtf.UNCERTAIN_AND_APPROXIMATE + `]`
-
-	pattern_year := `\-?[0-9X]{4}`
-	pattern_month := `(?:[0X][1-9X]|[1X][0-2X])`
-	pattern_day := `(?:[012X][0-9X]|[3X][01X])`
-
-	pattern_yyyy := `(` + pattern_qualifier + `?` + pattern_year + `|` + pattern_year + pattern_qualifier + `?)`
-	pattern_mm := `(` + pattern_qualifier + `?` + pattern_month + `|` + pattern_month + pattern_qualifier + `?)`
-	pattern_dd := `(` + pattern_qualifier + `?` + pattern_day + `|` + pattern_day + pattern_qualifier + `?)`
-
-	pattern_ymd := `^` + pattern_yyyy + `(?:\-` + pattern_mm + `(?:\-` + pattern_dd + `)?` + `)?$`
-
-	pattern_date := `(` + pattern_year + `|(?:` + pattern_month + `)|(?:` + pattern_day + `))`
-
-	re_ymd_string = regexp.MustCompile(pattern_ymd)
-
-	re_qualifier_individual = regexp.MustCompile(`^(` + pattern_qualifier + `)?` + pattern_date + `$`)
-	re_qualifier_group = regexp.MustCompile(`^` + pattern_date + `(` + pattern_qualifier + `)?$`)
 }
 
 // PLEASE RENAME ME TO BE DateRangeWithYMDString
@@ -53,7 +22,7 @@ func DateRangeWithString(edtf_str string) (*edtf.DateRange, error) {
 	uncertain := edtf.NONE
 	approximate := edtf.NONE
 
-	parts := re_ymd_string.FindStringSubmatch(edtf_str)
+	parts := re.YMD.FindStringSubmatch(edtf_str)
 	count := len(parts)
 
 	if count != 4 {
@@ -423,7 +392,7 @@ func EmptyDateRange() *edtf.DateRange {
 
 func parseYMDComponent(date string) (string, *Qualifier, error) {
 
-	m := re_qualifier_individual.FindStringSubmatch(date)
+	m := re.QualifiedIndividual.FindStringSubmatch(date)
 
 	if len(m) == 3 {
 
@@ -440,7 +409,7 @@ func parseYMDComponent(date string) (string, *Qualifier, error) {
 		return m[2], q, nil
 	}
 
-	m = re_qualifier_group.FindStringSubmatch(date)
+	m = re.QualifiedGroup.FindStringSubmatch(date)
 
 	if len(m) == 3 {
 
