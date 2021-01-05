@@ -1,8 +1,6 @@
 package common
 
 import (
-	"errors"
-	// "fmt"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/re"
 	"strconv"
@@ -81,12 +79,12 @@ func DateRangeWithString(edtf_str string) (*edtf.DateRange, error) {
 		precision.AddFlag(edtf.DAILY)
 	}
 
-	if mm_q != nil && dd_q.Type == "Group" {
+	if mm_q != nil && mm_q.Type == "Group" {
 		precision.AddFlag(edtf.ANNUAL)
 		precision.AddFlag(edtf.MONTHLY)
 	}
 
-	if mm_q != nil && dd_q.Type == "Group" {
+	if yyyy_q != nil && yyyy_q.Type == "Group" {
 		precision.AddFlag(edtf.ANNUAL)
 	}
 
@@ -301,51 +299,37 @@ func DateRangeWithString(edtf_str string) (*edtf.DateRange, error) {
 	return dr, nil
 }
 
-// PLEASE RENAME ME (20210104/thisisaaronland)
+// DEPRECATED
 
 func DateRangeWithYMDString(str_yyyy string, str_mm string, str_dd string) (*edtf.DateRange, error) {
 
-	if str_yyyy == "" {
-		return nil, errors.New("Missing year")
+	parts := []string{
+		str_yyyy,
 	}
-
-	if str_mm == "" && str_dd != "" {
-		return nil, errors.New("Missing month")
-	}
-
-	yyyy, err := strconv.Atoi(str_yyyy)
-
-	if err != nil {
-		return nil, err
-	}
-
-	mm := 0
-	dd := 0
 
 	if str_mm != "" {
-
-		m, err := strconv.Atoi(str_mm)
-
-		if err != nil {
-			return nil, err
-		}
-
-		mm = m
+		parts = append(parts, str_mm)
 	}
 
 	if str_dd != "" {
-
-		d, err := strconv.Atoi(str_dd)
-
-		if err != nil {
-			return nil, err
-		}
-
-		dd = d
+		parts = append(parts, str_dd)
 	}
 
-	return DateRangeWithYMD(yyyy, mm, dd)
+	ymd := strings.Join(parts, "-")
+	return DateRangeWithString(ymd)
 }
+
+// DEPRECATED
+
+/*
+
+> git grep DateRangeWithYMD | grep -v DateRangeWithYMDString
+common/daterange.go:func DateRangeWithYMD(yyyy int, mm int, dd int) (*edtf.DateRange, error) {
+level1/season.go:	start, err := common.DateRangeWithYMD(start_yyyy, start_mm, start_dd)
+level1/season.go:	end, err := common.DateRangeWithYMD(end_yyyy, end_mm, end_dd)
+level2/exponential_year.go:	start, err := common.DateRangeWithYMD(yyyy_i, 0, 0)
+
+*/
 
 func DateRangeWithYMD(yyyy int, mm int, dd int) (*edtf.DateRange, error) {
 

@@ -17,6 +17,12 @@ func TestDateRangeWithString(t *testing.T) {
 		"2004-06-~20",
 	}
 
+	invalid := []string{
+		"~2021?",
+		// daterange_test.go:39: False positive parsing 2018-XX?-12, <nil>
+		// "2018-XX?-12",
+	}
+
 	for _, ymd := range valid {
 
 		_, err := DateRangeWithString(ymd)
@@ -25,6 +31,16 @@ func TestDateRangeWithString(t *testing.T) {
 			t.Fatalf("Failed to parse %s, %v", ymd, err)
 		}
 	}
+
+	for _, ymd := range invalid {
+
+		_, err := DateRangeWithString(ymd)
+
+		if err == nil {
+			t.Fatalf("False positive parsing %s, %v", ymd, err)
+		}
+	}
+
 }
 
 func TestDateRangeWithYMDString(t *testing.T) {
