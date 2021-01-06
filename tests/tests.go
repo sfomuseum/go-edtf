@@ -23,6 +23,10 @@ type TestResultOptions struct {
 	StartUpperUncertain   edtf.Precision
 	EndLowerUncertain     edtf.Precision
 	EndUpperUncertain     edtf.Precision
+	StartLowerApproximate edtf.Precision
+	StartUpperApproximate edtf.Precision
+	EndLowerApproximate   edtf.Precision
+	EndUpperApproximate   edtf.Precision
 }
 
 func NewTestResult(opts TestResultOptions) *TestResult {
@@ -74,20 +78,81 @@ func (r *TestResult) TestDate(d *edtf.EDTFDate) error {
 		return err
 	}
 
+	err = r.testApproximateAll(d)
+
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
 func (r *TestResult) testUncertainAll(d *edtf.EDTFDate) error {
 
-	if r.options.StartUpperUncertain != edtf.NONE {
+	err := r.testPrecision(d.Start.Lower.Uncertain, r.options.StartLowerUncertain)
 
-		start_upper := d.Start.Upper
-		uncertain := start_upper.Uncertain
+	if err != nil {
+		return fmt.Errorf("Invalid StartLowerUncertain flag, %v", err)
+	}
 
-		if !uncertain.HasFlag(r.options.StartUpperUncertain) {
-			return fmt.Errorf("StartUpperUncertain missing '%v' precision", r.options.StartUpperUncertain)
-		}
+	err = r.testPrecision(d.Start.Upper.Uncertain, r.options.StartUpperUncertain)
 
+	if err != nil {
+		return fmt.Errorf("Invalid StartUpperUncertain flag, %v", err)
+	}
+
+	err = r.testPrecision(d.End.Lower.Uncertain, r.options.EndLowerUncertain)
+
+	if err != nil {
+		return fmt.Errorf("Invalid EndLowerUncertain flag, %v", err)
+	}
+
+	err = r.testPrecision(d.End.Upper.Uncertain, r.options.EndUpperUncertain)
+
+	if err != nil {
+		return fmt.Errorf("Invalid EndUpperUncertain flag, %v", err)
+	}
+
+	return nil
+}
+
+func (r *TestResult) testApproximateAll(d *edtf.EDTFDate) error {
+
+	err := r.testPrecision(d.Start.Lower.Approximate, r.options.StartLowerApproximate)
+
+	if err != nil {
+		return fmt.Errorf("Invalid StartLowerApproximate flag, %v", err)
+	}
+
+	err = r.testPrecision(d.Start.Upper.Approximate, r.options.StartUpperApproximate)
+
+	if err != nil {
+		return fmt.Errorf("Invalid StartUpperApproximate flag, %v", err)
+	}
+
+	err = r.testPrecision(d.End.Lower.Approximate, r.options.EndLowerApproximate)
+
+	if err != nil {
+		return fmt.Errorf("Invalid EndLowerApproximate flag, %v", err)
+	}
+
+	err = r.testPrecision(d.End.Upper.Approximate, r.options.EndUpperApproximate)
+
+	if err != nil {
+		return fmt.Errorf("Invalid EndUpperApproximate flag, %v", err)
+	}
+
+	return nil
+}
+
+func (r *TestResult) testPrecision(flags edtf.Precision, expected edtf.Precision) error {
+
+	if expected == edtf.NONE {
+		return nil
+	}
+
+	if !flags.HasFlag(expected) {
+		return fmt.Errorf("Missing flag %v", expected)
 	}
 
 	return nil

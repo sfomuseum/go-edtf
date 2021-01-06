@@ -69,14 +69,15 @@ var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests
 			StartUpperTimeRFC3339: "2004-06-01T23:59:59Z",
 			EndLowerTimeRFC3339:   "2004-06-30T00:00:00Z",
 			EndUpperTimeRFC3339:   "2004-06-30T23:59:59Z",
-			// EndLowerApproximate: edtf.MONTHLY,
+			EndLowerApproximate:   edtf.MONTHLY,
 		}),
 		"2004-06-11%": tests.NewTestResult(tests.TestResultOptions{
 			StartLowerTimeRFC3339: "2004-06-11T00:00:00Z",
 			StartUpperTimeRFC3339: "2004-06-11T00:00:00Z",
 			EndLowerTimeRFC3339:   "2004-06-11T23:59:59Z",
 			EndUpperTimeRFC3339:   "2004-06-11T23:59:59Z",
-			// EndLowerUncertainAndApproximate: edtf.DAILY,
+			EndLowerUncertain:     edtf.DAILY,
+			EndLowerApproximate:   edtf.DAILY,
 		}),
 	},
 	UNSPECIFIED_DIGITS: map[string]*tests.TestResult{
