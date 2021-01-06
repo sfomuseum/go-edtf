@@ -14,10 +14,14 @@ func TestSeason(t *testing.T) {
 
 	for input, tr := range valid {
 
+		t.Logf("ParseSeason '%s'", input)
+
 		d, err := ParseSeason(input)
 
 		if err != nil {
-			t.Fatalf("Failed to parse '%s', %v", input, err)
+			t.Logf("Failed to parse '%s', %v", input, err)
+			t.Fail()
+			continue
 		}
 
 		if tr != nil {
@@ -25,7 +29,9 @@ func TestSeason(t *testing.T) {
 			err := tr.TestDate(d)
 
 			if err != nil {
-				t.Fatalf("Results failed tests '%s', %v", input, err)
+				t.Logf("Results failed tests '%s', %v", input, err)
+				t.Fail()
+				continue
 			}
 		}
 

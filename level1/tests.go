@@ -23,30 +23,30 @@ var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests
 	},
 	SEASON: map[string]*tests.TestResult{
 		"2001-01": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "",
-			StartUpperTimeRFC3339: "",
-			EndLowerTimeRFC3339:   "",
-			EndUpperTimeRFC3339:   "",
+			StartLowerTimeRFC3339: "2001-01-01T00:00:00Z",
+			StartUpperTimeRFC3339: "2001-01-01T23:59:59Z",
+			EndLowerTimeRFC3339:   "2001-01-31T00:00:00Z",
+			EndUpperTimeRFC3339:   "2001-01-31T23:59:59Z",
 		}),
 		"2001-24": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "",
-			StartUpperTimeRFC3339: "",
-			EndLowerTimeRFC3339:   "",
-			EndUpperTimeRFC3339:   "",
+			StartLowerTimeRFC3339: "2001-10-01T00:00:00Z",
+			StartUpperTimeRFC3339: "2001-10-01T23:59:59Z",
+			EndLowerTimeRFC3339:   "2001-12-01T00:00:00Z",
+			EndUpperTimeRFC3339:   "2001-12-31T23:59:59Z",
 		}),
 		// "-0011-24": tests.NewTestResult(tests.TestResultOptions{}),	// TO DO
 		// "-0301-05": tests.NewTestResult(tests.TestResultOptions{}),	// TO DO
 		"Spring, 2002": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "",
-			StartUpperTimeRFC3339: "",
-			EndLowerTimeRFC3339:   "",
-			EndUpperTimeRFC3339:   "",
+			StartLowerTimeRFC3339: "2002-03-01T00:00:00Z",
+			StartUpperTimeRFC3339: "2002-03-01T23:59:59Z",
+			EndLowerTimeRFC3339:   "2002-05-31T00:00:00Z",
+			EndUpperTimeRFC3339:   "2002-05-31T23:59:59Z",
 		}),
 		"winter, 2002": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "",
-			StartUpperTimeRFC3339: "",
-			EndLowerTimeRFC3339:   "",
-			EndUpperTimeRFC3339:   "",
+			StartLowerTimeRFC3339: "2002-12-01T00:00:00Z",
+			StartUpperTimeRFC3339: "2002-12-01T23:59:59Z",
+			EndLowerTimeRFC3339:   "2003-02-01T00:00:00Z",
+			EndUpperTimeRFC3339:   "2003-02-28T23:59:59Z",
 		}),
 		// "Summer, -1980": tests.NewTestResult(tests.TestResultOptions{}),	// TO DO
 	},
