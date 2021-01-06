@@ -31,6 +31,14 @@ type TestResultOptions struct {
 	StartUpperPrecision   edtf.Precision
 	EndLowerPrecision     edtf.Precision
 	EndUpperPrecision     edtf.Precision
+	StartLowerIsOpen      bool
+	StartUpperIsOpen      bool
+	EndLowerIsOpen        bool
+	EndUpperIsOpen        bool
+	StartLowerIsUnknown   bool
+	StartUpperIsUnknown   bool
+	EndLowerIsUnknown     bool
+	EndUpperIsUnknown     bool
 }
 
 func NewTestResult(opts TestResultOptions) *TestResult {
@@ -92,6 +100,85 @@ func (r *TestResult) TestDate(d *edtf.EDTFDate) error {
 
 	if err != nil {
 		return err
+	}
+
+	err = r.testIsOpenAll(d)
+
+	if err != nil {
+		return err
+	}
+
+	err = r.testIsUnknownAll(d)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *TestResult) testIsOpenAll(d *edtf.EDTFDate) error {
+
+	err := r.testBoolean(d.Start.Lower.Open, r.options.StartLowerIsOpen)
+
+	if err != nil {
+		return fmt.Errorf("Invalid StartLowerIsOpen flag, %v", err)
+	}
+
+	err = r.testBoolean(d.Start.Upper.Open, r.options.StartUpperIsOpen)
+
+	if err != nil {
+		return fmt.Errorf("Invalid StartUpperIsOpen flag, %v", err)
+	}
+
+	err = r.testBoolean(d.End.Lower.Open, r.options.EndLowerIsOpen)
+
+	if err != nil {
+		return fmt.Errorf("Invalid EndLowerIsOpen flag, %v", err)
+	}
+
+	err = r.testBoolean(d.End.Upper.Open, r.options.EndUpperIsOpen)
+
+	if err != nil {
+		return fmt.Errorf("Invalid EndUpperIsOpen flag, %v", err)
+	}
+
+	return nil
+}
+
+func (r *TestResult) testIsUnknownAll(d *edtf.EDTFDate) error {
+
+	err := r.testBoolean(d.Start.Lower.Unknown, r.options.StartLowerIsUnknown)
+
+	if err != nil {
+		return fmt.Errorf("Invalid StartLowerIsUnknown flag, %v", err)
+	}
+
+	err = r.testBoolean(d.Start.Upper.Unknown, r.options.StartUpperIsUnknown)
+
+	if err != nil {
+		return fmt.Errorf("Invalid StartUpperIsUnknown flag, %v", err)
+	}
+
+	err = r.testBoolean(d.End.Lower.Unknown, r.options.EndLowerIsUnknown)
+
+	if err != nil {
+		return fmt.Errorf("Invalid EndLowerIsUnknown flag, %v", err)
+	}
+
+	err = r.testBoolean(d.End.Upper.Unknown, r.options.EndUpperIsUnknown)
+
+	if err != nil {
+		return fmt.Errorf("Invalid EndUpperIsUnknown flag, %v", err)
+	}
+
+	return nil
+}
+
+func (r *TestResult) testBoolean(candidate bool, expected bool) error {
+
+	if candidate != expected {
+		return fmt.Errorf("Boolean test failed, expected '%t' but got '%t'", expected, candidate)
 	}
 
 	return nil

@@ -119,10 +119,10 @@ var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests
 	},
 	EXTENDED_INTERVAL_START: map[string]*tests.TestResult{
 		"../1985-04-12": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "",
-			StartUpperTimeRFC3339: "",
-			EndLowerTimeRFC3339:   "",
-			EndUpperTimeRFC3339:   "",
+			StartLowerIsOpen:    true,
+			StartUpperIsOpen:    true,
+			EndLowerTimeRFC3339: "1985-04-12T00:00:00Z",
+			EndUpperTimeRFC3339: "1985-04-12T23:59:59Z",
 		}),
 		/*
 			"../1985-04": tests.NewTestResult(tests.TestResultOptions{

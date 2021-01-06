@@ -412,6 +412,22 @@ func EmptyDateRange() *edtf.DateRange {
 	return dt
 }
 
+func UnknownDateRange() *edtf.DateRange {
+
+	dr := EmptyDateRange()
+	dr.Lower.Unknown = true
+	dr.Upper.Unknown = true
+	return dr
+}
+
+func OpenDateRange() *edtf.DateRange {
+
+	dr := EmptyDateRange()
+	dr.Lower.Open = true
+	dr.Upper.Open = true
+	return dr
+}
+
 func parseYMDComponent(date string) (string, *Qualifier, error) {
 
 	m := re.QualifiedIndividual.FindStringSubmatch(date)

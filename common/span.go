@@ -60,13 +60,19 @@ func dateSpanFromEDTF(edtf_str string) (*edtf.DateSpan, error) {
 	var span *edtf.DateSpan
 
 	switch edtf_str {
-	case "": // unknown
+	case edtf.UNKNOWN:
 
-		span = EmptyDateSpan()
+		span = UnknownDateSpan()
 
-	case "..": // open
+		span.Start.EDTF = edtf_str
+		span.End.EDTF = edtf_str
 
-		span = EmptyDateSpan()
+	case edtf.OPEN:
+
+		span = OpenDateSpan()
+
+		span.Start.EDTF = edtf_str
+		span.End.EDTF = edtf_str
 
 	default:
 
@@ -229,6 +235,32 @@ func EmptyDateSpan() *edtf.DateSpan {
 
 	start := EmptyDateRange()
 	end := EmptyDateRange()
+
+	sp := &edtf.DateSpan{
+		Start: start,
+		End:   end,
+	}
+
+	return sp
+}
+
+func UnknownDateSpan() *edtf.DateSpan {
+
+	start := UnknownDateRange()
+	end := UnknownDateRange()
+
+	sp := &edtf.DateSpan{
+		Start: start,
+		End:   end,
+	}
+
+	return sp
+}
+
+func OpenDateSpan() *edtf.DateSpan {
+
+	start := OpenDateRange()
+	end := OpenDateRange()
 
 	sp := &edtf.DateSpan{
 		Start: start,
