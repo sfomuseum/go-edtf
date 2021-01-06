@@ -1,6 +1,7 @@
 package level1
 
 import (
+	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/tests"
 )
 
@@ -57,22 +58,25 @@ var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests
 	},
 	QUALIFIED_DATE: map[string]*tests.TestResult{
 		"1984?": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "",
-			StartUpperTimeRFC3339: "",
-			EndLowerTimeRFC3339:   "",
-			EndUpperTimeRFC3339:   "",
+			StartLowerTimeRFC3339: "1984-01-01T00:00:00Z",
+			StartUpperTimeRFC3339: "1984-01-01T23:59:59Z",
+			EndLowerTimeRFC3339:   "1984-12-31T00:00:00Z",
+			EndUpperTimeRFC3339:   "1984-12-31T23:59:59Z",
+			StartUpperUncertain:   edtf.ANNUAL,
 		}),
 		"2004-06~": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "",
-			StartUpperTimeRFC3339: "",
-			EndLowerTimeRFC3339:   "",
-			EndUpperTimeRFC3339:   "",
+			StartLowerTimeRFC3339: "2004-06-01T00:00:00Z",
+			StartUpperTimeRFC3339: "2004-06-01T23:59:59Z",
+			EndLowerTimeRFC3339:   "2004-06-30T00:00:00Z",
+			EndUpperTimeRFC3339:   "2004-06-30T23:59:59Z",
+			// EndLowerApproximate: edtf.MONTHLY,
 		}),
 		"2004-06-11%": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "",
-			StartUpperTimeRFC3339: "",
-			EndLowerTimeRFC3339:   "",
-			EndUpperTimeRFC3339:   "",
+			StartLowerTimeRFC3339: "2004-06-11T00:00:00Z",
+			StartUpperTimeRFC3339: "2004-06-11T00:00:00Z",
+			EndLowerTimeRFC3339:   "2004-06-11T23:59:59Z",
+			EndUpperTimeRFC3339:   "2004-06-11T23:59:59Z",
+			// EndLowerUncertainAndApproximate: edtf.DAILY,
 		}),
 	},
 	UNSPECIFIED_DIGITS: map[string]*tests.TestResult{

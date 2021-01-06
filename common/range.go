@@ -7,12 +7,15 @@ import (
 	"github.com/whosonfirst/go-edtf/re"
 	"strconv"
 	"strings"
-	//"time"
 )
 
 type Qualifier struct {
 	Value string
 	Type  string
+}
+
+func (q *Qualifier) String() string {
+	return fmt.Sprintf("[%T] Value: '%s' Type: '%s'", q, q.Value, q.Type)
 }
 
 // StringWhatever is a bad naming convention - please make me better
@@ -124,6 +127,12 @@ func StringRangeFromEDTF(edtf_str string) (*StringRange, error) {
 		dd = d
 		dd_q = q
 	}
+
+	/*
+		fmt.Println(yyyy_q)
+		fmt.Println(mm_q)
+		fmt.Println(dd_q)
+	*/
 
 	if dd_q != nil && dd_q.Type == "Group" {
 		precision.AddFlag(edtf.ANNUAL)
@@ -327,7 +336,6 @@ func StringRangeFromEDTF(edtf_str string) (*StringRange, error) {
 		dd, err := calendar.DaysInMonthWithString(yyyymm)
 
 		if err != nil {
-			fmt.Println("SAD", yyyymm, err)
 			return nil, err
 		}
 
@@ -400,7 +408,7 @@ func parseYMDComponent(date string) (string, *Qualifier, error) {
 
 			q = &Qualifier{
 				Type:  "Individual",
-				Value: m[1],
+				Value: m[2],
 			}
 		}
 

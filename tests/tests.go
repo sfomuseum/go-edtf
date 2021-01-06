@@ -19,6 +19,10 @@ type TestResultOptions struct {
 	StartUpperTimeUnix    int64
 	StartLowerTimeUnix    int64
 	EndUpperTimeUnix      int64
+	StartLowerUncertain   edtf.Precision
+	StartUpperUncertain   edtf.Precision
+	EndLowerUncertain     edtf.Precision
+	EndUpperUncertain     edtf.Precision
 }
 
 func NewTestResult(opts TestResultOptions) *TestResult {
@@ -62,6 +66,28 @@ func (r *TestResult) TestDate(d *edtf.EDTFDate) error {
 
 	if err != nil {
 		return err
+	}
+
+	err = r.testUncertainAll(d)
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (r *TestResult) testUncertainAll(d *edtf.EDTFDate) error {
+
+	if r.options.StartUpperUncertain != edtf.NONE {
+
+		start_upper := d.Start.Upper
+		uncertain := start_upper.Uncertain
+
+		if !uncertain.HasFlag(r.options.StartUpperUncertain) {
+			return fmt.Errorf("StartUpperUncertain missing '%v' precision", r.options.StartUpperUncertain)
+		}
+
 	}
 
 	return nil
