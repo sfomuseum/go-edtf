@@ -4,7 +4,7 @@ import (
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/common"
 	"github.com/whosonfirst/go-edtf/re"
-	// "strings"
+	"strings"
 )
 
 /*
@@ -20,20 +20,38 @@ func IsLetterPrefixedCalendarYear(edtf_str string) bool {
 	return re.LetterPrefixedCalendarYear.MatchString(edtf_str)
 }
 
-// Years must be in the range 0000..9999.
-// https://golang.org/pkg/time/#Parse
-
-// sigh....
-// fmt.Printf("DEBUG %v\n", start.Add(time.Hour * 8760 * 1000))
-// ./prog.go:21:54: constant 31536000000000000000 overflows time.Duration
-
 func ParseLetterPrefixedCalendarYear(edtf_str string) (*edtf.EDTFDate, error) {
 
-	if !re.LetterPrefixedCalendarYear.MatchString(edtf_str) {
+	m := re.LetterPrefixedCalendarYear.FindStringSubmatch(edtf_str)
+
+	if len(m) != 2 {
 		return nil, edtf.Invalid(LETTER_PREFIXED_CALENDAR_YEAR, edtf_str)
 	}
 
-	sp, err := common.DateSpanFromEDTF(edtf_str)
+	// Years must be in the range 0000..9999.
+	// https://golang.org/pkg/time/#Parse
+
+	// sigh....
+	// fmt.Printf("DEBUG %v\n", start.Add(time.Hour * 8760 * 1000))
+	// ./prog.go:21:54: constant 31536000000000000000 overflows time.Duration
+
+	// common.DateSpanFromEDTF needs to be updated to simply assign a valid
+	// *edtf.YMD element and leave *time.Time blank when creating *edtf.Date
+	// instances (20210105/thisisaaronland)
+
+	yyyy := m[1]
+
+	max_length := 4
+
+	if strings.HasPrefix(yyyy, "-") {
+		max_length = 5
+	}
+
+	if len(yyyy) > max_length {
+		return nil, edtf.Unsupported(LETTER_PREFIXED_CALENDAR_YEAR, edtf_str)
+	}
+
+	sp, err := common.DateSpanFromEDTF(yyyy)
 
 	if err != nil {
 		return nil, err
@@ -47,43 +65,4 @@ func ParseLetterPrefixedCalendarYear(edtf_str string) (*edtf.EDTFDate, error) {
 	}
 
 	return d, nil
-
-	/*
-		m := re.LetterPrefixedCalendarYear.FindStringSubmatch(edtf_str)
-
-		if len(m) != 2 {
-			return nil, edtf.Invalid(LETTER_PREFIXED_CALENDAR_YEAR, edtf_str)
-		}
-
-		start_yyyy := m[1]
-		start_mm := ""
-		start_dd := ""
-
-		max_length := 4
-
-		if strings.HasPrefix(start_yyyy, "-") {
-			max_length = 5
-		}
-
-		if len(start_yyyy) > max_length {
-			return nil, edtf.Unsupported(LETTER_PREFIXED_CALENDAR_YEAR, edtf_str)
-		}
-
-		start, err := common.DateRangeWithYMDString(start_yyyy, start_mm, start_dd)
-
-		if err != nil {
-			return nil, err
-		}
-
-		end := start
-
-		d := &edtf.EDTFDate{
-			Start: start,
-			End:   end,
-			EDTF:  edtf_str,
-			Level: LEVEL,
-		}
-
-		return d, nil
-	*/
 }
