@@ -75,6 +75,14 @@ func StringRangeFromEDTF(edtf_str string) (*StringRange, error) {
 	mm := parts[2]
 	dd := parts[3]
 
+	if yyyy != "" && mm != "" && dd != "" {
+		precision.AddFlag(edtf.DAILY)
+	} else if yyyy != "" && mm != "" {
+		precision.AddFlag(edtf.MONTHLY)
+	} else if yyyy != "" {
+		precision.AddFlag(edtf.ANNUAL)
+	}
+
 	// fmt.Printf("DATE Y: '%s' M: '%s' D: '%s'\n", yyyy, mm, dd)
 
 	var yyyy_q *Qualifier
@@ -319,6 +327,7 @@ func StringRangeFromEDTF(edtf_str string) (*StringRange, error) {
 		dd, err := calendar.DaysInMonthWithString(yyyymm)
 
 		if err != nil {
+			fmt.Println("SAD", yyyymm, err)
 			return nil, err
 		}
 
@@ -347,84 +356,6 @@ func StringRangeFromEDTF(edtf_str string) (*StringRange, error) {
 	}
 
 	return r, nil
-}
-
-func DateRangeWithStringRange(r *StringRange) (*edtf.DateRange, error) {
-
-	start_yyyy := r.Start.Year
-	start_mm := r.Start.Month
-	start_dd := r.Start.Day
-
-	end_yyyy := r.End.Year
-	end_mm := r.End.Month
-	end_dd := r.End.Day
-
-	edtf_str := r.EDTF
-
-	// fmt.Println("LOWER", edtf_str, start_yyyy, start_mm, start_dd, edtf.HMS_LOWER)
-	// fmt.Println("UPPER", edtf_str, end_yyyy, end_mm, end_dd, edtf.HMS_UPPER)
-
-	start_ymd, err := YMDFromStrings(start_yyyy, start_mm, start_dd)
-
-	if err != nil {
-		return nil, err
-	}
-
-	fmt.Println("DATERANGE START", start_ymd, r.Start)
-
-	end_ymd, err := YMDFromStrings(end_yyyy, end_mm, end_dd)
-
-	if err != nil {
-		return nil, err
-	}
-
-	lower_t, err := TimeWithYMD(start_ymd, edtf.HMS_LOWER)
-
-	if err != nil {
-		return nil, err
-	}
-
-	upper_t, err := TimeWithYMD(end_ymd, edtf.HMS_UPPER)
-
-	if err != nil {
-		return nil, err
-	}
-
-	// fmt.Println("LOWER", edtf_str, lower_t.Format(time.RFC3339))
-	// fmt.Println("UPPER", edtf_str, upper_t.Format(time.RFC3339))
-
-	lower_d := &edtf.Date{
-		Time: lower_t,
-		YMD:  start_ymd,
-	}
-
-	upper_d := &edtf.Date{
-		Time: upper_t,
-		YMD:  end_ymd,
-	}
-
-	dr := &edtf.DateRange{
-		EDTF:  edtf_str,
-		Lower: lower_d,
-		Upper: upper_d,
-	}
-
-	if r.Uncertain != edtf.NONE {
-		dr.Lower.Uncertain = r.Uncertain
-		dr.Upper.Uncertain = r.Uncertain
-	}
-
-	if r.Approximate != edtf.NONE {
-		dr.Lower.Approximate = r.Approximate
-		dr.Upper.Approximate = r.Approximate
-	}
-
-	if r.Precision != edtf.NONE {
-		dr.Lower.Unspecified = r.Precision
-		dr.Upper.Unspecified = r.Precision
-	}
-
-	return dr, nil
 }
 
 func EmptyDateRange() *edtf.DateRange {

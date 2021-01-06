@@ -31,30 +31,13 @@ func ParseTimeInterval(edtf_str string) (*edtf.EDTFDate, error) {
 		return nil, edtf.Invalid(TIME_INTERVAL, edtf_str)
 	}
 
-	sp, err := common.DateSpanWithString(edtf_str)
+	sp, err := common.DateSpanFromEDTF(edtf_str)
 
 	if err != nil {
 		return nil, err
 	}
 
-	/*
-		parts := strings.Split(edtf_str, "/")
-
-		start, err := common.DateRangeWithString(parts[0])
-
-		if err != nil {
-			return nil, err
-		}
-
-		end, err := common.DateRangeWithString(parts[1])
-
-		if err != nil {
-			return nil, err
-		}
-	*/
-
 	d := &edtf.EDTFDate{
-		// Span: sp,
 		Start: sp.Start,
 		End:   sp.End,
 		EDTF:  edtf_str,

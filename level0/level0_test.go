@@ -24,6 +24,8 @@ func TestIsLevel0(t *testing.T) {
 
 	for _, input := range valid {
 
+		t.Logf("IsLevel0 '%s'", input)
+
 		ok := IsLevel0(input)
 
 		if !ok {
@@ -36,6 +38,8 @@ func TestIsLevel0(t *testing.T) {
 	}
 
 	for _, input := range invalid {
+
+		t.Logf("IsLevel0 (false) '%s'", input)
 
 		ok := IsLevel0(input)
 

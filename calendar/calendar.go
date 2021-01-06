@@ -8,30 +8,46 @@ import (
 	"time"
 )
 
-func DaysInMonthWithString(yyyymm string) (uint, error) {
+func DaysInMonthWithString(yyyymm string) (int, error) {
 
 	ym := strings.Split(yyyymm, "-")
 
-	if len(ym) != 2 {
+	var str_yyyy string
+	var str_mm string
+
+	switch len(ym) {
+	case 3:
+		str_yyyy = fmt.Sprintf("-%s", ym[1])
+		str_mm = ym[2]
+	case 2:
+		str_yyyy = ym[0]
+		str_mm = ym[1]
+	default:
 		return 0, errors.New("Invalid YYYYMM string")
 	}
 
-	yyyy, err := strconv.Atoi(ym[0])
+	yyyy, err := strconv.Atoi(str_yyyy)
 
 	if err != nil {
 		return 0, err
 	}
 
-	mm, err := strconv.Atoi(ym[1])
+	mm, err := strconv.Atoi(str_mm)
 
 	if err != nil {
 		return 0, err
 	}
 
-	return DaysInMonth(uint(yyyy), uint(mm))
+	return DaysInMonth(yyyy, mm)
 }
 
-func DaysInMonth(yyyy uint, mm uint) (uint, error) {
+func DaysInMonth(yyyy int, mm int) (int, error) {
+
+	// Because Go can't parse dates < 0...
+
+	if yyyy < 0 {
+		yyyy = yyyy - (yyyy * 2)
+	}
 
 	next_yyyy := yyyy
 	next_mm := mm + 1
@@ -51,5 +67,5 @@ func DaysInMonth(yyyy uint, mm uint) (uint, error) {
 	mm_t := next_t.AddDate(0, 0, -1)
 	dd := mm_t.Day()
 
-	return uint(dd), nil
+	return dd, nil
 }

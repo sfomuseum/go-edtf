@@ -125,3 +125,15 @@ func (f Precision) HasFlag(flag Precision) bool { return f&flag != 0 }
 func (f *Precision) AddFlag(flag Precision)     { *f |= flag }
 func (f *Precision) ClearFlag(flag Precision)   { *f &= ^flag }
 func (f *Precision) ToggleFlag(flag Precision)  { *f ^= flag }
+
+func (f *Precision) IsAnnual() bool {
+	return f.HasFlag(ANNUAL)
+}
+
+func (f *Precision) IsMonthly() bool {
+	return f.HasFlag(MONTHLY)
+}
+
+func (f *Precision) IsDaily() bool {
+	return f.HasFlag(DAILY)
+}

@@ -14,6 +14,8 @@ func TestParseTimeInterval(t *testing.T) {
 
 	for input, tr := range valid {
 
+		t.Logf("ParseTimeInterval '%s'", input)
+
 		d, err := ParseTimeInterval(input)
 
 		if err != nil {

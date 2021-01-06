@@ -14,6 +14,8 @@ func TestParseDateAndTime(t *testing.T) {
 
 	for input, tr := range valid {
 
+		t.Logf("ParseDateAndTime '%s'", input)
+
 		d, err := ParseDateAndTime(input)
 
 		if err != nil {

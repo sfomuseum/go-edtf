@@ -122,7 +122,7 @@ func YMDFromStrings(str_yyyy string, str_mm string, str_dd string) (*edtf.YMD, e
 
 	if dd == 0 {
 
-		days, err := calendar.DaysInMonth(uint(yyyy), uint(mm))
+		days, err := calendar.DaysInMonth(yyyy, mm)
 
 		if err != nil {
 			return nil, err
@@ -132,13 +132,13 @@ func YMDFromStrings(str_yyyy string, str_mm string, str_dd string) (*edtf.YMD, e
 
 	} else {
 
-		days, err := calendar.DaysInMonth(uint(yyyy), uint(mm))
+		days, err := calendar.DaysInMonth(yyyy, mm)
 
 		if err != nil {
 			return nil, err
 		}
 
-		if uint(dd) > days {
+		if dd > days {
 			return nil, errors.New("Invalid days for month")
 		}
 	}
