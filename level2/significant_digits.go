@@ -1,11 +1,12 @@
 package level2
 
 import (
+	"fmt"
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/common"
 	"github.com/whosonfirst/go-edtf/re"
-	// "strconv"
-	// "strings"
+	"strconv"
+	"strings"
 )
 
 /*
@@ -39,11 +40,87 @@ func ParseSignificantDigits(edtf_str string) (*edtf.EDTFDate, error) {
 
 	*/
 
-	if !re.SignificantDigits.MatchString(edtf_str) {
+	m := re.SignificantDigits.FindStringSubmatch(edtf_str)
+
+	if len(m) != 5 {
 		return nil, edtf.Invalid(SIGNIFICANT_DIGITS, edtf_str)
 	}
 
-	sp, err := common.DateSpanFromEDTF(edtf_str)
+	str_yyyy := m[1]
+	str_year := m[2]
+	notation := m[3]
+	str_digits := m[4]
+
+	var yyyy int
+
+	if str_yyyy != "" {
+
+		y, err := strconv.Atoi(str_yyyy)
+
+		if err != nil {
+			return nil, edtf.Invalid(SIGNIFICANT_DIGITS, edtf_str)
+		}
+
+		yyyy = y
+
+	} else if str_year != "" {
+
+		if len(str_year) > 4 {
+			return nil, edtf.Unsupported(SIGNIFICANT_DIGITS, edtf_str)
+		}
+
+		y, err := strconv.Atoi(str_year)
+
+		if err != nil {
+			return nil, edtf.Invalid(SIGNIFICANT_DIGITS, edtf_str)
+		}
+
+		yyyy = y
+
+	} else if notation != "" {
+
+		y, err := common.ParseExponentialNotation(notation)
+
+		if err != nil {
+			return nil, err
+		}
+
+		yyyy = y
+
+	} else {
+		return nil, edtf.Invalid(SIGNIFICANT_DIGITS, edtf_str)
+	}
+
+	if yyyy > edtf.MAX_YEARS {
+		return nil, edtf.Unsupported(SIGNIFICANT_DIGITS, edtf_str)
+	}
+
+	digits, err := strconv.Atoi(str_digits)
+
+	if err != nil {
+		return nil, edtf.Invalid(SIGNIFICANT_DIGITS, edtf_str)
+	}
+
+	if len(strconv.Itoa(digits)) > len(strconv.Itoa(yyyy)) {
+		return nil, edtf.Invalid(SIGNIFICANT_DIGITS, edtf_str)
+	}
+
+	str_yyyy = strconv.Itoa(yyyy)
+	prefix_yyyy := str_yyyy[0 : len(str_yyyy)-digits]
+
+	first := strings.Repeat("0", digits)
+	last := strings.Repeat("9", digits)
+
+	start_yyyy := prefix_yyyy + first
+	end_yyyy := prefix_yyyy + last
+
+	_str := fmt.Sprintf("%s/%s", start_yyyy, end_yyyy)
+
+	if strings.HasPrefix(start_yyyy, "-") && strings.HasPrefix(end_yyyy, "-") {
+		_str = fmt.Sprintf("%s/%s", end_yyyy, start_yyyy)
+	}
+
+	sp, err := common.DateSpanFromEDTF(_str)
 
 	if err != nil {
 		return nil, err
@@ -58,102 +135,4 @@ func ParseSignificantDigits(edtf_str string) (*edtf.EDTFDate, error) {
 
 	return d, nil
 
-	/*
-		m := re.SignificantDigits.FindStringSubmatch(edtf_str)
-
-		if len(m) != 5 {
-			return nil, edtf.Invalid(SIGNIFICANT_DIGITS, edtf_str)
-		}
-
-		str_yyyy := m[1]
-		str_year := m[2]
-		notation := m[3]
-		str_digits := m[4]
-
-		var yyyy int
-
-		if str_yyyy != "" {
-
-			y, err := strconv.Atoi(str_yyyy)
-
-			if err != nil {
-				return nil, edtf.Invalid(SIGNIFICANT_DIGITS, edtf_str)
-			}
-
-			yyyy = y
-
-		} else if str_year != "" {
-
-			if len(str_year) > 4 {
-				return nil, edtf.Unsupported(SIGNIFICANT_DIGITS, edtf_str)
-			}
-
-			y, err := strconv.Atoi(str_year)
-
-			if err != nil {
-				return nil, edtf.Invalid(SIGNIFICANT_DIGITS, edtf_str)
-			}
-
-			yyyy = y
-
-		} else if notation != "" {
-
-			y, err := common.ParseExponentialNotation(notation)
-
-			if err != nil {
-				return nil, err
-			}
-
-			yyyy = y
-
-		} else {
-			return nil, edtf.Invalid(SIGNIFICANT_DIGITS, edtf_str)
-		}
-
-		if yyyy > edtf.MAX_YEARS {
-			return nil, edtf.Unsupported(SIGNIFICANT_DIGITS, edtf_str)
-		}
-
-		digits, err := strconv.Atoi(str_digits)
-
-		if err != nil {
-			return nil, edtf.Invalid(SIGNIFICANT_DIGITS, edtf_str)
-		}
-
-		if len(strconv.Itoa(digits)) > len(strconv.Itoa(yyyy)) {
-			return nil, edtf.Invalid(SIGNIFICANT_DIGITS, edtf_str)
-		}
-
-		str_yyyy = strconv.Itoa(yyyy)
-		prefix_yyyy := str_yyyy[0 : len(str_yyyy)-digits]
-
-		first := strings.Repeat("0", digits)
-		last := strings.Repeat("9", digits)
-
-		start_yyyy := prefix_yyyy + first
-		end_yyyy := prefix_yyyy + last
-
-		start, err := common.DateRangeWithYMDString(start_yyyy, "", "")
-
-		if err != nil {
-			return nil, err
-		}
-
-		end, err := common.DateRangeWithYMDString(end_yyyy, "", "")
-
-		if err != nil {
-			return nil, err
-		}
-
-		d := &edtf.EDTFDate{
-			Start: start,
-			End:   end,
-			EDTF:  edtf_str,
-			Level: LEVEL,
-		}
-
-		// fmt.Printf("%s %v - %v\n", edtf_str, d.Start.Lower.Time, d.End.Upper.Time)
-
-		return d, nil
-	*/
 }

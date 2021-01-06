@@ -17,29 +17,20 @@ var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests
 	},
 	SIGNIFICANT_DIGITS: map[string]*tests.TestResult{
 		"1950S2": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "",
-			StartUpperTimeRFC3339: "",
-			EndLowerTimeRFC3339:   "",
-			EndUpperTimeRFC3339:   "",
+			StartLowerTimeRFC3339: "1900-01-01T00:00:00Z",
+			StartUpperTimeRFC3339: "1900-12-31T23:59:59Z",
+			EndLowerTimeRFC3339:   "1999-01-01T00:00:00Z",
+			EndUpperTimeRFC3339:   "1999-12-31T23:59:59Z",
 		}),
-		"Y171010000S3": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "",
-			StartUpperTimeRFC3339: "",
-			EndLowerTimeRFC3339:   "",
-			EndUpperTimeRFC3339:   "",
-		}),
+		"Y171010000S3": tests.NewTestResult(tests.TestResultOptions{}),
+		// -2000/-2999
 		"Y-20E2S3": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "",
-			StartUpperTimeRFC3339: "",
-			EndLowerTimeRFC3339:   "",
-			EndUpperTimeRFC3339:   "",
+			StartLowerTimeRFC3339: "-2999-01-01T00:00:00Z",
+			StartUpperTimeRFC3339: "-2999-12-31T23:59:59Z",
+			EndLowerTimeRFC3339:   "-2000-01-01T00:00:00Z",
+			EndUpperTimeRFC3339:   "-2000-12-31T23:59:59Z",
 		}),
-		"Y3388E2S3": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "",
-			StartUpperTimeRFC3339: "",
-			EndLowerTimeRFC3339:   "",
-			EndUpperTimeRFC3339:   "",
-		}),
+		"Y3388E2S3": tests.NewTestResult(tests.TestResultOptions{}),
 	},
 	SUB_YEAR_GROUPINGS: map[string]*tests.TestResult{
 		"2001-34": tests.NewTestResult(tests.TestResultOptions{

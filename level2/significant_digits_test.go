@@ -15,6 +15,8 @@ func TestSignificantDigits(t *testing.T) {
 
 	for input, tr := range valid {
 
+		t.Logf("ParseSignificantDigits '%s'", input)
+
 		d, err := ParseSignificantDigits(input)
 
 		if err != nil {
@@ -23,7 +25,9 @@ func TestSignificantDigits(t *testing.T) {
 				t.Logf("Skipping '%s', %v", input, err)
 				continue
 			} else {
-				t.Fatalf("Failed to parse '%s', %v", input, err)
+				t.Logf("Failed to parse '%s', %v", input, err)
+				t.Fail()
+				continue
 			}
 		}
 
@@ -32,7 +36,9 @@ func TestSignificantDigits(t *testing.T) {
 			err := tr.TestDate(d)
 
 			if err != nil {
-				t.Fatalf("Results failed tests '%s', %v", input, err)
+				t.Logf("Results failed tests '%s', %v", input, err)
+				t.Fail()
+				continue
 			}
 		}
 

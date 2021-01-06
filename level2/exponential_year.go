@@ -32,23 +32,23 @@ func ParseExponentialYear(edtf_str string) (*edtf.EDTFDate, error) {
 	if !re.ExponentialYear.MatchString(edtf_str) {
 		return nil, edtf.Invalid(EXPONENTIAL_YEAR, edtf_str)
 	}
-	
+
 	m := re.ExponentialYear.FindStringSubmatch(edtf_str)
-	
+
 	if len(m) != 2 {
 		return nil, edtf.Invalid(EXPONENTIAL_YEAR, edtf_str)
 	}
-	
+
 	notation := m[1]
-	
+
 	yyyy, err := common.ParseExponentialNotation(notation)
-	
+
 	if err != nil {
 		return nil, err
 	}
 
 	str_yyyy := strconv.Itoa(yyyy)
-	
+
 	sp, err := common.DateSpanFromEDTF(str_yyyy)
 
 	if err != nil {
