@@ -196,10 +196,10 @@ var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests
 	},
 	NEGATIVE_CALENDAR_YEAR: map[string]*tests.TestResult{
 		"-1985": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "",
-			StartUpperTimeRFC3339: "",
-			EndLowerTimeRFC3339:   "",
-			EndUpperTimeRFC3339:   "",
+			StartLowerTimeRFC3339: "-1985-01-01T00:00:00Z",
+			StartUpperTimeRFC3339: "-1985-01-01T23:59:59Z",
+			EndLowerTimeRFC3339:   "-1985-12-31T00:00:00Z",
+			EndUpperTimeRFC3339:   "-1985-12-31T23:59:59Z",
 		}),
 	},
 }
