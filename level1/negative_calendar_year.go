@@ -40,34 +40,4 @@ func ParseNegativeCalendarYear(edtf_str string) (*edtf.EDTFDate, error) {
 	}
 
 	return d, nil
-
-	/*
-		m := re.NegativeYear.FindStringSubmatch(edtf_str)
-
-		if len(m) != 2 {
-			return nil, edtf.Invalid(NEGATIVE_CALENDAR_YEAR, edtf_str)
-		}
-
-		start_yyyy := m[1]
-		start_mm := ""
-		start_dd := ""
-
-		start, err := common.DateRangeWithYMDString(start_yyyy, start_mm, start_dd)
-
-		if err != nil {
-			return nil, err
-		}
-
-		end := start
-
-		d := &edtf.EDTFDate{
-			Start: start,
-			End:   end,
-			EDTF:  edtf_str,
-			Level: LEVEL,
-		}
-
-		return d, nil
-
-	*/
 }

@@ -109,50 +109,6 @@ func ParseExtendedIntervalStart(edtf_str string) (*edtf.EDTFDate, error) {
 	}
 
 	return d, nil
-
-	/*
-		m := re.IntervalStart.FindStringSubmatch(edtf_str)
-
-		if len(m) != 5 {
-			return nil, edtf.Invalid(EXTENDED_INTERVAL_START, edtf_str)
-		}
-
-		start_dt := m[1]
-		end_yyyy := m[2]
-		end_mm := m[3]
-		end_dd := m[4]
-
-		end, err := common.DateRangeWithYMDString(end_yyyy, end_mm, end_dd)
-
-		if err != nil {
-			return nil, err
-		}
-
-		start := &edtf.DateRange{
-			Lower: &edtf.Date{},
-			Upper: &edtf.Date{},
-		}
-
-		switch start_dt {
-		case edtf.OPEN:
-			start.Upper.Open = true
-			start.Lower.Open = true
-		case edtf.UNKNOWN:
-			start.Upper.Unknown = true
-			start.Lower.Unknown = true
-		default:
-			return nil, edtf.Invalid(EXTENDED_INTERVAL_START, edtf_str)
-		}
-
-		d := &edtf.EDTFDate{
-			Start: start,
-			End:   end,
-			EDTF:  edtf_str,
-			Level: LEVEL,
-		}
-
-		return d, nil
-	*/
 }
 
 func ParseExtendedIntervalEnd(edtf_str string) (*edtf.EDTFDate, error) {
@@ -180,50 +136,4 @@ func ParseExtendedIntervalEnd(edtf_str string) (*edtf.EDTFDate, error) {
 	}
 
 	return d, nil
-
-	/*
-		m := re.IntervalEnd.FindStringSubmatch(edtf_str)
-
-		if len(m) != 5 {
-			return nil, edtf.Invalid(EXTENDED_INTERVAL_END, edtf_str)
-		}
-
-		return nil, nil
-
-		start_yyyy := m[1]
-		start_mm := m[2]
-		start_dd := m[3]
-		end_dt := m[4]
-
-		start, err := common.DateRangeWithYMDString(start_yyyy, start_mm, start_dd)
-
-		if err != nil {
-			return nil, err
-		}
-
-		end := &edtf.DateRange{
-			Lower: &edtf.Date{},
-			Upper: &edtf.Date{},
-		}
-
-		switch end_dt {
-		case edtf.OPEN:
-			end.Upper.Open = true
-			end.Lower.Open = true
-		case edtf.UNKNOWN:
-			end.Upper.Unknown = true
-			end.Lower.Unknown = true
-		default:
-			return nil, edtf.Invalid(EXTENDED_INTERVAL_END, edtf_str)
-		}
-
-		d := &edtf.EDTFDate{
-			Start: start,
-			End:   end,
-			EDTF:  edtf_str,
-			Level: LEVEL,
-		}
-
-		return d, nil
-	*/
 }

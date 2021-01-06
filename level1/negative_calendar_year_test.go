@@ -15,7 +15,7 @@ func TestNegativeCalendarYear(t *testing.T) {
 	for input, tr := range valid {
 
 		t.Logf("ParseNegativeCalendarYear '%s'", input)
-		
+
 		d, err := ParseNegativeCalendarYear(input)
 
 		if err != nil {
