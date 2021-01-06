@@ -9,10 +9,10 @@ var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests
 		"Y-17E7": tests.NewTestResult(tests.TestResultOptions{}), // TO DO - https://github.com/whosonfirst/go-edtf/issues/5
 		"Y10E7":  tests.NewTestResult(tests.TestResultOptions{}), // TO DO
 		"Y20E2": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "",
-			StartUpperTimeRFC3339: "",
-			EndLowerTimeRFC3339:   "",
-			EndUpperTimeRFC3339:   "",
+			StartLowerTimeRFC3339: "2000-01-01T00:00:00Z",
+			StartUpperTimeRFC3339: "2000-01-01T23:59:59Z",
+			EndLowerTimeRFC3339:   "2000-12-31T00:00:00Z",
+			EndUpperTimeRFC3339:   "2000-12-31T23:59:59Z",
 		}),
 	},
 	SIGNIFICANT_DIGITS: map[string]*tests.TestResult{

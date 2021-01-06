@@ -15,6 +15,8 @@ func TestExponentialYear(t *testing.T) {
 
 	for input, tr := range valid {
 
+		t.Logf("ParseExponentialYear '%s'", input)
+		
 		d, err := ParseExponentialYear(input)
 
 		if err != nil {
@@ -22,7 +24,9 @@ func TestExponentialYear(t *testing.T) {
 				t.Logf("Skipping '%s', %v", input, err)
 				continue
 			} else {
-				t.Fatalf("Failed to parse '%s', %v", input, err)
+				t.Logf("Failed to parse '%s', %v", input, err)
+				t.Fail()
+				continue
 			}
 		}
 
@@ -31,7 +35,9 @@ func TestExponentialYear(t *testing.T) {
 			err := tr.TestDate(d)
 
 			if err != nil {
-				t.Fatalf("Results failed tests '%s', %v", input, err)
+				t.Logf("Results failed tests '%s', %v", input, err)
+				t.Fail()
+				continue				
 			}
 		}
 

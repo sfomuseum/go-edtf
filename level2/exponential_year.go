@@ -4,6 +4,7 @@ import (
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/common"
 	"github.com/whosonfirst/go-edtf/re"
+	"strconv"
 )
 
 /*
@@ -31,8 +32,24 @@ func ParseExponentialYear(edtf_str string) (*edtf.EDTFDate, error) {
 	if !re.ExponentialYear.MatchString(edtf_str) {
 		return nil, edtf.Invalid(EXPONENTIAL_YEAR, edtf_str)
 	}
+	
+	m := re.ExponentialYear.FindStringSubmatch(edtf_str)
+	
+	if len(m) != 2 {
+		return nil, edtf.Invalid(EXPONENTIAL_YEAR, edtf_str)
+	}
+	
+	notation := m[1]
+	
+	yyyy, err := common.ParseExponentialNotation(notation)
+	
+	if err != nil {
+		return nil, err
+	}
 
-	sp, err := common.DateSpanFromEDTF(edtf_str)
+	str_yyyy := strconv.Itoa(yyyy)
+	
+	sp, err := common.DateSpanFromEDTF(str_yyyy)
 
 	if err != nil {
 		return nil, err
@@ -46,37 +63,4 @@ func ParseExponentialYear(edtf_str string) (*edtf.EDTFDate, error) {
 	}
 
 	return d, nil
-
-	/*
-		m := re.ExponentialYear.FindStringSubmatch(edtf_str)
-
-		if len(m) != 2 {
-			return nil, edtf.Invalid(EXPONENTIAL_YEAR, edtf_str)
-		}
-
-		notation := m[1]
-
-		yyyy_i, err := common.ParseExponentialNotation(notation)
-
-		if err != nil {
-			return nil, err
-		}
-
-		start, err := common.DateRangeWithYMD(yyyy_i, 0, 0)
-
-		if err != nil {
-			return nil, err
-		}
-
-		end := start
-
-		d := &edtf.EDTFDate{
-			Start: start,
-			End:   end,
-			EDTF:  edtf_str,
-			Level: LEVEL,
-		}
-
-		return d, nil
-	*/
 }
