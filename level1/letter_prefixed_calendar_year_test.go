@@ -15,6 +15,8 @@ func TestLetterPrefixedCalendarYear(t *testing.T) {
 
 	for input, tr := range valid {
 
+		t.Logf("ParseLetterPrefixedCalendarYear '%s'", input)
+
 		d, err := ParseLetterPrefixedCalendarYear(input)
 
 		if err != nil {

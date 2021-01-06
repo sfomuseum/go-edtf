@@ -4,7 +4,7 @@ import (
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/common"
 	"github.com/whosonfirst/go-edtf/re"
-	"strings"
+	// "strings"
 )
 
 /*
@@ -29,40 +29,61 @@ func IsLetterPrefixedCalendarYear(edtf_str string) bool {
 
 func ParseLetterPrefixedCalendarYear(edtf_str string) (*edtf.EDTFDate, error) {
 
-	m := re.LetterPrefixedCalendarYear.FindStringSubmatch(edtf_str)
-
-	if len(m) != 2 {
+	if !re.LetterPrefixedCalendarYear.MatchString(edtf_str) {
 		return nil, edtf.Invalid(LETTER_PREFIXED_CALENDAR_YEAR, edtf_str)
 	}
 
-	start_yyyy := m[1]
-	start_mm := ""
-	start_dd := ""
-
-	max_length := 4
-
-	if strings.HasPrefix(start_yyyy, "-") {
-		max_length = 5
-	}
-
-	if len(start_yyyy) > max_length {
-		return nil, edtf.Unsupported(LETTER_PREFIXED_CALENDAR_YEAR, edtf_str)
-	}
-
-	start, err := common.DateRangeWithYMDString(start_yyyy, start_mm, start_dd)
+	sp, err := common.DateSpanFromEDTF(edtf_str)
 
 	if err != nil {
 		return nil, err
 	}
 
-	end := start
-
 	d := &edtf.EDTFDate{
-		Start: start,
-		End:   end,
+		Start: sp.Start,
+		End:   sp.End,
 		EDTF:  edtf_str,
 		Level: LEVEL,
 	}
 
 	return d, nil
+
+	/*
+		m := re.LetterPrefixedCalendarYear.FindStringSubmatch(edtf_str)
+
+		if len(m) != 2 {
+			return nil, edtf.Invalid(LETTER_PREFIXED_CALENDAR_YEAR, edtf_str)
+		}
+
+		start_yyyy := m[1]
+		start_mm := ""
+		start_dd := ""
+
+		max_length := 4
+
+		if strings.HasPrefix(start_yyyy, "-") {
+			max_length = 5
+		}
+
+		if len(start_yyyy) > max_length {
+			return nil, edtf.Unsupported(LETTER_PREFIXED_CALENDAR_YEAR, edtf_str)
+		}
+
+		start, err := common.DateRangeWithYMDString(start_yyyy, start_mm, start_dd)
+
+		if err != nil {
+			return nil, err
+		}
+
+		end := start
+
+		d := &edtf.EDTFDate{
+			Start: start,
+			End:   end,
+			EDTF:  edtf_str,
+			Level: LEVEL,
+		}
+
+		return d, nil
+	*/
 }

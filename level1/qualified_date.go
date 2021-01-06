@@ -24,58 +24,79 @@ func IsQualifiedDate(edtf_str string) bool {
 
 func ParseQualifiedDate(edtf_str string) (*edtf.EDTFDate, error) {
 
-	m := re.QualifiedDate.FindStringSubmatch(edtf_str)
-
-	if len(m) != 5 {
+	if !re.QualifiedDate.MatchString(edtf_str) {
 		return nil, edtf.Invalid(QUALIFIED_DATE, edtf_str)
 	}
 
-	yyyy := m[1]
-	mm := m[2]
-	dd := m[3]
-	q := m[4]
-
-	start, err := common.DateRangeWithYMDString(yyyy, mm, dd)
+	sp, err := common.DateSpanFromEDTF(edtf_str)
 
 	if err != nil {
 		return nil, err
 	}
 
-	end := start
-
 	d := &edtf.EDTFDate{
-		Start: start,
-		End:   end,
+		Start: sp.Start,
+		End:   sp.End,
 		EDTF:  edtf_str,
 		Level: LEVEL,
 	}
 
-	precision := edtf.NONE
-	precision.AddFlag(edtf.DAILY)
-
-	switch q {
-	case edtf.UNCERTAIN:
-		d.Start.Lower.Uncertain = precision
-		d.Start.Upper.Uncertain = precision
-		d.End.Lower.Uncertain = precision
-		d.End.Upper.Uncertain = precision
-	case edtf.APPROXIMATE:
-		d.Start.Lower.Approximate = precision
-		d.Start.Upper.Approximate = precision
-		d.End.Lower.Approximate = precision
-		d.End.Upper.Approximate = precision
-	case edtf.UNCERTAIN_AND_APPROXIMATE:
-		d.Start.Lower.Uncertain = precision
-		d.Start.Upper.Uncertain = precision
-		d.End.Lower.Uncertain = precision
-		d.End.Upper.Uncertain = precision
-		d.Start.Lower.Approximate = precision
-		d.Start.Upper.Approximate = precision
-		d.End.Lower.Approximate = precision
-		d.End.Upper.Approximate = precision
-	default:
-		return nil, edtf.Invalid(QUALIFIED_DATE, edtf_str)
-	}
-
 	return d, nil
+
+	/*
+		m := re.QualifiedDate.FindStringSubmatch(edtf_str)
+
+		if len(m) != 5 {
+			return nil, edtf.Invalid(QUALIFIED_DATE, edtf_str)
+		}
+
+		yyyy := m[1]
+		mm := m[2]
+		dd := m[3]
+		q := m[4]
+
+		start, err := common.DateRangeWithYMDString(yyyy, mm, dd)
+
+		if err != nil {
+			return nil, err
+		}
+
+		end := start
+
+		d := &edtf.EDTFDate{
+			Start: start,
+			End:   end,
+			EDTF:  edtf_str,
+			Level: LEVEL,
+		}
+
+		precision := edtf.NONE
+		precision.AddFlag(edtf.DAILY)
+
+		switch q {
+		case edtf.UNCERTAIN:
+			d.Start.Lower.Uncertain = precision
+			d.Start.Upper.Uncertain = precision
+			d.End.Lower.Uncertain = precision
+			d.End.Upper.Uncertain = precision
+		case edtf.APPROXIMATE:
+			d.Start.Lower.Approximate = precision
+			d.Start.Upper.Approximate = precision
+			d.End.Lower.Approximate = precision
+			d.End.Upper.Approximate = precision
+		case edtf.UNCERTAIN_AND_APPROXIMATE:
+			d.Start.Lower.Uncertain = precision
+			d.Start.Upper.Uncertain = precision
+			d.End.Lower.Uncertain = precision
+			d.End.Upper.Uncertain = precision
+			d.Start.Lower.Approximate = precision
+			d.Start.Upper.Approximate = precision
+			d.End.Lower.Approximate = precision
+			d.End.Upper.Approximate = precision
+		default:
+			return nil, edtf.Invalid(QUALIFIED_DATE, edtf_str)
+		}
+
+		return d, nil
+	*/
 }

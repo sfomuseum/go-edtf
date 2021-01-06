@@ -9,16 +9,16 @@ var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests
 		"Y170000002": tests.NewTestResult(tests.TestResultOptions{}), // TO DO
 		"Y-17000002": tests.NewTestResult(tests.TestResultOptions{}), // TO DO
 		"Y1700": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "",
-			StartUpperTimeRFC3339: "",
-			EndLowerTimeRFC3339:   "",
-			EndUpperTimeRFC3339:   "",
+			StartLowerTimeRFC3339: "1970-01-01T00:00:00Z",
+			StartUpperTimeRFC3339: "1970-01-01T00:00:00Z",
+			EndLowerTimeRFC3339:   "1970-12-31T23:59:59Z",
+			EndUpperTimeRFC3339:   "1970-12-31T23:59:59Z",
 		}),
 		"Y-1200": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "",
-			StartUpperTimeRFC3339: "",
-			EndLowerTimeRFC3339:   "",
-			EndUpperTimeRFC3339:   "",
+			StartLowerTimeRFC3339: "-1200-01-01T00:00:00Z",
+			StartUpperTimeRFC3339: "-1200-01-01T00:00:00Z",
+			EndLowerTimeRFC3339:   "-1200-12-31T23:59:59Z",
+			EndUpperTimeRFC3339:   "-1200-12-31T23:59:59Z",
 		}),
 	},
 	SEASON: map[string]*tests.TestResult{
