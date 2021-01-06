@@ -141,8 +141,6 @@ func ParseSetRepresentations(edtf_str string) (*edtf.EDTFDate, error) {
 	}
 
 	sort.Strings(possible)
-
-	fmt.Println("POSSIBLE", edtf_str, strings.Join(possible, ","))
 	count := len(possible)
 
 	switch count {
@@ -155,9 +153,6 @@ func ParseSetRepresentations(edtf_str string) (*edtf.EDTFDate, error) {
 		start_ymd = possible[0]
 		end_ymd = possible[count-1]
 	}
-
-	fmt.Printf("START '%s' END '%s'\n", start_ymd, end_ymd)
-	fmt.Printf("OPEN START '%t' END '%t'\n", start_open, end_open)
 
 	_str := start_ymd
 
@@ -175,57 +170,65 @@ func ParseSetRepresentations(edtf_str string) (*edtf.EDTFDate, error) {
 	}
 
 	/*
-		var start *edtf.DateRange
-		var end *edtf.DateRange
 
-		if start_open {
+		Imagine we have a string like this:
+		'[1760-01,1760-02,1760-12..]'
 
-			start = common.EmptyDateRange()
-			start.Lower.Open = true
-			start.Upper.Open = true
+		Which needs to be interpreted as:
 
-			start.Lower.Inclusivity = inclusivity
-			start.Upper.Inclusivity = inclusivity
+		start lower: 1760-01
+		start upper: 1760-12
 
-		} else {
+		end lower/upper: ..
 
-			dr, err := common.DateRangeWithString(start_ymd)
+		But since we can't parse '1760-01/1760-12/...'
+		since that would be gibberish we parse '1760-01/1760-1'
+		and set the 'open_post_facto' flag to update the results of
+		common.DateSpanFromEDTF after the fact
+		(20210106/thisisaaronland)
 
-			if err != nil {
-				return nil, err
-			}
-
-			start = dr
-		}
-
-		if end_open {
-
-			end = common.EmptyDateRange()
-			end.Lower.Open = true
-			end.Upper.Open = true
-
-			end.Lower.Inclusivity = inclusivity
-			end.Upper.Inclusivity = inclusivity
-
-		} else {
-
-			dr, err := common.DateRangeWithString(end_ymd)
-
-			if err != nil {
-				return nil, err
-			}
-
-			end = dr
-		}
 	*/
 
-	fmt.Println("INCLUSIVITY", inclusivity)
-	fmt.Println("PARSE", _str)
+	open_post_facto := false
+
+	if start_open || end_open {
+
+		if len(possible) > 1 {
+			_str = fmt.Sprintf("%s/%s", start_ymd, end_ymd)
+			open_post_facto = true
+		}
+	}
 
 	sp, err := common.DateSpanFromEDTF(_str)
 
 	if err != nil {
 		return nil, err
+	}
+
+	if open_post_facto {
+
+		open_range := common.OpenDateRange()
+
+		if start_open {
+			sp.End.Lower = sp.Start.Lower
+			sp.Start = open_range
+		}
+
+		if end_open {
+
+			sp.Start.Upper = sp.End.Upper
+			sp.End = open_range
+		}
+	}
+
+	if start_open {
+		sp.Start.Lower.Inclusivity = inclusivity
+		sp.Start.Upper.Inclusivity = inclusivity
+	}
+
+	if end_open {
+		sp.End.Lower.Inclusivity = inclusivity
+		sp.End.Upper.Inclusivity = inclusivity
 	}
 
 	d := &edtf.EDTFDate{

@@ -48,6 +48,13 @@ var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests
 		// "second quarter of 2001": tests.NewTestResult(tests.TestResultOptions{}),	// TO DO
 	},
 	SET_REPRESENTATIONS: map[string]*tests.TestResult{
+		"[1760-01,1760-02,1760-12..]": tests.NewTestResult(tests.TestResultOptions{
+			StartLowerTimeRFC3339: "1760-01-01T00:00:00Z",
+			StartUpperTimeRFC3339: "1760-12-31T23:59:59Z",
+			EndLowerIsOpen:        true,
+			EndUpperIsOpen:        true,
+			// INCLUSIVITY
+		}),
 		"[1667,1668,1670..1672]": tests.NewTestResult(tests.TestResultOptions{
 			// THIS FEELS WRONG...LIKE IT'S BACKWARDS
 			StartLowerTimeRFC3339: "1667-01-01T00:00:00Z",
@@ -70,26 +77,6 @@ var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests
 			EndUpperIsOpen:        true,
 			// INCLUSIVITY
 		}),
-
-		/*
-
-		FIX ME:
-		POSSIBLE [1760-01,1760-02,1760-12..] 1760-01,1760-02,1760-12
-		START '1760-01' END '1760-12'
-		OPEN START 'false' END 'true'
-		INCLUSIVITY 4
-		PARSE 1760-01/..
-		    set_representation_test.go:38: Results failed tests '[1760-01,1760-02,1760-12..]', Failed StartUpperTimeRFC3339 test, Invalid RFC3339 time, expected '1760-12-31T23:59:59Z' but got '1760-01-31T23:59:59Z'
-
-				"[1760-01,1760-02,1760-12..]": tests.NewTestResult(tests.TestResultOptions{
-					StartLowerTimeRFC3339: "1760-01-01T00:00:00Z",
-					StartUpperTimeRFC3339: "1760-12-31T23:59:59Z",
-					EndLowerIsOpen: true,
-					EndUpperIsOpen: true,
-					// INCLUSIVITY
-				}),
-		*/
-
 		"[1667,1760-12]": tests.NewTestResult(tests.TestResultOptions{
 			StartLowerTimeRFC3339: "1667-01-01T00:00:00Z",
 			StartUpperTimeRFC3339: "1667-12-31T23:59:59Z",
