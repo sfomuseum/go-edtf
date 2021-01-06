@@ -16,12 +16,16 @@ const HMS_LOWER string = "00:00:00"
 const HMS_UPPER string = "23:59:59"
 
 const (
-	NONE Precision = 0
-	ALL  Precision = 1 << iota
-	ANY
-	ANNUAL
-	MONTHLY
-	DAILY
+	NONE      Precision = 0
+	ALL       Precision = 1 << iota //
+	ANY                             //
+	DAY                             // 8
+	WEEK                            // 16
+	MONTH                           // 32
+	YEAR                            // 64
+	DECADE                          // 128
+	CENTURY                         // 256
+	MILLENIUM                       // 512
 )
 
 const MAX_YEARS int = 9999 // This is a Golang thing
@@ -69,6 +73,7 @@ type Date struct {
 	Uncertain   Precision `json:"uncertain,omitempty"`
 	Approximate Precision `json:"approximate,omitempty"`
 	Unspecified Precision `json:"unspecified,omitempty"`
+	Precision   Precision `json:"precision,omitempty"`
 	Open        bool      `json:"open,omitempty"`
 	Unknown     bool      `json:"unknown,omitempty"`
 	Inclusivity Precision `json:"inclusivity,omitempty"`
@@ -127,13 +132,13 @@ func (f *Precision) ClearFlag(flag Precision)   { *f &= ^flag }
 func (f *Precision) ToggleFlag(flag Precision)  { *f ^= flag }
 
 func (f *Precision) IsAnnual() bool {
-	return f.HasFlag(ANNUAL)
+	return f.HasFlag(YEAR)
 }
 
 func (f *Precision) IsMonthly() bool {
-	return f.HasFlag(MONTHLY)
+	return f.HasFlag(MONTH)
 }
 
 func (f *Precision) IsDaily() bool {
-	return f.HasFlag(DAILY)
+	return f.HasFlag(DAY)
 }

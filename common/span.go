@@ -137,6 +137,7 @@ func dateSpanFromEDTF(edtf_str string) (*edtf.DateSpan, error) {
 		YMD:         start_ymd,
 		Uncertain:   str_range.Uncertain,
 		Approximate: str_range.Approximate,
+		Precision:   str_range.Precision,
 	}
 
 	start_upper := &edtf.Date{
@@ -144,6 +145,7 @@ func dateSpanFromEDTF(edtf_str string) (*edtf.DateSpan, error) {
 		YMD:         start_ymd,
 		Uncertain:   str_range.Uncertain,
 		Approximate: str_range.Approximate,
+		Precision:   str_range.Precision,
 	}
 
 	end_lower := &edtf.Date{
@@ -151,6 +153,7 @@ func dateSpanFromEDTF(edtf_str string) (*edtf.DateSpan, error) {
 		YMD:         end_ymd,
 		Uncertain:   str_range.Uncertain,
 		Approximate: str_range.Approximate,
+		Precision:   str_range.Precision,
 	}
 
 	end_upper := &edtf.Date{
@@ -158,6 +161,7 @@ func dateSpanFromEDTF(edtf_str string) (*edtf.DateSpan, error) {
 		YMD:         end_ymd,
 		Uncertain:   str_range.Uncertain,
 		Approximate: str_range.Approximate,
+		Precision:   str_range.Precision,
 	}
 
 	start_range := &edtf.DateRange{

@@ -27,6 +27,10 @@ type TestResultOptions struct {
 	StartUpperApproximate edtf.Precision
 	EndLowerApproximate   edtf.Precision
 	EndUpperApproximate   edtf.Precision
+	StartLowerPrecision   edtf.Precision
+	StartUpperPrecision   edtf.Precision
+	EndLowerPrecision     edtf.Precision
+	EndUpperPrecision     edtf.Precision
 }
 
 func NewTestResult(opts TestResultOptions) *TestResult {
@@ -72,6 +76,12 @@ func (r *TestResult) TestDate(d *edtf.EDTFDate) error {
 		return err
 	}
 
+	err = r.testPrecisionAll(d)
+
+	if err != nil {
+		return err
+	}
+
 	err = r.testUncertainAll(d)
 
 	if err != nil {
@@ -82,6 +92,35 @@ func (r *TestResult) TestDate(d *edtf.EDTFDate) error {
 
 	if err != nil {
 		return err
+	}
+
+	return nil
+}
+
+func (r *TestResult) testPrecisionAll(d *edtf.EDTFDate) error {
+
+	err := r.testPrecision(d.Start.Lower.Precision, r.options.StartLowerPrecision)
+
+	if err != nil {
+		return fmt.Errorf("Invalid StartLowerPrecision flag, %v", err)
+	}
+
+	err = r.testPrecision(d.Start.Upper.Precision, r.options.StartUpperPrecision)
+
+	if err != nil {
+		return fmt.Errorf("Invalid StartUpperPrecision flag, %v", err)
+	}
+
+	err = r.testPrecision(d.End.Lower.Precision, r.options.EndLowerPrecision)
+
+	if err != nil {
+		return fmt.Errorf("Invalid EndLowerPrecision flag, %v", err)
+	}
+
+	err = r.testPrecision(d.End.Upper.Precision, r.options.EndUpperPrecision)
+
+	if err != nil {
+		return fmt.Errorf("Invalid EndUpperPrecision flag, %v", err)
 	}
 
 	return nil

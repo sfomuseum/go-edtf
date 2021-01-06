@@ -78,15 +78,17 @@ func StringRangeFromEDTF(edtf_str string) (*StringRange, error) {
 	mm := parts[2]
 	dd := parts[3]
 
+	// fmt.Printf("DATE Y: '%s' M: '%s' D: '%s'\n", yyyy, mm, dd)
+
 	if yyyy != "" && mm != "" && dd != "" {
-		precision.AddFlag(edtf.DAILY)
+		precision.AddFlag(edtf.DAY)
 	} else if yyyy != "" && mm != "" {
-		precision.AddFlag(edtf.MONTHLY)
+		precision.AddFlag(edtf.MONTH)
 	} else if yyyy != "" {
-		precision.AddFlag(edtf.ANNUAL)
+		precision.AddFlag(edtf.YEAR)
 	}
 
-	// fmt.Printf("DATE Y: '%s' M: '%s' D: '%s'\n", yyyy, mm, dd)
+	// fmt.Println("PRECISION -", edtf_str, precision)
 
 	var yyyy_q *Qualifier
 	var mm_q *Qualifier
@@ -135,30 +137,30 @@ func StringRangeFromEDTF(edtf_str string) (*StringRange, error) {
 	*/
 
 	if dd_q != nil && dd_q.Type == "Group" {
-		precision.AddFlag(edtf.ANNUAL)
-		precision.AddFlag(edtf.MONTHLY)
-		precision.AddFlag(edtf.DAILY)
+		precision.AddFlag(edtf.YEAR)
+		precision.AddFlag(edtf.MONTH)
+		precision.AddFlag(edtf.DAY)
 	}
 
 	if mm_q != nil && mm_q.Type == "Group" {
-		precision.AddFlag(edtf.ANNUAL)
-		precision.AddFlag(edtf.MONTHLY)
+		precision.AddFlag(edtf.YEAR)
+		precision.AddFlag(edtf.MONTH)
 	}
 
 	if yyyy_q != nil && yyyy_q.Type == "Group" {
-		precision.AddFlag(edtf.ANNUAL)
+		precision.AddFlag(edtf.YEAR)
 	}
 
 	if yyyy_q != nil && yyyy_q.Type == "Individual" {
 
 		switch yyyy_q.Value {
 		case edtf.UNCERTAIN:
-			uncertain.AddFlag(edtf.ANNUAL)
+			uncertain.AddFlag(edtf.YEAR)
 		case edtf.APPROXIMATE:
-			approximate.AddFlag(edtf.ANNUAL)
+			approximate.AddFlag(edtf.YEAR)
 		case edtf.UNCERTAIN_AND_APPROXIMATE:
-			uncertain.AddFlag(edtf.ANNUAL)
-			approximate.AddFlag(edtf.ANNUAL)
+			uncertain.AddFlag(edtf.YEAR)
+			approximate.AddFlag(edtf.YEAR)
 		default:
 			// pass
 		}
@@ -168,12 +170,12 @@ func StringRangeFromEDTF(edtf_str string) (*StringRange, error) {
 
 		switch mm_q.Value {
 		case edtf.UNCERTAIN:
-			uncertain.AddFlag(edtf.MONTHLY)
+			uncertain.AddFlag(edtf.MONTH)
 		case edtf.APPROXIMATE:
-			approximate.AddFlag(edtf.MONTHLY)
+			approximate.AddFlag(edtf.MONTH)
 		case edtf.UNCERTAIN_AND_APPROXIMATE:
-			uncertain.AddFlag(edtf.MONTHLY)
-			approximate.AddFlag(edtf.MONTHLY)
+			uncertain.AddFlag(edtf.MONTH)
+			approximate.AddFlag(edtf.MONTH)
 		default:
 			// pass
 		}
@@ -183,12 +185,12 @@ func StringRangeFromEDTF(edtf_str string) (*StringRange, error) {
 
 		switch dd_q.Value {
 		case edtf.UNCERTAIN:
-			uncertain.AddFlag(edtf.DAILY)
+			uncertain.AddFlag(edtf.DAY)
 		case edtf.APPROXIMATE:
-			approximate.AddFlag(edtf.DAILY)
+			approximate.AddFlag(edtf.DAY)
 		case edtf.UNCERTAIN_AND_APPROXIMATE:
-			uncertain.AddFlag(edtf.DAILY)
-			approximate.AddFlag(edtf.DAILY)
+			uncertain.AddFlag(edtf.DAY)
+			approximate.AddFlag(edtf.DAY)
 		default:
 			// pass
 		}
@@ -202,7 +204,14 @@ func StringRangeFromEDTF(edtf_str string) (*StringRange, error) {
 	end_mm := start_mm
 	end_dd := start_dd
 
-	if strings.HasSuffix(yyyy, "X") {
+	// fmt.Println("PRECISION 0", edtf_str, precision)
+
+	if !strings.HasSuffix(yyyy, "X") {
+
+		precision = edtf.NONE
+		precision.AddFlag(edtf.YEAR)
+
+	} else {
 
 		start_m := int64(0)
 		end_m := int64(0)
@@ -228,6 +237,9 @@ func StringRangeFromEDTF(edtf_str string) (*StringRange, error) {
 
 			start_m = m * 1000
 			end_m = start_m
+
+			precision = edtf.NONE
+			precision.AddFlag(edtf.MILLENIUM)
 		}
 
 		if string(yyyy[1]) != "X" {
@@ -240,6 +252,9 @@ func StringRangeFromEDTF(edtf_str string) (*StringRange, error) {
 
 			start_c = c * 100
 			end_c = start_c
+
+			precision = edtf.NONE
+			precision.AddFlag(edtf.CENTURY)
 		}
 
 		if string(yyyy[2]) != "X" {
@@ -252,6 +267,9 @@ func StringRangeFromEDTF(edtf_str string) (*StringRange, error) {
 
 			start_d = d * 10
 			end_d = start_d
+
+			precision = edtf.NONE
+			precision.AddFlag(edtf.DECADE)
 		}
 
 		if string(yyyy[3]) != "X" {
@@ -264,6 +282,9 @@ func StringRangeFromEDTF(edtf_str string) (*StringRange, error) {
 
 			start_y = y * 1
 			end_y = start_y
+
+			precision = edtf.NONE
+			precision.AddFlag(edtf.YEAR)
 		}
 
 		start_ymd := start_m + start_c + start_d + start_y
@@ -275,27 +296,39 @@ func StringRangeFromEDTF(edtf_str string) (*StringRange, error) {
 		start_yyyy = strconv.FormatInt(start_ymd, 10)
 		end_yyyy = strconv.FormatInt(end_ymd, 10)
 
-		precision.AddFlag(edtf.ANNUAL)
 	}
 
-	if strings.HasSuffix(mm, "X") {
+	// fmt.Println("PRECISION 1", edtf_str, precision)
 
+	if !strings.HasSuffix(mm, "X") {
+
+		if mm != "" {
+			precision = edtf.NONE
+			precision.AddFlag(edtf.MONTH)
+		}
+
+	} else {
 		// this does not account for 1985-24, etc.
 
 		if strings.HasPrefix(mm, "X") {
-
 			start_mm = "01"
 			end_mm = "12"
 		} else {
-
 			start_mm = "10"
 			end_mm = "12"
 		}
-
-		precision.AddFlag(edtf.MONTHLY)
 	}
 
-	if strings.HasSuffix(dd, "X") {
+	// fmt.Println("PRECISION 2", edtf_str, precision)
+
+	if !strings.HasSuffix(dd, "X") {
+
+		if dd != "" {
+			precision = edtf.NONE
+			precision.AddFlag(edtf.DAY)
+		}
+
+	} else {
 
 		switch string(dd[0]) {
 		case "X":
@@ -313,9 +346,9 @@ func StringRangeFromEDTF(edtf_str string) (*StringRange, error) {
 		default:
 			return nil, edtf.Invalid("date", edtf_str)
 		}
-
-		precision.AddFlag(edtf.DAILY)
 	}
+
+	// fmt.Println("PRECISION 3", edtf_str, precision)
 
 	if start_mm == "" {
 		start_mm = "01"

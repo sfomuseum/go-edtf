@@ -14,6 +14,8 @@ func TestUnspecifiedDigits(t *testing.T) {
 
 	for input, tr := range valid {
 
+		t.Logf("ParseUnspecifiedDigits '%s'", input)
+
 		d, err := ParseUnspecifiedDigits(input)
 
 		if err != nil {
