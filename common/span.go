@@ -10,38 +10,81 @@ import (
 func DateSpanFromEDTF(edtf_str string) (*edtf.DateSpan, error) {
 
 	parts := strings.Split(edtf_str, "/")
+	count := len(parts)
 
-	left_edtf := parts[0]
+	is_multi := false
 
-	sp, err := dateSpanFromEDTF(left_edtf)
+	var left_edtf string
+	var right_edtf string
+
+	switch count {
+	case 2:
+		left_edtf = parts[0]
+		right_edtf = parts[1]
+		is_multi = true
+	case 1:
+		left_edtf = parts[0]
+	default:
+		return nil, edtf.Invalid("date span", edtf_str)
+	}
+
+	if !is_multi {
+		return dateSpanFromYMD(left_edtf)
+	}
+
+	left_span, err := dateSpanFromEDTF(left_edtf)
 
 	if err != nil {
 		return nil, err
 	}
 
-	if len(parts) == 2 {
+	right_span, err := dateSpanFromEDTF(right_edtf)
 
-		right_edtf := parts[1]
+	if err != nil {
+		return nil, err
+	}
 
-		right_sp, err := dateSpanFromEDTF(right_edtf)
+	left_span.Start.Upper = left_span.End.Upper
+
+	right_span.End.Lower = right_span.Start.Lower
+
+	left_span.End = right_span.End
+
+	return left_span, nil
+}
+
+// specifically from one half of a FOO/BAR string
+
+func dateSpanFromEDTF(edtf_str string) (*edtf.DateSpan, error) {
+
+	var span *edtf.DateSpan
+
+	switch edtf_str {
+	case "": // unknown
+
+		span = EmptyDateSpan()
+
+	case "..": // open
+
+		span = EmptyDateSpan()
+
+	default:
+
+		ds, err := dateSpanFromYMD(edtf_str)
 
 		if err != nil {
 			return nil, err
 		}
 
-		sp.Start.Upper = sp.End.Upper
-
-		right_sp.End.Lower = right_sp.Start.Lower
-
-		sp.End = right_sp.End
+		span = ds
 	}
 
-	return sp, nil
+	return span, nil
 }
 
-func dateSpanFromEDTF(edtf_str string) (*edtf.DateSpan, error) {
+func dateSpanFromYMD(edtf_str string) (*edtf.DateSpan, error) {
 
-	str_range, err := StringRangeFromEDTF(edtf_str)
+	str_range, err := StringRangeFromYMD(edtf_str)
 
 	if err != nil {
 		return nil, err
@@ -180,4 +223,17 @@ func dateSpanFromEDTF(edtf_str string) (*edtf.DateSpan, error) {
 	}
 
 	return sp, nil
+}
+
+func EmptyDateSpan() *edtf.DateSpan {
+
+	start := EmptyDateRange()
+	end := EmptyDateRange()
+
+	sp := &edtf.DateSpan{
+		Start: start,
+		End:   end,
+	}
+
+	return sp
 }

@@ -14,10 +14,14 @@ func TestExtendedIntervalEnd(t *testing.T) {
 
 	for input, tr := range valid {
 
+		t.Logf("ParseExtendedIntervalEnd '%s'", input)
+
 		d, err := ParseExtendedIntervalEnd(input)
 
 		if err != nil {
-			t.Fatalf("Failed to parse '%s', %v", input, err)
+			t.Logf("Failed to parse '%s', %v", input, err)
+			t.Fail()
+			continue
 		}
 
 		if tr != nil {
@@ -25,7 +29,9 @@ func TestExtendedIntervalEnd(t *testing.T) {
 			err := tr.TestDate(d)
 
 			if err != nil {
-				t.Fatalf("Results failed tests '%s', %v", input, err)
+				t.Logf("Results failed tests '%s', %v", input, err)
+				t.Fail()
+				continue
 			}
 		}
 	}
@@ -42,10 +48,14 @@ func TestExtendedIntervalStart(t *testing.T) {
 
 	for input, tr := range valid {
 
+		t.Logf("ParseExtendedIntervalStart '%s'", input)
+
 		d, err := ParseExtendedIntervalStart(input)
 
 		if err != nil {
-			t.Fatalf("Failed to parse '%s', %v", input, err)
+			t.Logf("Failed to parse '%s', %v", input, err)
+			t.Fail()
+			continue
 		}
 
 		if tr != nil {
@@ -53,7 +63,9 @@ func TestExtendedIntervalStart(t *testing.T) {
 			err := tr.TestDate(d)
 
 			if err != nil {
-				t.Fatalf("Results failed tests '%s', %v", input, err)
+				t.Logf("Results failed tests '%s', %v", input, err)
+				t.Fail()
+				continue
 			}
 		}
 	}

@@ -61,7 +61,7 @@ func (r *StringRange) String() string {
 	return fmt.Sprintf("[[%T] Start: '%s' End: '%s']", r, r.Start, r.End)
 }
 
-func StringRangeFromEDTF(edtf_str string) (*StringRange, error) {
+func StringRangeFromYMD(edtf_str string) (*StringRange, error) {
 
 	precision := edtf.NONE
 	uncertain := edtf.NONE

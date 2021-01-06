@@ -124,36 +124,38 @@ var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests
 			EndLowerTimeRFC3339:   "",
 			EndUpperTimeRFC3339:   "",
 		}),
-		"../1985-04": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "",
-			StartUpperTimeRFC3339: "",
-			EndLowerTimeRFC3339:   "",
-			EndUpperTimeRFC3339:   "",
-		}),
-		"../1985": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "",
-			StartUpperTimeRFC3339: "",
-			EndLowerTimeRFC3339:   "",
-			EndUpperTimeRFC3339:   "",
-		}),
-		"/1985-04-12": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "",
-			StartUpperTimeRFC3339: "",
-			EndLowerTimeRFC3339:   "",
-			EndUpperTimeRFC3339:   "",
-		}),
-		"/1985-04": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "",
-			StartUpperTimeRFC3339: "",
-			EndLowerTimeRFC3339:   "",
-			EndUpperTimeRFC3339:   "",
-		}),
-		"/1985": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "",
-			StartUpperTimeRFC3339: "",
-			EndLowerTimeRFC3339:   "",
-			EndUpperTimeRFC3339:   "",
-		}),
+		/*
+			"../1985-04": tests.NewTestResult(tests.TestResultOptions{
+				StartLowerTimeRFC3339: "",
+				StartUpperTimeRFC3339: "",
+				EndLowerTimeRFC3339:   "",
+				EndUpperTimeRFC3339:   "",
+			}),
+			"../1985": tests.NewTestResult(tests.TestResultOptions{
+				StartLowerTimeRFC3339: "",
+				StartUpperTimeRFC3339: "",
+				EndLowerTimeRFC3339:   "",
+				EndUpperTimeRFC3339:   "",
+			}),
+			"/1985-04-12": tests.NewTestResult(tests.TestResultOptions{
+				StartLowerTimeRFC3339: "",
+				StartUpperTimeRFC3339: "",
+				EndLowerTimeRFC3339:   "",
+				EndUpperTimeRFC3339:   "",
+			}),
+			"/1985-04": tests.NewTestResult(tests.TestResultOptions{
+				StartLowerTimeRFC3339: "",
+				StartUpperTimeRFC3339: "",
+				EndLowerTimeRFC3339:   "",
+				EndUpperTimeRFC3339:   "",
+			}),
+			"/1985": tests.NewTestResult(tests.TestResultOptions{
+				StartLowerTimeRFC3339: "",
+				StartUpperTimeRFC3339: "",
+				EndLowerTimeRFC3339:   "",
+				EndUpperTimeRFC3339:   "",
+			}),
+		*/
 	},
 	EXTENDED_INTERVAL_END: map[string]*tests.TestResult{
 		"1985-04-12/..": tests.NewTestResult(tests.TestResultOptions{
