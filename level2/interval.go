@@ -5,7 +5,7 @@ import (
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/common"
 	"github.com/whosonfirst/go-edtf/re"
-	"strings"
+	//"strings"
 )
 
 /*
@@ -33,33 +33,54 @@ func ParseInterval(edtf_str string) (*edtf.EDTFDate, error) {
 
 	*/
 
-	// m := re.Interval.FindStringSubmatch(edtf_str)
-
 	if !re.Interval.MatchString(edtf_str) {
 		return nil, edtf.Invalid(INTERVAL, edtf_str)
 	}
 
-	parts := strings.Split(edtf_str, "/")
-
-	start, err := common.DateRangeWithString(parts[0])
-
-	if err != nil {
-		return nil, err
-	}
-
-	end, err := common.DateRangeWithString(parts[1])
+	sp, err := common.DateSpanFromEDTF(edtf_str)
 
 	if err != nil {
 		return nil, err
 	}
 
 	d := &edtf.EDTFDate{
-		Start: start,
-		End:   end,
-		Level: LEVEL,
-		Label: INTERVAL,
+		Start: sp.Start,
+		End:   sp.End,
 		EDTF:  edtf_str,
+		Level: LEVEL,
 	}
 
 	return d, nil
+
+	/*
+		// m := re.Interval.FindStringSubmatch(edtf_str)
+
+		if !re.Interval.MatchString(edtf_str) {
+			return nil, edtf.Invalid(INTERVAL, edtf_str)
+		}
+
+		parts := strings.Split(edtf_str, "/")
+
+		start, err := common.DateRangeWithString(parts[0])
+
+		if err != nil {
+			return nil, err
+		}
+
+		end, err := common.DateRangeWithString(parts[1])
+
+		if err != nil {
+			return nil, err
+		}
+
+		d := &edtf.EDTFDate{
+			Start: start,
+			End:   end,
+			Level: LEVEL,
+			Label: INTERVAL,
+			EDTF:  edtf_str,
+		}
+
+		return d, nil
+	*/
 }

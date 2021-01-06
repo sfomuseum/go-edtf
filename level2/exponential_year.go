@@ -28,34 +28,55 @@ func ParseExponentialYear(edtf_str string) (*edtf.EDTFDate, error) {
 		EXP 5 Y10E7,10E7,,10,7
 	*/
 
-	m := re.ExponentialYear.FindStringSubmatch(edtf_str)
-
-	if len(m) != 2 {
+	if !re.ExponentialYear.MatchString(edtf_str) {
 		return nil, edtf.Invalid(EXPONENTIAL_YEAR, edtf_str)
 	}
 
-	notation := m[1]
-
-	yyyy_i, err := common.ParseExponentialNotation(notation)
+	sp, err := common.DateSpanFromEDTF(edtf_str)
 
 	if err != nil {
 		return nil, err
 	}
-
-	start, err := common.DateRangeWithYMD(yyyy_i, 0, 0)
-
-	if err != nil {
-		return nil, err
-	}
-
-	end := start
 
 	d := &edtf.EDTFDate{
-		Start: start,
-		End:   end,
+		Start: sp.Start,
+		End:   sp.End,
 		EDTF:  edtf_str,
 		Level: LEVEL,
 	}
 
 	return d, nil
+
+	/*
+		m := re.ExponentialYear.FindStringSubmatch(edtf_str)
+
+		if len(m) != 2 {
+			return nil, edtf.Invalid(EXPONENTIAL_YEAR, edtf_str)
+		}
+
+		notation := m[1]
+
+		yyyy_i, err := common.ParseExponentialNotation(notation)
+
+		if err != nil {
+			return nil, err
+		}
+
+		start, err := common.DateRangeWithYMD(yyyy_i, 0, 0)
+
+		if err != nil {
+			return nil, err
+		}
+
+		end := start
+
+		d := &edtf.EDTFDate{
+			Start: start,
+			End:   end,
+			EDTF:  edtf_str,
+			Level: LEVEL,
+		}
+
+		return d, nil
+	*/
 }

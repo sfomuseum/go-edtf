@@ -4,8 +4,8 @@ import (
 	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/common"
 	"github.com/whosonfirst/go-edtf/re"
-	"sort"
-	"strings"
+	// "sort"
+	// "strings"
 )
 
 /*
@@ -66,143 +66,164 @@ func ParseSetRepresentations(edtf_str string) (*edtf.EDTFDate, error) {
 
 	*/
 
-	m := re.SetRepresentations.FindStringSubmatch(edtf_str)
-
-	if len(m) != 6 {
+	if !re.SetRepresentations.MatchString(edtf_str) {
 		return nil, edtf.Invalid(SET_REPRESENTATIONS, edtf_str)
 	}
 
-	class := m[1]
-	candidates := m[2]
+	sp, err := common.DateSpanFromEDTF(edtf_str)
 
-	start_ymd := ""
-	end_ymd := ""
-
-	start_open := false
-	end_open := false
-
-	inclusivity := edtf.NONE
-
-	switch class {
-	case "[":
-		inclusivity = edtf.ANY
-	case "{":
-		inclusivity = edtf.ALL
-	default:
-		return nil, edtf.Invalid(SET_REPRESENTATIONS, edtf_str)
-	}
-
-	// this should be moved in to a separate method for getting
-	// the list of all possible dates - we only care about the
-	// bookends right now (20201231/thisisaaronland)
-
-	possible := make([]string, 0)
-
-	for _, date := range strings.Split(candidates, ",") {
-
-		parts := strings.Split(date, "..")
-		count := len(parts)
-
-		switch count {
-		case 1:
-			possible = append(possible, date)
-			continue
-		case 2:
-
-			if parts[0] != "" && parts[1] != "" { // YYYY..YYYY
-
-				// get everything in between parts[0] and parts[1]
-				// need to determine what to get (days, months, years)
-
-				possible = append(possible, parts[0])
-				possible = append(possible, parts[1])
-
-			} else if parts[0] == "" { // ..YYYY
-
-				// parts[1] is end (max) date
-				// start (min) date is "open" or "unknown"
-
-				possible = append(possible, parts[1])
-				start_open = true
-
-			} else { // YYYY..
-
-				// parts[0] is start (min) date
-				// end (max) date is "open" or "unknown"
-
-				possible = append(possible, parts[0])
-				end_open = true
-			}
-
-		default:
-			return nil, edtf.Invalid(SET_REPRESENTATIONS, edtf_str)
-		}
-	}
-
-	sort.Strings(possible)
-
-	count := len(possible)
-
-	switch count {
-	case 0:
-		return nil, edtf.Invalid(SET_REPRESENTATIONS, edtf_str)
-	case 1:
-		start_ymd = possible[0]
-		end_ymd = start_ymd
-	default:
-		start_ymd = possible[0]
-		end_ymd = possible[count-1]
-	}
-
-	var start *edtf.DateRange
-	var end *edtf.DateRange
-
-	if start_open {
-
-		start = common.EmptyDateRange()
-		start.Lower.Open = true
-		start.Upper.Open = true
-
-		start.Lower.Inclusivity = inclusivity
-		start.Upper.Inclusivity = inclusivity
-
-	} else {
-
-		dr, err := common.DateRangeWithString(start_ymd)
-
-		if err != nil {
-			return nil, err
-		}
-
-		start = dr
-	}
-
-	if end_open {
-
-		end = common.EmptyDateRange()
-		end.Lower.Open = true
-		end.Upper.Open = true
-
-		end.Lower.Inclusivity = inclusivity
-		end.Upper.Inclusivity = inclusivity
-
-	} else {
-
-		dr, err := common.DateRangeWithString(end_ymd)
-
-		if err != nil {
-			return nil, err
-		}
-
-		end = dr
+	if err != nil {
+		return nil, err
 	}
 
 	d := &edtf.EDTFDate{
-		Start: start,
-		End:   end,
+		Start: sp.Start,
+		End:   sp.End,
 		EDTF:  edtf_str,
 		Level: LEVEL,
 	}
 
 	return d, nil
+
+	/*
+		m := re.SetRepresentations.FindStringSubmatch(edtf_str)
+
+		if len(m) != 6 {
+			return nil, edtf.Invalid(SET_REPRESENTATIONS, edtf_str)
+		}
+
+		class := m[1]
+		candidates := m[2]
+
+		start_ymd := ""
+		end_ymd := ""
+
+		start_open := false
+		end_open := false
+
+		inclusivity := edtf.NONE
+
+		switch class {
+		case "[":
+			inclusivity = edtf.ANY
+		case "{":
+			inclusivity = edtf.ALL
+		default:
+			return nil, edtf.Invalid(SET_REPRESENTATIONS, edtf_str)
+		}
+
+		// this should be moved in to a separate method for getting
+		// the list of all possible dates - we only care about the
+		// bookends right now (20201231/thisisaaronland)
+
+		possible := make([]string, 0)
+
+		for _, date := range strings.Split(candidates, ",") {
+
+			parts := strings.Split(date, "..")
+			count := len(parts)
+
+			switch count {
+			case 1:
+				possible = append(possible, date)
+				continue
+			case 2:
+
+				if parts[0] != "" && parts[1] != "" { // YYYY..YYYY
+
+					// get everything in between parts[0] and parts[1]
+					// need to determine what to get (days, months, years)
+
+					possible = append(possible, parts[0])
+					possible = append(possible, parts[1])
+
+				} else if parts[0] == "" { // ..YYYY
+
+					// parts[1] is end (max) date
+					// start (min) date is "open" or "unknown"
+
+					possible = append(possible, parts[1])
+					start_open = true
+
+				} else { // YYYY..
+
+					// parts[0] is start (min) date
+					// end (max) date is "open" or "unknown"
+
+					possible = append(possible, parts[0])
+					end_open = true
+				}
+
+			default:
+				return nil, edtf.Invalid(SET_REPRESENTATIONS, edtf_str)
+			}
+		}
+
+		sort.Strings(possible)
+
+		count := len(possible)
+
+		switch count {
+		case 0:
+			return nil, edtf.Invalid(SET_REPRESENTATIONS, edtf_str)
+		case 1:
+			start_ymd = possible[0]
+			end_ymd = start_ymd
+		default:
+			start_ymd = possible[0]
+			end_ymd = possible[count-1]
+		}
+
+		var start *edtf.DateRange
+		var end *edtf.DateRange
+
+		if start_open {
+
+			start = common.EmptyDateRange()
+			start.Lower.Open = true
+			start.Upper.Open = true
+
+			start.Lower.Inclusivity = inclusivity
+			start.Upper.Inclusivity = inclusivity
+
+		} else {
+
+			dr, err := common.DateRangeWithString(start_ymd)
+
+			if err != nil {
+				return nil, err
+			}
+
+			start = dr
+		}
+
+		if end_open {
+
+			end = common.EmptyDateRange()
+			end.Lower.Open = true
+			end.Upper.Open = true
+
+			end.Lower.Inclusivity = inclusivity
+			end.Upper.Inclusivity = inclusivity
+
+		} else {
+
+			dr, err := common.DateRangeWithString(end_ymd)
+
+			if err != nil {
+				return nil, err
+			}
+
+			end = dr
+		}
+
+		d := &edtf.EDTFDate{
+			Start: start,
+			End:   end,
+			EDTF:  edtf_str,
+			Level: LEVEL,
+		}
+
+		return d, nil
+	*/
 }
