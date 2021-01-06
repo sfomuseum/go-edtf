@@ -17,8 +17,8 @@ const HMS_UPPER string = "23:59:59"
 
 const (
 	NONE      Precision = 0
-	ALL       Precision = 1 << iota //
-	ANY                             //
+	ALL       Precision = 1 << iota // 2
+	ANY                             // 4
 	DAY                             // 8
 	WEEK                            // 16
 	MONTH                           // 32

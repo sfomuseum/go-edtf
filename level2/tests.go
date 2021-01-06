@@ -1,6 +1,7 @@
 package level2
 
 import (
+	"github.com/whosonfirst/go-edtf"
 	"github.com/whosonfirst/go-edtf/tests"
 )
 
@@ -53,7 +54,7 @@ var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests
 			StartUpperTimeRFC3339: "1760-12-31T23:59:59Z",
 			EndLowerIsOpen:        true,
 			EndUpperIsOpen:        true,
-			// INCLUSIVITY
+			StartLowerInclusivity: edtf.ANY,
 		}),
 		"[1667,1668,1670..1672]": tests.NewTestResult(tests.TestResultOptions{
 			// THIS FEELS WRONG...LIKE IT'S BACKWARDS
@@ -61,28 +62,30 @@ var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests
 			StartUpperTimeRFC3339: "1667-12-31T23:59:59Z",
 			EndLowerTimeRFC3339:   "1672-01-01T00:00:00Z",
 			EndUpperTimeRFC3339:   "1672-12-31T23:59:59Z",
-			// INCLUSIVITY
+			StartLowerInclusivity: edtf.ANY,
+			EndUpperInclusivity:   edtf.ANY,
 		}),
 		"[..1760-12-03]": tests.NewTestResult(tests.TestResultOptions{
 			EndLowerTimeRFC3339: "1760-12-03T00:00:00Z",
 			EndUpperTimeRFC3339: "1760-12-03T23:59:59Z",
 			StartLowerIsOpen:    true,
 			StartUpperIsOpen:    true,
-			// INCLUSIVITY
+			EndUpperInclusivity: edtf.ANY,
 		}),
 		"[1760-12..]": tests.NewTestResult(tests.TestResultOptions{
 			StartLowerTimeRFC3339: "1760-12-01T00:00:00Z",
 			StartUpperTimeRFC3339: "1760-12-31T23:59:59Z",
 			EndLowerIsOpen:        true,
 			EndUpperIsOpen:        true,
-			// INCLUSIVITY
+			StartUpperInclusivity: edtf.ANY,
 		}),
 		"[1667,1760-12]": tests.NewTestResult(tests.TestResultOptions{
 			StartLowerTimeRFC3339: "1667-01-01T00:00:00Z",
 			StartUpperTimeRFC3339: "1667-12-31T23:59:59Z",
 			EndLowerTimeRFC3339:   "1760-12-01T00:00:00Z",
 			EndUpperTimeRFC3339:   "1760-12-31T23:59:59Z",
-			// INCLUSIVITY
+			StartUpperInclusivity: edtf.ANY,
+			EndLowerInclusivity:   edtf.ANY,
 		}),
 
 		"[..1984]": tests.NewTestResult(tests.TestResultOptions{
@@ -90,28 +93,30 @@ var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests
 			StartUpperIsOpen:    true,
 			EndLowerTimeRFC3339: "1984-01-01T00:00:00Z",
 			EndUpperTimeRFC3339: "1984-12-31T23:59:59Z",
-			// INCLUSIVITY
+			EndLowerInclusivity: edtf.ANY,
 		}),
 		"{1667,1668,1670..1672}": tests.NewTestResult(tests.TestResultOptions{
 			StartLowerTimeRFC3339: "1667-01-01T00:00:00Z",
 			StartUpperTimeRFC3339: "1667-12-31T23:59:59Z",
 			EndLowerTimeRFC3339:   "1672-01-01T00:00:00Z",
 			EndUpperTimeRFC3339:   "1672-12-31T23:59:59Z",
-			// INCLUSIVITY
+			StartUpperInclusivity: edtf.ALL,
+			EndLowerInclusivity:   edtf.ALL,
 		}),
 		"{1960,1961-12}": tests.NewTestResult(tests.TestResultOptions{
 			StartLowerTimeRFC3339: "1960-01-01T00:00:00Z",
 			StartUpperTimeRFC3339: "1960-12-31T23:59:59Z",
 			EndLowerTimeRFC3339:   "1961-12-01T00:00:00Z",
 			EndUpperTimeRFC3339:   "1961-12-31T23:59:59Z",
-			// INCLUSIVITY
+			StartUpperInclusivity: edtf.ALL,
+			EndLowerInclusivity:   edtf.ALL,
 		}),
 		"{..1984}": tests.NewTestResult(tests.TestResultOptions{
 			StartLowerIsOpen:    true,
 			StartUpperIsOpen:    true,
 			EndLowerTimeRFC3339: "1984-01-01T00:00:00Z",
 			EndUpperTimeRFC3339: "1984-12-31T23:59:59Z",
-			// INCLUSIVITY
+			EndLowerInclusivity: edtf.ALL,
 		}),
 	},
 	GROUP_QUALIFICATION: map[string]*tests.TestResult{

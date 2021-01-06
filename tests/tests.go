@@ -39,6 +39,10 @@ type TestResultOptions struct {
 	StartUpperIsUnknown   bool
 	EndLowerIsUnknown     bool
 	EndUpperIsUnknown     bool
+	StartLowerInclusivity edtf.Precision
+	StartUpperInclusivity edtf.Precision
+	EndLowerInclusivity   edtf.Precision
+	EndUpperInclusivity   edtf.Precision
 }
 
 func NewTestResult(opts TestResultOptions) *TestResult {
@@ -114,6 +118,12 @@ func (r *TestResult) TestDate(d *edtf.EDTFDate) error {
 		return err
 	}
 
+	err = r.testInclusivityAll(d)
+
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
@@ -179,6 +189,35 @@ func (r *TestResult) testBoolean(candidate bool, expected bool) error {
 
 	if candidate != expected {
 		return fmt.Errorf("Boolean test failed, expected '%t' but got '%t'", expected, candidate)
+	}
+
+	return nil
+}
+
+func (r *TestResult) testInclusivityAll(d *edtf.EDTFDate) error {
+
+	err := r.testPrecision(d.Start.Lower.Inclusivity, r.options.StartLowerInclusivity)
+
+	if err != nil {
+		return fmt.Errorf("Invalid StartLowerInclusivity flag, %v", err)
+	}
+
+	err = r.testPrecision(d.Start.Upper.Inclusivity, r.options.StartUpperInclusivity)
+
+	if err != nil {
+		return fmt.Errorf("Invalid StartUpperInclusivity flag, %v", err)
+	}
+
+	err = r.testPrecision(d.End.Lower.Inclusivity, r.options.EndLowerInclusivity)
+
+	if err != nil {
+		return fmt.Errorf("Invalid EndLowerInclusivity flag, %v", err)
+	}
+
+	err = r.testPrecision(d.End.Upper.Inclusivity, r.options.EndUpperInclusivity)
+
+	if err != nil {
+		return fmt.Errorf("Invalid EndUpperInclusivity flag, %v", err)
 	}
 
 	return nil

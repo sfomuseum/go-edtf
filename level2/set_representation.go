@@ -221,15 +221,17 @@ func ParseSetRepresentations(edtf_str string) (*edtf.EDTFDate, error) {
 		}
 	}
 
-	if start_open {
+	if !start_open {
 		sp.Start.Lower.Inclusivity = inclusivity
 		sp.Start.Upper.Inclusivity = inclusivity
 	}
 
-	if end_open {
+	if !end_open {
 		sp.End.Lower.Inclusivity = inclusivity
 		sp.End.Upper.Inclusivity = inclusivity
 	}
+
+	fmt.Println("OKAY", edtf_str, inclusivity)
 
 	d := &edtf.EDTFDate{
 		Start: sp.Start,
