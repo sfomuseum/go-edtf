@@ -34,10 +34,16 @@ var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests
 	},
 	SUB_YEAR_GROUPINGS: map[string]*tests.TestResult{
 		"2001-34": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "",
-			StartUpperTimeRFC3339: "",
-			EndLowerTimeRFC3339:   "",
-			EndUpperTimeRFC3339:   "",
+			StartLowerTimeRFC3339: "2001-04-01T00:00:00Z",
+			StartUpperTimeRFC3339: "2001-04-01T23:59:59Z",
+			EndLowerTimeRFC3339:   "2001-06-30T00:00:00Z",
+			EndUpperTimeRFC3339:   "2001-06-30T23:59:59Z",
+		}),
+		"2019-28": tests.NewTestResult(tests.TestResultOptions{
+			StartLowerTimeRFC3339: "2019-12-01T00:00:00Z",
+			StartUpperTimeRFC3339: "2019-12-01T23:59:59Z",
+			EndLowerTimeRFC3339:   "2020-02-01T00:00:00Z",
+			EndUpperTimeRFC3339:   "2020-02-29T23:59:59Z",
 		}),
 		// "second quarter of 2001": tests.NewTestResult(tests.TestResultOptions{}),	// TO DO
 	},
