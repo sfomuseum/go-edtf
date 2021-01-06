@@ -28,14 +28,12 @@ var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests
 			EndLowerTimeRFC3339:   "2001-01-31T00:00:00Z",
 			EndUpperTimeRFC3339:   "2001-01-31T23:59:59Z",
 		}),
-		"2001-24": tests.NewTestResult(tests.TestResultOptions{
-			StartLowerTimeRFC3339: "2001-10-01T00:00:00Z",
-			StartUpperTimeRFC3339: "2001-10-01T23:59:59Z",
-			EndLowerTimeRFC3339:   "2001-12-01T00:00:00Z",
-			EndUpperTimeRFC3339:   "2001-12-31T23:59:59Z",
+		"2019-24": tests.NewTestResult(tests.TestResultOptions{
+			StartLowerTimeRFC3339: "2019-12-01T00:00:00Z",
+			StartUpperTimeRFC3339: "2019-12-01T23:59:59Z",
+			EndLowerTimeRFC3339:   "2020-02-29T00:00:00Z",
+			EndUpperTimeRFC3339:   "2020-02-29T23:59:59Z", // leap year
 		}),
-		// "-0011-24": tests.NewTestResult(tests.TestResultOptions{}),	// TO DO
-		// "-0301-05": tests.NewTestResult(tests.TestResultOptions{}),	// TO DO
 		"Spring, 2002": tests.NewTestResult(tests.TestResultOptions{
 			StartLowerTimeRFC3339: "2002-03-01T00:00:00Z",
 			StartUpperTimeRFC3339: "2002-03-01T23:59:59Z",
@@ -45,10 +43,17 @@ var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests
 		"winter, 2002": tests.NewTestResult(tests.TestResultOptions{
 			StartLowerTimeRFC3339: "2002-12-01T00:00:00Z",
 			StartUpperTimeRFC3339: "2002-12-01T23:59:59Z",
-			EndLowerTimeRFC3339:   "2003-02-01T00:00:00Z",
+			EndLowerTimeRFC3339:   "2003-02-28T00:00:00Z",
 			EndUpperTimeRFC3339:   "2003-02-28T23:59:59Z",
 		}),
-		// "Summer, -1980": tests.NewTestResult(tests.TestResultOptions{}),	// TO DO
+		/*
+			"Summer, -1980": tests.NewTestResult(tests.TestResultOptions{
+				StartLowerTimeRFC3339: "-1980-06-01T00:00:00Z",
+				StartUpperTimeRFC3339: "-1980-06-01T23:59:59Z",
+				EndLowerTimeRFC3339:   "-1980-08-31T00:00:00Z",
+				EndUpperTimeRFC3339:   "-1980-08-31T23:59:59Z",
+			}),
+		*/
 	},
 	QUALIFIED_DATE: map[string]*tests.TestResult{
 		"1984?": tests.NewTestResult(tests.TestResultOptions{
