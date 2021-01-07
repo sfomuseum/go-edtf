@@ -219,7 +219,7 @@ func dateSpanFromYMD(edtf_str string) (*edtf.DateSpan, error) {
 	}
 
 	end_range := &edtf.DateRange{
-		EDTF: edtf_str,1		
+		EDTF: edtf_str,		
 		Lower: end_lower,
 		Upper: end_upper,
 	}
