@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"flag"
 	"fmt"
-	"github.com/whosonfirst/go-edtf/parser"
+	"github.com/sfomuseum/go-edtf/parser"
 	"log"
 )
 

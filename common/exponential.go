@@ -1,7 +1,7 @@
 package common
 
 import (
-	"github.com/whosonfirst/go-edtf"
+	"github.com/sfomuseum/go-edtf"
 	"math/big"
 )
 

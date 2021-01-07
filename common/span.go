@@ -1,8 +1,7 @@
 package common
 
 import (
-	_ "fmt"
-	"github.com/whosonfirst/go-edtf"
+	"github.com/sfomuseum/go-edtf"
 	"strings"
 	"time"
 )

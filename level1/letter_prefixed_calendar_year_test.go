@@ -1,7 +1,7 @@
 package level1
 
 import (
-	"github.com/whosonfirst/go-edtf"
+	"github.com/sfomuseum/go-edtf"
 	"testing"
 )
 

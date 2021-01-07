@@ -1,4 +1,4 @@
-module github.com/whosonfirst/go-edtf
+module github.com/sfomuseum/go-edtf
 
 go 1.12
 

@@ -2,8 +2,8 @@ package common
 
 import (
 	"errors"
-	"github.com/whosonfirst/go-edtf"
-	"github.com/whosonfirst/go-edtf/calendar"
+	"github.com/sfomuseum/go-edtf"
+	"github.com/sfomuseum/go-edtf/calendar"
 	"strconv"
 	"strings"
 )

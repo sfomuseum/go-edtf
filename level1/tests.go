@@ -1,8 +1,8 @@
 package level1
 
 import (
-	"github.com/whosonfirst/go-edtf"
-	"github.com/whosonfirst/go-edtf/tests"
+	"github.com/sfomuseum/go-edtf"
+	"github.com/sfomuseum/go-edtf/tests"
 )
 
 var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests.TestResult{

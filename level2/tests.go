@@ -1,13 +1,13 @@
 package level2
 
 import (
-	"github.com/whosonfirst/go-edtf"
-	"github.com/whosonfirst/go-edtf/tests"
+	"github.com/sfomuseum/go-edtf"
+	"github.com/sfomuseum/go-edtf/tests"
 )
 
 var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests.TestResult{
 	EXPONENTIAL_YEAR: map[string]*tests.TestResult{
-		"Y-17E7": tests.NewTestResult(tests.TestResultOptions{}), // TO DO - https://github.com/whosonfirst/go-edtf/issues/5
+		"Y-17E7": tests.NewTestResult(tests.TestResultOptions{}), // TO DO - https://github.com/sfomuseum/go-edtf/issues/5
 		"Y10E7":  tests.NewTestResult(tests.TestResultOptions{}), // TO DO
 		"Y20E2": tests.NewTestResult(tests.TestResultOptions{
 			StartLowerTimeRFC3339: "2000-01-01T00:00:00Z",

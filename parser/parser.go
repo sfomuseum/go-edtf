@@ -2,11 +2,10 @@ package parser
 
 import (
 	"errors"
-	_ "fmt"
-	"github.com/whosonfirst/go-edtf"
-	"github.com/whosonfirst/go-edtf/level0"
-	"github.com/whosonfirst/go-edtf/level1"
-	"github.com/whosonfirst/go-edtf/level2"
+	"github.com/sfomuseum/go-edtf"
+	"github.com/sfomuseum/go-edtf/level0"
+	"github.com/sfomuseum/go-edtf/level1"
+	"github.com/sfomuseum/go-edtf/level2"
 )
 
 func IsValid(edtf_str string) bool {

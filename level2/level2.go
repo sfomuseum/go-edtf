@@ -2,8 +2,8 @@ package level2
 
 import (
 	"errors"
-	"github.com/whosonfirst/go-edtf"
-	"github.com/whosonfirst/go-edtf/re"
+	"github.com/sfomuseum/go-edtf"
+	"github.com/sfomuseum/go-edtf/re"
 )
 
 const LEVEL int = 2

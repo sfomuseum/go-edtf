@@ -2,9 +2,9 @@ package level0
 
 import (
 	"fmt"
-	"github.com/whosonfirst/go-edtf"
-	"github.com/whosonfirst/go-edtf/common"
-	"github.com/whosonfirst/go-edtf/re"
+	"github.com/sfomuseum/go-edtf"
+	"github.com/sfomuseum/go-edtf/common"
+	"github.com/sfomuseum/go-edtf/re"
 	"strings"
 	"time"
 )
