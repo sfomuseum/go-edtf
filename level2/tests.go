@@ -169,14 +169,14 @@ var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests
 			StartUpperTimeRFC3339: "1560-12-25T23:59:59Z",
 			EndLowerTimeRFC3339:   "1569-12-25T00:00:00Z",
 			EndUpperTimeRFC3339:   "1569-12-25T23:59:59Z",
-			// StartUpperPrecision:   edtf.DECADE,
+			StartUpperPrecision:   edtf.DECADE,
 		}),
 		"15XX-12-25": tests.NewTestResult(tests.TestResultOptions{
 			StartLowerTimeRFC3339: "1500-12-25T00:00:00Z",
 			StartUpperTimeRFC3339: "1500-12-25T23:59:59Z",
 			EndLowerTimeRFC3339:   "1599-12-25T00:00:00Z",
 			EndUpperTimeRFC3339:   "1599-12-25T23:59:59Z",
-			// StartUpperPrecision:   edtf.CENTURY,
+			StartUpperPrecision:   edtf.CENTURY,
 		}),
 		// "XXXX-12-XX": tests.NewTestResult(tests.TestResultOptions{}),	// TO DO
 		"1XXX-XX": tests.NewTestResult(tests.TestResultOptions{
@@ -184,21 +184,21 @@ var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests
 			StartUpperTimeRFC3339: "1000-01-01T23:59:59Z",
 			EndLowerTimeRFC3339:   "1999-12-31T00:00:00Z",
 			EndUpperTimeRFC3339:   "1999-12-31T23:59:59Z",
-			// StartUpperPrecision:   edtf.MONTH,
+			StartUpperPrecision:   edtf.MILLENIUM,
 		}),
 		"1XXX-12": tests.NewTestResult(tests.TestResultOptions{
 			StartLowerTimeRFC3339: "1000-12-01T00:00:00Z",
 			StartUpperTimeRFC3339: "1000-12-01T23:59:59Z",
 			EndLowerTimeRFC3339:   "1999-12-31T00:00:00Z",
 			EndUpperTimeRFC3339:   "1999-12-31T23:59:59Z",
-			// StartUpperPrecision:   edtf.CENTURY,
+			StartUpperPrecision:   edtf.MILLENIUM,
 		}),
 		"1984-1X": tests.NewTestResult(tests.TestResultOptions{
 			StartLowerTimeRFC3339: "1984-10-01T00:00:00Z",
 			StartUpperTimeRFC3339: "1984-10-01T23:59:59Z",
 			EndLowerTimeRFC3339:   "1984-12-31T00:00:00Z",
 			EndUpperTimeRFC3339:   "1984-12-31T23:59:59Z",
-			// StartUpperPrecision:   edtf.MONTH,
+			StartUpperPrecision:   edtf.MONTH,
 		}),
 	},
 	INTERVAL: map[string]*tests.TestResult{

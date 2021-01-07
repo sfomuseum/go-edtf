@@ -88,7 +88,7 @@ func StringRangeFromYMD(edtf_str string) (*StringRange, error) {
 		precision.AddFlag(edtf.YEAR)
 	}
 
-	// fmt.Println("PRECISION -", edtf_str, precision)
+	fmt.Println("PRECISION -", edtf_str, precision)
 
 	var yyyy_q *Qualifier
 	var mm_q *Qualifier
@@ -256,7 +256,7 @@ func StringRangeFromYMD(edtf_str string) (*StringRange, error) {
 	end_mm := start_mm
 	end_dd := start_dd
 
-	// fmt.Println("PRECISION 0", edtf_str, precision)
+	fmt.Println("PRECISION 0", edtf_str, precision)
 
 	if !strings.HasSuffix(yyyy, "X") {
 
@@ -350,32 +350,37 @@ func StringRangeFromYMD(edtf_str string) (*StringRange, error) {
 
 	}
 
-	// fmt.Println("PRECISION 1", edtf_str, precision)
+	fmt.Println("PRECISION 1", edtf_str, precision)
 
 	if !strings.HasSuffix(mm, "X") {
 
-		if mm != "" {
+		if mm != "" && precision == edtf.NONE {
 			precision = edtf.NONE
 			precision.AddFlag(edtf.MONTH)
 		}
 
 	} else {
+
 		// this does not account for 1985-24, etc.
 
 		if strings.HasPrefix(mm, "X") {
 			start_mm = "01"
 			end_mm = "12"
+
 		} else {
 			start_mm = "10"
 			end_mm = "12"
+
+			precision = edtf.NONE
+			precision.AddFlag(edtf.MONTH)
 		}
 	}
 
-	// fmt.Println("PRECISION 2", edtf_str, precision)
+	fmt.Println("PRECISION 2", edtf_str, precision)
 
 	if !strings.HasSuffix(dd, "X") {
 
-		if dd != "" {
+		if dd != "" && precision == edtf.NONE {
 			precision = edtf.NONE
 			precision.AddFlag(edtf.DAY)
 		}
@@ -400,7 +405,7 @@ func StringRangeFromYMD(edtf_str string) (*StringRange, error) {
 		}
 	}
 
-	// fmt.Println("PRECISION 3", edtf_str, precision)
+	fmt.Println("PRECISION 3", edtf_str, precision)
 
 	if start_mm == "" {
 		start_mm = "01"
