@@ -32,11 +32,11 @@ const MAX_YEARS int = 9999 // This is a Golang thing
 
 type EDTFDate struct {
 	// Span *DateSpan `json:"span"`
-	Start *DateRange `json:"start"`
-	End   *DateRange `json:"end"`
-	EDTF  string     `json:"edtf"`
-	Level int        `json:"level"`
-	Label string     `json:"label"`
+	Start   *DateRange `json:"start"`
+	End     *DateRange `json:"end"`
+	EDTF    string     `json:"edtf"`
+	Level   int        `json:"level"`
+	Feature string     `json:"feature"`
 }
 
 func (d *EDTFDate) Lower() *time.Time {
@@ -67,16 +67,15 @@ func (r *DateRange) String() string {
 }
 
 type Date struct {
-	Time *time.Time `json:"time,omitempty"`
-	YMD  *YMD       `json:"ymd"`
-	// HMS string `json:"hms,omitempty"`
-	Uncertain   Precision `json:"uncertain,omitempty"`
-	Approximate Precision `json:"approximate,omitempty"`
-	Unspecified Precision `json:"unspecified,omitempty"`
-	Precision   Precision `json:"precision,omitempty"`
-	Open        bool      `json:"open,omitempty"`
-	Unknown     bool      `json:"unknown,omitempty"`
-	Inclusivity Precision `json:"inclusivity,omitempty"`
+	Time        *time.Time `json:"time,omitempty"`
+	YMD         *YMD       `json:"ymd"`
+	Uncertain   Precision  `json:"uncertain,omitempty"`
+	Approximate Precision  `json:"approximate,omitempty"`
+	Unspecified Precision  `json:"unspecified,omitempty"`
+	Precision   Precision  `json:"precision,omitempty"`
+	Open        bool       `json:"open,omitempty"`
+	Unknown     bool       `json:"unknown,omitempty"`
+	Inclusivity Precision  `json:"inclusivity,omitempty"`
 }
 
 func (d *Date) String() string {

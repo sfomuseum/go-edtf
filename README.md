@@ -28,6 +28,8 @@ The following is taken from the [EDTF website](https://www.loc.gov/standards/dat
 
 ### Date span
 
+The word `span` is defined as:
+
 ```
 The full extent of something from end to end; the amount of space that something covers:
 ```
@@ -36,6 +38,8 @@ An `edtf.EDTFDate` instance encompasses a date span in the form of `Start` and `
 
 ### Date range
 
+The word `range` is defined as:
+
 ```
 The area of variation between upper and lower limits on a particular scale
 ```
@@ -43,6 +47,33 @@ The area of variation between upper and lower limits on a particular scale
 An `edtf.DateRange` instance encompasses upper and lower dates (for an EDTF string) in the form of `Lower` and `Upper` properties which are themselves `edtf.Date` instances.
 
 ### Date
+
+_To be written_
+
+## Features
+
+The following EDTF features are not implemented yet:
+
+### Level 1
+
+_To be written_
+
+### Level 2
+
+_To be written_
+
+## Example
+
+_To be written_
+
+## Tools
+
+```
+$> make cli
+go build -mod vendor -o bin/parse cmd/parse/main.go
+```
+
+### parse
 
 _To be written_
 
