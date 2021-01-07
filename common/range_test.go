@@ -1,11 +1,10 @@
 package common
 
 import (
-// "testing"
+	"testing"
 )
 
-/*
-func TestDateRangeWithString(t *testing.T) {
+func TestStringRangeWithString(t *testing.T) {
 
 	valid := []string{
 		"1984-05-31",
@@ -26,43 +25,28 @@ func TestDateRangeWithString(t *testing.T) {
 
 	for _, ymd := range valid {
 
-		_, err := DateRangeWithString(ymd)
+		t.Logf("StringRangeFromYMD '%s'", ymd)
+
+		_, err := StringRangeFromYMD(ymd)
 
 		if err != nil {
-			t.Fatalf("Failed to parse %s, %v", ymd, err)
+			t.Logf("Failed to parse %s, %v", ymd, err)
+			t.Fail()
+			continue
 		}
 	}
 
 	for _, ymd := range invalid {
 
-		_, err := DateRangeWithString(ymd)
+		t.Logf("StringRangeFromYMD (false) '%s'", ymd)
+
+		_, err := StringRangeFromYMD(ymd)
 
 		if err == nil {
-			t.Fatalf("False positive parsing %s, %v", ymd, err)
+			t.Logf("False positive parsing %s, %v", ymd, err)
+			t.Fail()
+			continue
 		}
 	}
 
 }
-
-func TestDateRangeWithYMDString(t *testing.T) {
-
-	valid := [][]string{
-		[]string{"2020", "12", "28"},
-		[]string{"2020", "02", ""}, // ensure 29 days
-		[]string{"2019", "02", ""}, // ensure 28 days
-		[]string{"1900", "", ""},
-		[]string{"1450", "03", ""},
-		[]string{"-1900", "05", ""},
-		[]string{"-1972", "03", "19"},
-	}
-
-	for _, ymd := range valid {
-
-		_, err := DateRangeWithYMDString(ymd[0], ymd[1], ymd[2])
-
-		if err != nil {
-			t.Fatalf("Failed to parse %s, %v", ymd, err)
-		}
-	}
-}
-*/

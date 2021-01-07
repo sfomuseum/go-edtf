@@ -16,7 +16,7 @@ func TestDaysInMonth(t *testing.T) {
 	for str_ym, expected_days := range tests {
 
 		t.Logf("DaysInMonthWithString '%s'", str_ym)
-			
+
 		days, err := DaysInMonthWithString(str_ym)
 
 		if err != nil {
