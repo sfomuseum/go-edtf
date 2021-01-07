@@ -24,9 +24,9 @@ The following is taken from the [EDTF website](https://www.loc.gov/standards/dat
 
 > EDTF was developed over the course of several years by a community of interested parties, and a draft specification was published in 2012. The draft specification is no longer publicly, readily available, because its availability has caused confusion with the official version.
 
-## Nomenclature
+## Nomenclature and Type Definitions
 
-### Date span
+### Date Spans (or `edtf.EDTFDate`)
 
 The word `span` is defined as:
 
@@ -34,9 +34,19 @@ The word `span` is defined as:
 The full extent of something from end to end; the amount of space that something covers:
 ```
 
-An `edtf.EDTFDate` instance encompasses a date span in the form of `Start` and `End` properties which are themselves `edtf.DateRange` instances.
+An `edtf.EDTFDate` instance is a struct that represents a date span in the form of `Start` and `End` properties which are themselves `edtf.DateRange` instances. It also contains properties denoting the EDTF feature and level associated with EDTF string used to create the instance.
 
-### Date range
+```
+type EDTFDate struct {
+	Start   *DateRange `json:"start"`
+	End     *DateRange `json:"end"`
+	EDTF    string     `json:"edtf"`
+	Level   int        `json:"level"`
+	Feature string     `json:"feature"`
+}
+```
+
+### Date ranges (or `edtf.DateRange`)
 
 The word `range` is defined as:
 
@@ -44,23 +54,101 @@ The word `range` is defined as:
 The area of variation between upper and lower limits on a particular scale
 ```
 
-An `edtf.DateRange` instance encompasses upper and lower dates (for an EDTF string) in the form of `Lower` and `Upper` properties which are themselves `edtf.Date` instances.
+A `edtf.DateRange` instance encompasses upper and lower dates (for an EDTF string). It is a struct with `Lower` and `Upper` properties which are themselves `edtf.Date` instances.
 
-### Date
+```   		    	     
+type DateRange struct {
+	EDTF  string `json:"edtf"`
+	Lower *Date  `json:"lower"`
+	Upper *Date  `json:"upper"`
+}
+```
 
-_To be written_
+### Date (or `edtf.Date`)
+
+A `edtf.Date` instance is the upper or lower end of a date range. It is a struct that contains atomic date and time information as well as a number of flags denoting precision and other granularities defined in the EDTF specification.
+
+```
+type Date struct {
+	Time        *time.Time `json:"time,omitempty"`
+	YMD         *YMD       `json:"ymd"`
+	Uncertain   Precision  `json:"uncertain,omitempty"`
+	Approximate Precision  `json:"approximate,omitempty"`
+	Unspecified Precision  `json:"unspecified,omitempty"`
+	Precision   Precision  `json:"precision,omitempty"`
+	Open        bool       `json:"open,omitempty"`
+	Unknown     bool       `json:"unknown,omitempty"`
+	Inclusivity Precision  `json:"inclusivity,omitempty"`
+}
+```
+
+### Time (or `time.Time`)
+
+"Time" is considered to be a valid Go language [time.Time](https://golang.org/pkg/time/) instance. Because the Go language imposes limits on the minimum and maximum date it can represent (-9999 and 9999 respectively) this element _may_ be `nil`.
+
+### YMD (or `edtf.YMD`)
+
+A `edtf.YMD instance a struct containing numeric year, month and day properties. It is designed to supplement "time" elements or, in cases where a "time" element is not possible to replace it. 
+
+```
+type YMD struct {
+	Year  int `json:"year"`
+	Month int `json:"month"`
+	Day   int `json:"day"`
+}
+
+### Precision (or `edtf.Precision`)
+
+"Precision" a 32-bit integer (as well as a Go language `Precision` instance with its own method) that uses bitsets to represent granularity.
+
+The following named granularities are defined as constants:
+
+| Name | Value | Notes |
+| --- | --- | --- |
+| NONE | 0 | |
+| ALL | 2 | |
+| ANY | 4 | |
+| DAY | 8 | |
+| WEEK | 16 |
+| MONTH | 32 | |
+| YEAR | 64 | | 
+| DECADE | 128 | |
+| CENTURY | 256 | | 
+| MILLENIUM | 512 | |
+
 
 ## Features
 
-The following EDTF features are not implemented yet:
+### Level 0
+
+| Name | Implementation | Tests | Notes |
+| --- | --- | --- | --- |
+| [Date](https://www.loc.gov/standards/datetime/) | [yes](level0/date.go) | [yes](level0/date_test.go) | |
+| [Date and Time](https://www.loc.gov/standards/datetime/) | [yes](level0/date_and_time.go) | [yes](level0/date_and_time_test.go) | |
+| [Time Interval](https://www.loc.gov/standards/datetime/) | [yes](level0/time_interval.go) | [yes](level0/time_interval_test.go) | |
 
 ### Level 1
 
-_To be written_
+| Name | Implementation | Tests | Notes |
+| --- | --- | --- | --- |
+| [Letter-prefixed calendar year](https://www.loc.gov/standards/datetime/) | [yes](level1/letter_prefixed_calendar_year.go) | [yes](level1/letter_prefixed_calendar_year_test.go) | Calendar years greater (or less) than 9999 are not supported yet. |
+| [Season](https://www.loc.gov/standards/datetime/) | [yes](level1/season.go) | [yes](level1/season_test.go) | |
+| [Qualification of a date (complete)](https://www.loc.gov/standards/datetime/) | [yes](level1/qualified_date.go) | [yes](level1/qualified_date_test.go) | |
+| [Unspecified digit(s) from the right](https://www.loc.gov/standards/datetime/) | [yes](level1/unspecified_digits.go) | [yes](level1/unspecified_digits_test.go) | |
+| [Extended Interval (L1)](https://www.loc.gov/standards/datetime/) | [yes](level1/extended_interval.go) | [yes](level1/extended_interval_test.go) | |
+| [Negative calendar year](https://www.loc.gov/standards/datetime/) | [yes](level1/negative_calendar_year.go) | [yes](level1/negative_calendar_year_test.go) | |
 
 ### Level 2
 
-_To be written_
+| Name | Implementation | Tests | Notes |
+| --- | --- | --- | --- |
+| [Exponential year](https://www.loc.gov/standards/datetime/) | [yes](level2/exponential_year.go) | [yes](level2/exponential_year_test.go) | Calendar years greater (or less) than 9999 are not supported yet. |
+| [Significant digits](https://www.loc.gov/standards/datetime/) | [yes](level2/significant_digits.go) | [yes](level2/significant_digits_test.go) | |
+| [Sub-year groupings](https://www.loc.gov/standards/datetime/) | [yes](level2/sub_year_grouping.go) | [yes](level2/sub_year_grouping_test.go) | Compound phrases, like "second quarter of 2001" are not supported yet. |
+| [Set representation](https://www.loc.gov/standards/datetime/) | [yes](level2/set_representation.go) | [yes](level2/set_representation_test.go) | |
+| [Qualification](https://www.loc.gov/standards/datetime/) | [yes](level2/qualification.go) | [yes](level2/qualification_test.go) | |
+| [Unspecified Digit](https://www.loc.gov/standards/datetime/) | [yes](level2/unspecified_digit.go) | [yes](level2/unspecified_digit_test.go) | Years with a leading unspecified digit, for example "X999", are not supported yet |
+| [Interval](https://www.loc.gov/standards/datetime/) | [yes](level2/interval.go) | [yes](level2/interval.go) | |
 
 ## Example
 

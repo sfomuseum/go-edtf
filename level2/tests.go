@@ -24,7 +24,6 @@ var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests
 			EndUpperTimeRFC3339:   "1999-12-31T23:59:59Z",
 		}),
 		"Y171010000S3": tests.NewTestResult(tests.TestResultOptions{}),
-		// -2000/-2999
 		"Y-20E2S3": tests.NewTestResult(tests.TestResultOptions{
 			StartLowerTimeRFC3339: "-2999-01-01T00:00:00Z",
 			StartUpperTimeRFC3339: "-2999-12-31T23:59:59Z",

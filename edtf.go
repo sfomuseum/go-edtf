@@ -31,7 +31,6 @@ const (
 const MAX_YEARS int = 9999 // This is a Golang thing
 
 type EDTFDate struct {
-	// Span *DateSpan `json:"span"`
 	Start   *DateRange `json:"start"`
 	End     *DateRange `json:"end"`
 	EDTF    string     `json:"edtf"`
