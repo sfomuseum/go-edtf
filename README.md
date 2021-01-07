@@ -96,6 +96,7 @@ type YMD struct {
 	Month int `json:"month"`
 	Day   int `json:"day"`
 }
+```
 
 ### Precision (or `edtf.Precision`)
 
