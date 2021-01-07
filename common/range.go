@@ -88,7 +88,7 @@ func StringRangeFromYMD(edtf_str string) (*StringRange, error) {
 		precision.AddFlag(edtf.YEAR)
 	}
 
-	fmt.Println("PRECISION -", edtf_str, precision)
+	// fmt.Println("PRECISION -", edtf_str, precision)
 
 	var yyyy_q *Qualifier
 	var mm_q *Qualifier
@@ -256,7 +256,7 @@ func StringRangeFromYMD(edtf_str string) (*StringRange, error) {
 	end_mm := start_mm
 	end_dd := start_dd
 
-	fmt.Println("PRECISION 0", edtf_str, precision)
+	// fmt.Println("PRECISION 0", edtf_str, precision)
 
 	if !strings.HasSuffix(yyyy, "X") {
 
@@ -350,7 +350,7 @@ func StringRangeFromYMD(edtf_str string) (*StringRange, error) {
 
 	}
 
-	fmt.Println("PRECISION 1", edtf_str, precision)
+	// fmt.Println("PRECISION 1", edtf_str, precision)
 
 	if !strings.HasSuffix(mm, "X") {
 
@@ -376,7 +376,7 @@ func StringRangeFromYMD(edtf_str string) (*StringRange, error) {
 		}
 	}
 
-	fmt.Println("PRECISION 2", edtf_str, precision)
+	// fmt.Println("PRECISION 2", edtf_str, precision)
 
 	if !strings.HasSuffix(dd, "X") {
 
@@ -405,7 +405,20 @@ func StringRangeFromYMD(edtf_str string) (*StringRange, error) {
 		}
 	}
 
-	fmt.Println("PRECISION 3", edtf_str, precision)
+	// the fact that I need to do this tells me that all of the precision
+	// logic around significant digits needs to be refactored but this will
+	// do for now... (20210106/thisisaaronland)
+
+	if dd == "XX" && mm == "XX" {
+		precision = edtf.NONE
+		precision.AddFlag(edtf.YEAR)
+	} else if dd == "XX" {
+		precision = edtf.NONE
+		precision.AddFlag(edtf.MONTH)
+	} else {
+	}
+
+	// fmt.Println("PRECISION 3", edtf_str, precision)
 
 	if start_mm == "" {
 		start_mm = "01"
