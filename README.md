@@ -10,10 +10,6 @@ A Go package for parsing Extended DateTime Format (EDTF) date strings. It is com
 * [Tools](#tools)
 * [Tests](#tests)
 
-## Important
-
-This is almost ready to bless with an initial release but things might still change before that happens.
-
 ## Background
 
 The following is taken from the [EDTF website](https://www.loc.gov/standards/datetime/background.html):
@@ -194,6 +190,8 @@ _Error handling removed for the sake of brevity._
 
 ## Tools
 
+To build binary versions of these tools run the `cli` Makefile target. For example:
+
 ```
 $> make cli
 go build -mod vendor -o bin/parse cmd/parse/main.go
@@ -201,7 +199,120 @@ go build -mod vendor -o bin/parse cmd/parse/main.go
 
 ### parse
 
-_To be written_
+Parse one or more EDTF strings and return a list of JSON-encoded `edtf.EDTFDate` objects.
+
+```
+$> ./bin/parse -h
+Parse one or more EDTF strings and return a list of JSON-encoded edtf.EDTFDate objects.
+Usage:
+	 ./bin/parse edtf_string(N) edtf_string(N)
+```
+
+For example:
+
+```
+$> ./bin/parse 2004-06-XX/2004-07-03 '{1667,1668,1670..1672}' | jq
+[
+  {
+    "start": {
+      "edtf": "2004-06-XX",
+      "lower": {
+        "time": "2004-06-01T00:00:00Z",
+        "ymd": {
+          "year": 2004,
+          "month": 6,
+          "day": 1
+        },
+        "precision": 32
+      },
+      "upper": {
+        "time": "2004-06-30T23:59:59Z",
+        "ymd": {
+          "year": 2004,
+          "month": 6,
+          "day": 30
+        },
+        "precision": 32
+      }
+    },
+    "end": {
+      "edtf": "2004-07-03",
+      "lower": {
+        "time": "2004-07-03T00:00:00Z",
+        "ymd": {
+          "year": 2004,
+          "month": 7,
+          "day": 3
+        },
+        "precision": 64
+      },
+      "upper": {
+        "time": "2004-07-03T23:59:59Z",
+        "ymd": {
+          "year": 2004,
+          "month": 7,
+          "day": 3
+        },
+        "precision": 64
+      }
+    },
+    "edtf": "2004-06-XX/2004-07-03",
+    "level": 2,
+    "feature": "interval"
+  },
+  {
+    "start": {
+      "edtf": "1667",
+      "lower": {
+        "time": "1667-01-01T00:00:00Z",
+        "ymd": {
+          "year": 1667,
+          "month": 1,
+          "day": 1
+        },
+        "precision": 64,
+        "inclusivity": 2
+      },
+      "upper": {
+        "time": "1667-12-31T23:59:59Z",
+        "ymd": {
+          "year": 1667,
+          "month": 12,
+          "day": 31
+        },
+        "precision": 64,
+        "inclusivity": 2
+      }
+    },
+    "end": {
+      "edtf": "1672",
+      "lower": {
+        "time": "1672-01-01T00:00:00Z",
+        "ymd": {
+          "year": 1672,
+          "month": 1,
+          "day": 1
+        },
+        "precision": 64,
+        "inclusivity": 2
+      },
+      "upper": {
+        "time": "1672-12-31T23:59:59Z",
+        "ymd": {
+          "year": 1672,
+          "month": 12,
+          "day": 31
+        },
+        "precision": 64,
+        "inclusivity": 2
+      }
+    },
+    "edtf": "{1667,1668,1670..1672}",
+    "level": 2,
+    "feature": "set representations"
+  }
+]
+```
 
 ## Tests
 
@@ -210,6 +321,10 @@ Tests are defined and handled in (3) places:
 * In every `level(N)` package there are individual `_test.go` files for each feature.
 * In every `level(N)` package there is a `tests.go` file that defines input values and expected response values defined as `tests.TestResult` instances.
 * The `tests.TestResult` instance, its options and its methods are defined in the `tests` package. It implements a `TestDate` method that most of the individual `_test.go` files invoke.
+
+## Reporting Bugs and Issues
+
+There might still be bugs, implementation gotchas or other issues. If you encounter any of these [please report them here](https://github.com/sfomuseum/go-edtf/issues).
 
 ## See also
 
