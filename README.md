@@ -5,10 +5,11 @@ A Go package for parsing Extended DateTime Format (EDTF) date strings. It is com
 * [Background](#background)
 * [Features](#features)
 * [Nomenclature and Type Definitions](#nomenclature-and-type-definitions)
-* (Documentation](#documentation)
+* [Documentation](#documentation)
 * [Example](#example)
 * [Tools](#tools)
 * [Tests](#tests)
+* [Reporting Bugs and Issues](#reporting-bugs-and-issues)
 
 ## Background
 
