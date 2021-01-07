@@ -1,12 +1,15 @@
 # go-edtf
 
-A Go package for parsing Extended DateTime Format (EDTF) date strings.
+A Go package for parsing Extended DateTime Format (EDTF) date strings. It is compliant with Level 0, Level 1 and Level 2 of the EDTF specification (2019).
+
+* [Background](#background)
+* [Features](#features)
+* [Nomenclature and Type Definitions](#nomenclature-and-type-definitions)
+* [Example](#example)
+* [Tools](#tools)
+* [Tests](#tests)
 
 ## Important
-
-This is a work in progress and documentation is incomplete.
-
-Code to parse Level 0, Level 1 and Level 2 strings has been implemented including tests.
 
 This is almost ready to bless with an initial release but things might still change before that happens.
 
@@ -23,6 +26,39 @@ The following is taken from the [EDTF website](https://www.loc.gov/standards/dat
 > EDTF functionality has now been integrated into ISO 8601-2019, the latest revision of ISO 8601, published in March 2019.
 
 > EDTF was developed over the course of several years by a community of interested parties, and a draft specification was published in 2012. The draft specification is no longer publicly, readily available, because its availability has caused confusion with the official version.
+
+## Features
+
+### Level 0
+
+| Name | Implementation | Tests | Notes |
+| --- | --- | --- | --- |
+| [Date](https://www.loc.gov/standards/datetime/) | [yes](level0/date.go) | [yes](level0/date_test.go) | |
+| [Date and Time](https://www.loc.gov/standards/datetime/) | [yes](level0/date_and_time.go) | [yes](level0/date_and_time_test.go) | |
+| [Time Interval](https://www.loc.gov/standards/datetime/) | [yes](level0/time_interval.go) | [yes](level0/time_interval_test.go) | |
+
+### Level 1
+
+| Name | Implementation | Tests | Notes |
+| --- | --- | --- | --- |
+| [Letter-prefixed calendar year](https://www.loc.gov/standards/datetime/) | [yes](level1/letter_prefixed_calendar_year.go) | [yes](level1/letter_prefixed_calendar_year_test.go) | Calendar years greater (or less) than 9999 are not supported yet. |
+| [Season](https://www.loc.gov/standards/datetime/) | [yes](level1/season.go) | [yes](level1/season_test.go) | |
+| [Qualification of a date (complete)](https://www.loc.gov/standards/datetime/) | [yes](level1/qualified_date.go) | [yes](level1/qualified_date_test.go) | |
+| [Unspecified digit(s) from the right](https://www.loc.gov/standards/datetime/) | [yes](level1/unspecified_digits.go) | [yes](level1/unspecified_digits_test.go) | |
+| [Extended Interval (L1)](https://www.loc.gov/standards/datetime/) | [yes](level1/extended_interval.go) | [yes](level1/extended_interval_test.go) | |
+| [Negative calendar year](https://www.loc.gov/standards/datetime/) | [yes](level1/negative_calendar_year.go) | [yes](level1/negative_calendar_year_test.go) | |
+
+### Level 2
+
+| Name | Implementation | Tests | Notes |
+| --- | --- | --- | --- |
+| [Exponential year](https://www.loc.gov/standards/datetime/) | [yes](level2/exponential_year.go) | [yes](level2/exponential_year_test.go) | Calendar years greater (or less) than 9999 are not supported yet. |
+| [Significant digits](https://www.loc.gov/standards/datetime/) | [yes](level2/significant_digits.go) | [yes](level2/significant_digits_test.go) | |
+| [Sub-year groupings](https://www.loc.gov/standards/datetime/) | [yes](level2/sub_year_grouping.go) | [yes](level2/sub_year_grouping_test.go) | Compound phrases, like "second quarter of 2001" are not supported yet. |
+| [Set representation](https://www.loc.gov/standards/datetime/) | [yes](level2/set_representation.go) | [yes](level2/set_representation_test.go) | |
+| [Qualification](https://www.loc.gov/standards/datetime/) | [yes](level2/qualification.go) | [yes](level2/qualification_test.go) | |
+| [Unspecified Digit](https://www.loc.gov/standards/datetime/) | [yes](level2/unspecified_digit.go) | [yes](level2/unspecified_digit_test.go) | Years with a leading unspecified digit, for example "X999", are not supported yet |
+| [Interval](https://www.loc.gov/standards/datetime/) | [yes](level2/interval.go) | [yes](level2/interval.go) | |
 
 ## Nomenclature and Type Definitions
 
@@ -116,40 +152,6 @@ The following named granularities are defined as constants:
 | DECADE | 128 | |
 | CENTURY | 256 | | 
 | MILLENIUM | 512 | |
-
-
-## Features
-
-### Level 0
-
-| Name | Implementation | Tests | Notes |
-| --- | --- | --- | --- |
-| [Date](https://www.loc.gov/standards/datetime/) | [yes](level0/date.go) | [yes](level0/date_test.go) | |
-| [Date and Time](https://www.loc.gov/standards/datetime/) | [yes](level0/date_and_time.go) | [yes](level0/date_and_time_test.go) | |
-| [Time Interval](https://www.loc.gov/standards/datetime/) | [yes](level0/time_interval.go) | [yes](level0/time_interval_test.go) | |
-
-### Level 1
-
-| Name | Implementation | Tests | Notes |
-| --- | --- | --- | --- |
-| [Letter-prefixed calendar year](https://www.loc.gov/standards/datetime/) | [yes](level1/letter_prefixed_calendar_year.go) | [yes](level1/letter_prefixed_calendar_year_test.go) | Calendar years greater (or less) than 9999 are not supported yet. |
-| [Season](https://www.loc.gov/standards/datetime/) | [yes](level1/season.go) | [yes](level1/season_test.go) | |
-| [Qualification of a date (complete)](https://www.loc.gov/standards/datetime/) | [yes](level1/qualified_date.go) | [yes](level1/qualified_date_test.go) | |
-| [Unspecified digit(s) from the right](https://www.loc.gov/standards/datetime/) | [yes](level1/unspecified_digits.go) | [yes](level1/unspecified_digits_test.go) | |
-| [Extended Interval (L1)](https://www.loc.gov/standards/datetime/) | [yes](level1/extended_interval.go) | [yes](level1/extended_interval_test.go) | |
-| [Negative calendar year](https://www.loc.gov/standards/datetime/) | [yes](level1/negative_calendar_year.go) | [yes](level1/negative_calendar_year_test.go) | |
-
-### Level 2
-
-| Name | Implementation | Tests | Notes |
-| --- | --- | --- | --- |
-| [Exponential year](https://www.loc.gov/standards/datetime/) | [yes](level2/exponential_year.go) | [yes](level2/exponential_year_test.go) | Calendar years greater (or less) than 9999 are not supported yet. |
-| [Significant digits](https://www.loc.gov/standards/datetime/) | [yes](level2/significant_digits.go) | [yes](level2/significant_digits_test.go) | |
-| [Sub-year groupings](https://www.loc.gov/standards/datetime/) | [yes](level2/sub_year_grouping.go) | [yes](level2/sub_year_grouping_test.go) | Compound phrases, like "second quarter of 2001" are not supported yet. |
-| [Set representation](https://www.loc.gov/standards/datetime/) | [yes](level2/set_representation.go) | [yes](level2/set_representation_test.go) | |
-| [Qualification](https://www.loc.gov/standards/datetime/) | [yes](level2/qualification.go) | [yes](level2/qualification_test.go) | |
-| [Unspecified Digit](https://www.loc.gov/standards/datetime/) | [yes](level2/unspecified_digit.go) | [yes](level2/unspecified_digit_test.go) | Years with a leading unspecified digit, for example "X999", are not supported yet |
-| [Interval](https://www.loc.gov/standards/datetime/) | [yes](level2/interval.go) | [yes](level2/interval.go) | |
 
 ## Example
 
