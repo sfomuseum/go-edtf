@@ -5,6 +5,7 @@ A Go package for parsing Extended DateTime Format (EDTF) date strings. It is com
 * [Background](#background)
 * [Features](#features)
 * [Nomenclature and Type Definitions](#nomenclature-and-type-definitions)
+* (Documentation](#documentation)
 * [Example](#example)
 * [Tools](#tools)
 * [Tests](#tests)
@@ -153,9 +154,43 @@ The following named granularities are defined as constants:
 | CENTURY | 256 | | 
 | MILLENIUM | 512 | |
 
+## Documentation
+
+Proper Go language documentation [is incomplete](https://github.com/sfomuseum/go-edtf/issues/12) but can be viewed in its current state at: https://godoc.org/github.com/sfomuseum/go-edtf
+
 ## Example
 
-_To be written_
+```
+package main
+
+import (
+	"flag"
+	"github.com/sfomuseum/go-edtf/parser"
+	"log"
+)
+
+func main() {
+
+	flag.Parse()
+
+	for _, raw := range flag.Args() {
+
+		if !parser.IsValid(raw){
+			continue
+		}
+
+		level, feature, _ := parser.Matches(raw)
+
+		log.Printf("%s is a Level %d (%s) string\n", raw, level, feature)
+		
+		d, _ := parser.ParseString(raw)
+
+		log.Printf("%s span %v to %v\n", d.Lower(), d.Upper())
+	}
+}
+```
+
+_Error handling removed for the sake of brevity._
 
 ## Tools
 

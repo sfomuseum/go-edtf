@@ -46,35 +46,35 @@ func Matches(edtf_str string) (int, string, error) {
 
 	if level0.IsLevel0(edtf_str) {
 
-		label, err := level0.Matches(edtf_str)
+		feature, err := level0.Matches(edtf_str)
 
 		if err != nil {
 			return -1, "", err
 		}
 
-		return level0.LEVEL, label, nil
+		return level0.LEVEL, feature, nil
 	}
 
 	if level1.IsLevel1(edtf_str) {
 
-		label, err := level1.Matches(edtf_str)
+		feature, err := level1.Matches(edtf_str)
 
 		if err != nil {
 			return -1, "", err
 		}
 
-		return level1.LEVEL, label, nil
+		return level1.LEVEL, feature, nil
 	}
 
 	if level2.IsLevel2(edtf_str) {
 
-		label, err := level2.Matches(edtf_str)
+		feature, err := level2.Matches(edtf_str)
 
 		if err != nil {
 			return -1, "", err
 		}
 
-		return level2.LEVEL, label, nil
+		return level2.LEVEL, feature, nil
 	}
 
 	return -1, "", errors.New("Invalid or unsupported EDTF string")
