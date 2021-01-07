@@ -10,10 +10,12 @@ func TestUnspecifiedDigit(t *testing.T) {
 	valid, ok := Tests[UNSPECIFIED_DIGIT]
 
 	if !ok {
-		t.Fatalf("Failed to load test strings")
+		t.Logf("Failed to load test strings")
 	}
 
 	for input, tr := range valid {
+
+		t.Logf("ParseUnspecifiedDigit '%s'", input)
 
 		d, err := ParseUnspecifiedDigit(input)
 
@@ -22,7 +24,9 @@ func TestUnspecifiedDigit(t *testing.T) {
 				t.Logf("Skipping '%s', %v", input, err)
 				continue
 			} else {
-				t.Fatalf("Failed to parse '%s', %v", input, err)
+				t.Logf("Failed to parse '%s', %v", input, err)
+				t.Fail()
+				continue
 			}
 		}
 
@@ -31,7 +35,9 @@ func TestUnspecifiedDigit(t *testing.T) {
 			err := tr.TestDate(d)
 
 			if err != nil {
-				t.Fatalf("Results failed tests '%s', %v", input, err)
+				t.Logf("Results failed tests '%s', %v", input, err)
+				t.Fail()
+				continue
 			}
 		}
 

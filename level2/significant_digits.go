@@ -134,5 +134,4 @@ func ParseSignificantDigits(edtf_str string) (*edtf.EDTFDate, error) {
 	}
 
 	return d, nil
-
 }

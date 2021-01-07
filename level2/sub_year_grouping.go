@@ -51,27 +51,6 @@ func ParseSubYearGroupings(edtf_str string) (*edtf.EDTFDate, error) {
 
 	*/
 
-	/*
-		if !re.SubYearGrouping.MatchString(edtf_str) {
-			return nil, edtf.Invalid(SUB_YEAR_GROUPINGS, edtf_str)
-		}
-
-		sp, err := common.DateSpanFromEDTF(edtf_str)
-
-		if err != nil {
-			return nil, err
-		}
-
-		d := &edtf.EDTFDate{
-			Start: sp.Start,
-			End:   sp.End,
-			EDTF:  edtf_str,
-			Level: LEVEL,
-		}
-
-		return d, nil
-	*/
-
 	m := re.SubYearGrouping.FindStringSubmatch(edtf_str)
 
 	if len(m) != 3 {
