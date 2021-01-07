@@ -102,10 +102,11 @@ func ParseExtendedIntervalStart(edtf_str string) (*edtf.EDTFDate, error) {
 	}
 
 	d := &edtf.EDTFDate{
-		Start: sp.Start,
-		End:   sp.End,
-		EDTF:  edtf_str,
-		Level: LEVEL,
+		Start:   sp.Start,
+		End:     sp.End,
+		EDTF:    edtf_str,
+		Level:   LEVEL,
+		Feature: EXTENDED_INTERVAL_START,
 	}
 
 	return d, nil
@@ -129,10 +130,11 @@ func ParseExtendedIntervalEnd(edtf_str string) (*edtf.EDTFDate, error) {
 	}
 
 	d := &edtf.EDTFDate{
-		Start: sp.Start,
-		End:   sp.End,
-		EDTF:  edtf_str,
-		Level: LEVEL,
+		Start:   sp.Start,
+		End:     sp.End,
+		EDTF:    edtf_str,
+		Level:   LEVEL,
+		Feature: EXTENDED_INTERVAL_END,
 	}
 
 	return d, nil

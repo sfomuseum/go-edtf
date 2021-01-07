@@ -38,10 +38,11 @@ func ParseTimeInterval(edtf_str string) (*edtf.EDTFDate, error) {
 	}
 
 	d := &edtf.EDTFDate{
-		Start: sp.Start,
-		End:   sp.End,
-		EDTF:  edtf_str,
-		Level: LEVEL,
+		Start:   sp.Start,
+		End:     sp.End,
+		EDTF:    edtf_str,
+		Level:   LEVEL,
+		Feature: TIME_INTERVAL,
 	}
 
 	return d, nil

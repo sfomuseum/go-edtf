@@ -231,13 +231,12 @@ func ParseSetRepresentations(edtf_str string) (*edtf.EDTFDate, error) {
 		sp.End.Upper.Inclusivity = inclusivity
 	}
 
-	fmt.Println("OKAY", edtf_str, inclusivity)
-
 	d := &edtf.EDTFDate{
-		Start: sp.Start,
-		End:   sp.End,
-		EDTF:  edtf_str,
-		Level: LEVEL,
+		Start:   sp.Start,
+		End:     sp.End,
+		EDTF:    edtf_str,
+		Level:   LEVEL,
+		Feature: SET_REPRESENTATIONS,
 	}
 
 	return d, nil

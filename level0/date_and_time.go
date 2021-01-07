@@ -92,10 +92,11 @@ func ParseDateAndTime(edtf_str string) (*edtf.EDTFDate, error) {
 	}
 
 	d := &edtf.EDTFDate{
-		Start: start,
-		End:   end,
-		EDTF:  edtf_str,
-		Level: LEVEL,
+		Start:   start,
+		End:     end,
+		EDTF:    edtf_str,
+		Level:   LEVEL,
+		Feature: DATE_AND_TIME,
 	}
 
 	return d, nil
