@@ -130,25 +130,77 @@ func StringRangeFromYMD(edtf_str string) (*StringRange, error) {
 		dd_q = q
 	}
 
-	/*
-		fmt.Println(yyyy_q)
-		fmt.Println(mm_q)
-		fmt.Println(dd_q)
-	*/
+	// fmt.Println("YYYY", yyyy_q)
+	// fmt.Println("MM", mm_q)
+	// fmt.Println("DD", dd_q)
 
 	if dd_q != nil && dd_q.Type == "Group" {
-		precision.AddFlag(edtf.YEAR)
-		precision.AddFlag(edtf.MONTH)
-		precision.AddFlag(edtf.DAY)
+
+		// precision.AddFlag(edtf.YEAR)
+		// precision.AddFlag(edtf.MONTH)
+		// precision.AddFlag(edtf.DAY)
+
+		switch dd_q.Value {
+		case edtf.UNCERTAIN:
+			uncertain.AddFlag(edtf.YEAR)
+			uncertain.AddFlag(edtf.MONTH)
+			uncertain.AddFlag(edtf.DAY)
+		case edtf.APPROXIMATE:
+			approximate.AddFlag(edtf.YEAR)
+			approximate.AddFlag(edtf.MONTH)
+			approximate.AddFlag(edtf.DAY)
+		case edtf.UNCERTAIN_AND_APPROXIMATE:
+			uncertain.AddFlag(edtf.YEAR)
+			uncertain.AddFlag(edtf.MONTH)
+			uncertain.AddFlag(edtf.DAY)
+			approximate.AddFlag(edtf.YEAR)
+			approximate.AddFlag(edtf.MONTH)
+			approximate.AddFlag(edtf.DAY)
+		default:
+			// pass
+		}
+
 	}
 
 	if mm_q != nil && mm_q.Type == "Group" {
-		precision.AddFlag(edtf.YEAR)
-		precision.AddFlag(edtf.MONTH)
+
+		// precision.AddFlag(edtf.YEAR)
+		// precision.AddFlag(edtf.MONTH)
+
+		switch mm_q.Value {
+		case edtf.UNCERTAIN:
+			uncertain.AddFlag(edtf.YEAR)
+			uncertain.AddFlag(edtf.MONTH)
+		case edtf.APPROXIMATE:
+			approximate.AddFlag(edtf.YEAR)
+			approximate.AddFlag(edtf.MONTH)
+		case edtf.UNCERTAIN_AND_APPROXIMATE:
+			uncertain.AddFlag(edtf.YEAR)
+			uncertain.AddFlag(edtf.MONTH)
+			approximate.AddFlag(edtf.YEAR)
+			approximate.AddFlag(edtf.MONTH)
+		default:
+			// pass
+		}
+
 	}
 
 	if yyyy_q != nil && yyyy_q.Type == "Group" {
-		precision.AddFlag(edtf.YEAR)
+
+		// precision.AddFlag(edtf.YEAR)
+
+		switch yyyy_q.Value {
+		case edtf.UNCERTAIN:
+			uncertain.AddFlag(edtf.YEAR)
+		case edtf.APPROXIMATE:
+			approximate.AddFlag(edtf.YEAR)
+		case edtf.UNCERTAIN_AND_APPROXIMATE:
+			uncertain.AddFlag(edtf.YEAR)
+			approximate.AddFlag(edtf.YEAR)
+		default:
+			// pass
+		}
+
 	}
 
 	if yyyy_q != nil && yyyy_q.Type == "Individual" {
@@ -456,7 +508,7 @@ func parseYMDComponent(date string) (string, *Qualifier, error) {
 		if m[2] != "" {
 
 			q = &Qualifier{
-				Type:  "Individual",
+				Type:  "Group",
 				Value: m[2],
 			}
 		}
