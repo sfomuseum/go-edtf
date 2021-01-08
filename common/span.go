@@ -181,7 +181,6 @@ func dateSpanFromYMD(edtf_str string) (*edtf.DateSpan, error) {
 	//
 
 	start_lower := &edtf.Date{
-		Time:        start_lower_t,
 		YMD:         start_ymd,
 		Uncertain:   str_range.Uncertain,
 		Approximate: str_range.Approximate,
@@ -189,7 +188,6 @@ func dateSpanFromYMD(edtf_str string) (*edtf.DateSpan, error) {
 	}
 
 	start_upper := &edtf.Date{
-		Time:        start_upper_t,
 		YMD:         start_ymd,
 		Uncertain:   str_range.Uncertain,
 		Approximate: str_range.Approximate,
@@ -197,7 +195,6 @@ func dateSpanFromYMD(edtf_str string) (*edtf.DateSpan, error) {
 	}
 
 	end_lower := &edtf.Date{
-		Time:        end_lower_t,
 		YMD:         end_ymd,
 		Uncertain:   str_range.Uncertain,
 		Approximate: str_range.Approximate,
@@ -205,11 +202,26 @@ func dateSpanFromYMD(edtf_str string) (*edtf.DateSpan, error) {
 	}
 
 	end_upper := &edtf.Date{
-		Time:        end_upper_t,
 		YMD:         end_ymd,
 		Uncertain:   str_range.Uncertain,
 		Approximate: str_range.Approximate,
 		Precision:   str_range.Precision,
+	}
+
+	if start_lower_t != nil {
+		start_lower.SetTime(start_lower_t)
+	}
+
+	if start_upper_t != nil {
+		start_upper.SetTime(start_upper_t)
+	}
+
+	if end_lower_t != nil {
+		end_lower.SetTime(end_lower_t)
+	}
+
+	if end_upper_t != nil {
+		end_upper.SetTime(end_upper_t)
 	}
 
 	start_range := &edtf.DateRange{

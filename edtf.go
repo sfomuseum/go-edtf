@@ -2,6 +2,8 @@ package edtf
 
 import (
 	"fmt"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -39,11 +41,25 @@ type EDTFDate struct {
 }
 
 func (d *EDTFDate) Lower() *time.Time {
-	return d.Start.Lower.Time
+
+	ts := d.Start.Lower.Timestamp
+
+	if ts == nil {
+
+	}
+
+	return ts.Time()
 }
 
 func (d *EDTFDate) Upper() *time.Time {
-	return d.End.Upper.Time
+
+	ts := d.End.Upper.Timestamp
+
+	if ts == nil {
+		return nil
+	}
+
+	return ts.Time()
 }
 
 type DateSpan struct {
@@ -66,7 +82,8 @@ func (r *DateRange) String() string {
 }
 
 type Date struct {
-	Time        *time.Time `json:"time,omitempty"`
+	DateTime    string     `json:"datetime,omitempty"`
+	Timestamp   *Timestamp `json:"timestamp,omitempty"`
 	YMD         *YMD       `json:"ymd"`
 	Uncertain   Precision  `json:"uncertain,omitempty"`
 	Approximate Precision  `json:"approximate,omitempty"`
@@ -77,8 +94,13 @@ type Date struct {
 	Inclusivity Precision  `json:"inclusivity,omitempty"`
 }
 
+func (d *Date) SetTime(t *time.Time) {
+	d.DateTime = t.Format(time.RFC3339)
+	d.Timestamp = NewTimestampWithTime(t)
+}
+
 func (d *Date) String() string {
-	return fmt.Sprintf("[[%T] Time: '%v' YMD: '%v']", d, d.Time, d.YMD)
+	return fmt.Sprintf("[[%T] Time: '%v' YMD: '%v']", d, d.Timestamp, d.YMD)
 }
 
 type YMD struct {
@@ -118,6 +140,42 @@ do for now (20201223/thisisaaronland)
 
 func (d *EDTFDate) String() string {
 	return d.EDTF
+}
+
+type Timestamp struct {
+	timestamp int64
+}
+
+func NewTimestampWithTime(t *time.Time) *Timestamp {
+	return &Timestamp{t.Unix()}
+}
+
+func (ts *Timestamp) Time() *time.Time {
+
+	t := time.Unix(ts.Unix(), 0)
+	return &t
+}
+
+func (ts *Timestamp) Unix() int64 {
+	return ts.timestamp
+}
+
+func (ts *Timestamp) UnmarshalJSON(b []byte) error {
+
+	s := strings.Trim(string(b), `"`)
+	i, err := strconv.ParseInt(s, 10, 64)
+
+	if err != nil {
+		return err
+	}
+
+	*ts = Timestamp{i}
+	return nil
+}
+
+func (ts Timestamp) MarshalJSON() ([]byte, error) {
+	str_ts := strconv.FormatInt(ts.timestamp, 10)
+	return []byte(str_ts), nil
 }
 
 // https://stackoverflow.com/questions/48050522/using-bitsets-in-golang-to-represent-capabilities

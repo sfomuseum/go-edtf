@@ -327,7 +327,7 @@ func (r *TestResult) testRFC3339All(d *edtf.EDTFDate) error {
 
 	if r.options.StartLowerTimeRFC3339 != "" {
 
-		err := r.testRFC3339(r.options.StartLowerTimeRFC3339, d.Start.Lower.Time)
+		err := r.testRFC3339(r.options.StartLowerTimeRFC3339, d.Start.Lower.Timestamp)
 
 		if err != nil {
 			return fmt.Errorf("Failed StartLowerTimeRFC3339 test, %v", err)
@@ -336,7 +336,7 @@ func (r *TestResult) testRFC3339All(d *edtf.EDTFDate) error {
 
 	if r.options.StartUpperTimeRFC3339 != "" {
 
-		err := r.testRFC3339(r.options.StartUpperTimeRFC3339, d.Start.Upper.Time)
+		err := r.testRFC3339(r.options.StartUpperTimeRFC3339, d.Start.Upper.Timestamp)
 
 		if err != nil {
 			return fmt.Errorf("Failed StartUpperTimeRFC3339 test, %v", err)
@@ -345,7 +345,7 @@ func (r *TestResult) testRFC3339All(d *edtf.EDTFDate) error {
 
 	if r.options.EndLowerTimeRFC3339 != "" {
 
-		err := r.testRFC3339(r.options.EndLowerTimeRFC3339, d.End.Lower.Time)
+		err := r.testRFC3339(r.options.EndLowerTimeRFC3339, d.End.Lower.Timestamp)
 
 		if err != nil {
 			return fmt.Errorf("Failed EndLowerTimeRFC3339 test, %v", err)
@@ -354,7 +354,7 @@ func (r *TestResult) testRFC3339All(d *edtf.EDTFDate) error {
 
 	if r.options.EndUpperTimeRFC3339 != "" {
 
-		err := r.testRFC3339(r.options.EndUpperTimeRFC3339, d.End.Upper.Time)
+		err := r.testRFC3339(r.options.EndUpperTimeRFC3339, d.End.Upper.Timestamp)
 
 		if err != nil {
 			return fmt.Errorf("Failed EndUpperTimeRFC3339 test, %v", err)
@@ -364,11 +364,13 @@ func (r *TestResult) testRFC3339All(d *edtf.EDTFDate) error {
 	return nil
 }
 
-func (r *TestResult) testRFC3339(expected string, t *time.Time) error {
+func (r *TestResult) testRFC3339(expected string, ts *edtf.Timestamp) error {
 
-	if t == nil {
-		return fmt.Errorf("Missing time.Time instance")
+	if ts == nil {
+		return fmt.Errorf("Missing edtf.Timestamp instance")
 	}
+
+	t := ts.Time()
 
 	t_str := t.Format(time.RFC3339)
 
@@ -383,7 +385,7 @@ func (r *TestResult) testUnixAll(d *edtf.EDTFDate) error {
 
 	if r.options.StartLowerTimeUnix != 0 {
 
-		err := r.testUnix(r.options.StartLowerTimeUnix, d.Start.Lower.Time)
+		err := r.testUnix(r.options.StartLowerTimeUnix, d.Start.Lower.Timestamp)
 
 		if err != nil {
 			return fmt.Errorf("Failed StartLowerTimeUnix test, %v", err)
@@ -392,7 +394,7 @@ func (r *TestResult) testUnixAll(d *edtf.EDTFDate) error {
 
 	if r.options.StartUpperTimeUnix != 0 {
 
-		err := r.testUnix(r.options.StartUpperTimeUnix, d.Start.Upper.Time)
+		err := r.testUnix(r.options.StartUpperTimeUnix, d.Start.Upper.Timestamp)
 
 		if err != nil {
 			return fmt.Errorf("Failed StartUpperTimeUnix test, %v", err)
@@ -401,7 +403,7 @@ func (r *TestResult) testUnixAll(d *edtf.EDTFDate) error {
 
 	if r.options.EndLowerTimeUnix != 0 {
 
-		err := r.testUnix(r.options.EndLowerTimeUnix, d.End.Lower.Time)
+		err := r.testUnix(r.options.EndLowerTimeUnix, d.End.Lower.Timestamp)
 
 		if err != nil {
 			return fmt.Errorf("Failed EndLowerTimeUnix test, %v", err)
@@ -410,7 +412,7 @@ func (r *TestResult) testUnixAll(d *edtf.EDTFDate) error {
 
 	if r.options.EndUpperTimeUnix != 0 {
 
-		err := r.testUnix(r.options.EndUpperTimeUnix, d.End.Upper.Time)
+		err := r.testUnix(r.options.EndUpperTimeUnix, d.End.Upper.Timestamp)
 
 		if err != nil {
 			return fmt.Errorf("Failed EndUpperTimeUnix test, %v", err)
@@ -420,16 +422,16 @@ func (r *TestResult) testUnixAll(d *edtf.EDTFDate) error {
 	return nil
 }
 
-func (r *TestResult) testUnix(expected int64, t *time.Time) error {
+func (r *TestResult) testUnix(expected int64, ts *edtf.Timestamp) error {
 
-	if t == nil {
-		return fmt.Errorf("Missing time.Time instance")
+	if ts == nil {
+		return fmt.Errorf("Missing edtf.Timestamp instance")
 	}
 
-	ts := t.Unix()
+	ts_unix := ts.Unix()
 
-	if ts != expected {
-		return fmt.Errorf("Invalid Unix time, expected '%d' but got '%d'", expected, ts)
+	if ts_unix != expected {
+		return fmt.Errorf("Invalid Unix time, expected '%d' but got '%d'", expected, ts_unix)
 	}
 
 	return nil
