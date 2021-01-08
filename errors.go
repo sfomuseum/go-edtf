@@ -4,6 +4,27 @@ import (
 	"fmt"
 )
 
+type NotSetError struct {
+}
+
+func (e *NotSetError) Error() string {
+	return fmt.Sprintf("This property has not (or can not) been set")
+}
+
+func NotSet() error {
+	return &NotImplementedError{}
+}
+
+func IsNotSet(e error) bool {
+
+	switch e.(type) {
+	case *NotSetError:
+		return true
+	default:
+		return false
+	}
+}
+
 type NotImplementedError struct {
 	edtf_str string
 	label    string
@@ -76,6 +97,32 @@ func IsUnsupported(e error) bool {
 
 	switch e.(type) {
 	case *UnsupportedError:
+		return true
+	default:
+		return false
+	}
+}
+
+type UnrecognizedError struct {
+	edtf_str string
+	label    string
+}
+
+func (e *UnrecognizedError) Error() string {
+	return fmt.Sprintf("Unrecognized EDTF string '%s' (%s)", e.edtf_str, e.label)
+}
+
+func Unrecognized(label string, edtf_str string) error {
+	return &UnrecognizedError{
+		edtf_str: edtf_str,
+		label:    label,
+	}
+}
+
+func IsUnrecognized(e error) bool {
+
+	switch e.(type) {
+	case *UnrecognizedError:
 		return true
 	default:
 		return false

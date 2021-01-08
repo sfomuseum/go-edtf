@@ -69,18 +69,18 @@ func TestUnmarshalJSON(t *testing.T) {
 		return
 	}
 
-	lower := d.Lower()
+	lower, err := d.Lower()
 
-	if lower == nil {
-		t.Logf("Expected lower time.Time but got none")
+	if err != nil {
+		t.Logf("Expected lower time.Time but got none, %v", err)
 		t.Fail()
 		return
 	}
 
-	upper := d.Upper()
+	upper, err := d.Upper()
 
-	if lower == nil {
-		t.Logf("Expected upper time.Time but got none")
+	if err != nil {
+		t.Logf("Expected upper time.Time but got none, %v", err)
 		t.Fail()
 		return
 	}

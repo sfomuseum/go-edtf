@@ -1,7 +1,6 @@
 package level2
 
 import (
-	"errors"
 	"github.com/sfomuseum/go-edtf"
 	"github.com/sfomuseum/go-edtf/re"
 )
@@ -55,7 +54,7 @@ func Matches(edtf_str string) (string, error) {
 		return INTERVAL, nil
 	}
 
-	return "", errors.New("Invalid or unsupported Level 2 string")
+	return "", edtf.Invalid("Invalid or unsupported Level 2 string", edtf_str)
 }
 
 func ParseString(edtf_str string) (*edtf.EDTFDate, error) {
@@ -92,5 +91,5 @@ func ParseString(edtf_str string) (*edtf.EDTFDate, error) {
 		return ParseInterval(edtf_str)
 	}
 
-	return nil, errors.New("Invalid or unsupported Level 2 string")
+	return nil, edtf.Invalid("Invalid or unsupported Level 2 string", edtf_str)
 }

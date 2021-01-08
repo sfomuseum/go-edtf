@@ -24,26 +24,26 @@ type EDTFDate struct {
 	Feature string     `json:"feature"`
 }
 
-func (d *EDTFDate) Lower() *time.Time {
+func (d *EDTFDate) Lower() (*time.Time, error) {
 
 	ts := d.Start.Lower.Timestamp
 
 	if ts == nil {
-		return nil
+		return nil, NotSet()
 	}
 
-	return ts.Time()
+	return ts.Time(), nil
 }
 
-func (d *EDTFDate) Upper() *time.Time {
+func (d *EDTFDate) Upper() (*time.Time, error) {
 
 	ts := d.End.Upper.Timestamp
 
 	if ts == nil {
-		return nil
+		return nil, NotSet()
 	}
 
-	return ts.Time()
+	return ts.Time(), nil
 }
 
 /*
