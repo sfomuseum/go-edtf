@@ -8,9 +8,9 @@ import (
 
 const LEVEL int = 0
 
-const DATE string = "date"
-const DATE_AND_TIME string = "date and time"
-const TIME_INTERVAL string = "time interval"
+const DATE string = "Date"
+const DATE_AND_TIME string = "Date and Time"
+const TIME_INTERVAL string = "Time Interval"
 
 func IsLevel0(edtf_str string) bool {
 	return re.Level0.MatchString(edtf_str)
