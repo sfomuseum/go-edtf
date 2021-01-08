@@ -153,6 +153,8 @@ func NewTimestampWithTime(t *time.Time) *Timestamp {
 func (ts *Timestamp) Time() *time.Time {
 
 	t := time.Unix(ts.Unix(), 0)
+	t = t.UTC()
+	
 	return &t
 }
 
