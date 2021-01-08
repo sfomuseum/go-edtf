@@ -104,7 +104,8 @@ A `edtf.Date` instance is the upper or lower end of a date range. It is a struct
 
 ```
 type Date struct {
-	Time        *time.Time `json:"time,omitempty"`
+	DateTime    string     `json:"datetime,omitempty"`
+	Timestamp   *Timestamp `json:"timestamp,omitempty"`
 	YMD         *YMD       `json:"ymd"`
 	Uncertain   Precision  `json:"uncertain,omitempty"`
 	Approximate Precision  `json:"approximate,omitempty"`
@@ -116,9 +117,17 @@ type Date struct {
 }
 ```
 
-### Time (or `time.Time`)
+#### Notes
 
-"Time" is considered to be a valid Go language [time.Time](https://golang.org/pkg/time/) instance. Because the Go language imposes limits on the minimum and maximum date it can represent (-9999 and 9999 respectively) this element _may_ be `nil`.
+* `DateTime` strings are encoded as `RFC3339` strings, in UTC.
+
+### Timestamp (or `edtf.Timestamp`)
+
+A `edtf.Timestamp` instance represents the Unix timestamp for the date. When serialized (or "marshal-ed") as JSON a `edtf.Timestamp` instance is encoded as a signed 64-bit integer. When a JSON-encoded `edtf.EDTFDate` is unserialized (or "unmarshal"-ed) the integer is converted to a `edtf.Timestamp` instance.
+
+The `Timestamp` is defined as a custom struct rather than an integer so that when it is serialized there is no confusion about whether a value of "0" means "January 1, 1970" or "this property is missing". It means the former. If the property is `nil` then it should be excluded from the JSON representation entirely.
+
+Because the Go language imposes limits on the minimum and maximum date it can represent (-9999 and 9999 respectively) this element _may_ be `nil`.
 
 ### YMD (or `edtf.YMD`)
 
@@ -213,12 +222,14 @@ For example:
 
 ```
 $> ./bin/parse 2004-06-XX/2004-07-03 '{1667,1668,1670..1672}' | jq
+
 [
   {
     "start": {
       "edtf": "2004-06-XX",
       "lower": {
-        "time": "2004-06-01T00:00:00Z",
+        "datetime": "2004-06-01T00:00:00Z",
+        "timestamp": 1086048000,
         "ymd": {
           "year": 2004,
           "month": 6,
@@ -227,7 +238,8 @@ $> ./bin/parse 2004-06-XX/2004-07-03 '{1667,1668,1670..1672}' | jq
         "precision": 32
       },
       "upper": {
-        "time": "2004-06-30T23:59:59Z",
+        "datetime": "2004-06-30T23:59:59Z",
+        "timestamp": 1088639999,
         "ymd": {
           "year": 2004,
           "month": 6,
@@ -239,7 +251,8 @@ $> ./bin/parse 2004-06-XX/2004-07-03 '{1667,1668,1670..1672}' | jq
     "end": {
       "edtf": "2004-07-03",
       "lower": {
-        "time": "2004-07-03T00:00:00Z",
+        "datetime": "2004-07-03T00:00:00Z",
+        "timestamp": 1088812800,
         "ymd": {
           "year": 2004,
           "month": 7,
@@ -248,7 +261,8 @@ $> ./bin/parse 2004-06-XX/2004-07-03 '{1667,1668,1670..1672}' | jq
         "precision": 64
       },
       "upper": {
-        "time": "2004-07-03T23:59:59Z",
+        "datetime": "2004-07-03T23:59:59Z",
+        "timestamp": 1088899199,
         "ymd": {
           "year": 2004,
           "month": 7,
@@ -259,13 +273,14 @@ $> ./bin/parse 2004-06-XX/2004-07-03 '{1667,1668,1670..1672}' | jq
     },
     "edtf": "2004-06-XX/2004-07-03",
     "level": 2,
-    "feature": "interval"
+    "feature": "Interval"
   },
   {
     "start": {
       "edtf": "1667",
       "lower": {
-        "time": "1667-01-01T00:00:00Z",
+        "datetime": "1667-01-01T00:00:00Z",
+        "timestamp": -9561715200,
         "ymd": {
           "year": 1667,
           "month": 1,
@@ -275,7 +290,8 @@ $> ./bin/parse 2004-06-XX/2004-07-03 '{1667,1668,1670..1672}' | jq
         "inclusivity": 2
       },
       "upper": {
-        "time": "1667-12-31T23:59:59Z",
+        "datetime": "1667-12-31T23:59:59Z",
+        "timestamp": -9530179201,
         "ymd": {
           "year": 1667,
           "month": 12,
@@ -288,7 +304,8 @@ $> ./bin/parse 2004-06-XX/2004-07-03 '{1667,1668,1670..1672}' | jq
     "end": {
       "edtf": "1672",
       "lower": {
-        "time": "1672-01-01T00:00:00Z",
+        "datetime": "1672-01-01T00:00:00Z",
+        "timestamp": -9403948800,
         "ymd": {
           "year": 1672,
           "month": 1,
@@ -298,7 +315,8 @@ $> ./bin/parse 2004-06-XX/2004-07-03 '{1667,1668,1670..1672}' | jq
         "inclusivity": 2
       },
       "upper": {
-        "time": "1672-12-31T23:59:59Z",
+        "datetime": "1672-12-31T23:59:59Z",
+        "timestamp": -9372326401,
         "ymd": {
           "year": 1672,
           "month": 12,
@@ -310,7 +328,7 @@ $> ./bin/parse 2004-06-XX/2004-07-03 '{1667,1668,1670..1672}' | jq
     },
     "edtf": "{1667,1668,1670..1672}",
     "level": 2,
-    "feature": "set representations"
+    "feature": "Set representation"
   }
 ]
 ```
