@@ -69,6 +69,8 @@ func ParseDateAndTime(edtf_str string) (*edtf.EDTFDate, error) {
 		return nil, err
 	}
 
+	t = t.UTC()
+
 	if is_bce {
 		t = common.TimeToBCE(t)
 	}
