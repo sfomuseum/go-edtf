@@ -214,5 +214,11 @@ var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests
 			EndLowerTimeRFC3339:   "2004-07-03T00:00:00Z",
 			EndUpperTimeRFC3339:   "2004-07-03T23:59:59Z",
 		}),
+		"~-0100/~2020": tests.NewTestResult(tests.TestResultOptions{
+			StartLowerTimeRFC3339: "-0100-01-01T00:00:00Z",
+			StartUpperTimeRFC3339: "-0100-12-31T23:59:59Z",
+			EndLowerTimeRFC3339:   "2020-01-01T00:00:00Z",
+			EndUpperTimeRFC3339:   "2020-12-31T23:59:59Z",			
+		}),
 	},
 }
