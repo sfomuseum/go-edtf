@@ -44,6 +44,16 @@ func TestLevels(t *testing.T) {
 
 func TestIsValid(t *testing.T) {
 
+	for label, tests := range Tests {
+
+		for input, _ := range tests {
+
+			if !IsValid(input) {
+				t.Fatalf("Invalid string '%s' (%s)", input, label)
+			}
+		}
+	}
+
 	for label, tests := range level0.Tests {
 
 		for input, _ := range tests {
@@ -77,6 +87,23 @@ func TestIsValid(t *testing.T) {
 }
 
 func TestParseString(t *testing.T) {
+
+	for label, tests := range Tests {
+
+		for input, _ := range tests {
+
+			_, err := ParseString(input)
+
+			if err != nil {
+
+				if edtf.IsNotImplemented(err) || edtf.IsUnsupported(err) {
+					t.Logf("Skipping level 0 string '%s' (%s), %v", input, label, err)
+				} else {
+					t.Fatalf("Failed to parse level 0 string '%s' (%s), %v", input, label, err)
+				}
+			}
+		}
+	}
 
 	for label, tests := range level0.Tests {
 

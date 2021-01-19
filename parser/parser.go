@@ -2,6 +2,7 @@ package parser
 
 import (
 	"github.com/sfomuseum/go-edtf"
+	"github.com/sfomuseum/go-edtf/common"
 	"github.com/sfomuseum/go-edtf/level0"
 	"github.com/sfomuseum/go-edtf/level1"
 	"github.com/sfomuseum/go-edtf/level2"
@@ -21,7 +22,12 @@ func IsValid(edtf_str string) bool {
 		return true
 	}
 
-	return false
+	switch edtf_str {
+	case edtf.OPEN, edtf.UNKNOWN:
+		return true
+	default:
+		return false
+	}
 }
 
 func ParseString(edtf_str string) (*edtf.EDTFDate, error) {
@@ -36,6 +42,35 @@ func ParseString(edtf_str string) (*edtf.EDTFDate, error) {
 
 	if level2.IsLevel2(edtf_str) {
 		return level2.ParseString(edtf_str)
+	}
+
+	if edtf_str == edtf.OPEN {
+		sp := common.OpenDateSpan()
+
+		d := &edtf.EDTFDate{
+			Start:   sp.Start,
+			End:     sp.End,
+			EDTF:    edtf_str,
+			Level:   -1,
+			Feature: "Open",
+		}
+
+		return d, nil
+	}
+
+	if edtf_str == edtf.UNKNOWN {
+
+		sp := common.UnknownDateSpan()
+
+		d := &edtf.EDTFDate{
+			Start:   sp.Start,
+			End:     sp.End,
+			EDTF:    edtf_str,
+			Level:   -1,
+			Feature: "Unknown",
+		}
+
+		return d, nil
 	}
 
 	return nil, edtf.Unrecognized("Invalid or unsupported EDTF string", edtf_str)
