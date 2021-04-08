@@ -11,6 +11,10 @@ A Go package for parsing Extended DateTime Format (EDTF) date strings. It is com
 * [Tests](#tests)
 * [Reporting Bugs and Issues](#reporting-bugs-and-issues)
 
+[![Go Reference](https://pkg.go.dev/badge/github.com/sfomuseum/go-edtf.svg)](https://pkg.go.dev/github.com/sfomuseum/go-edtf)
+
+_At this time Go reference documentation is incomplete._
+
 ## Background
 
 The following is taken from the [EDTF website](https://www.loc.gov/standards/datetime/background.html):

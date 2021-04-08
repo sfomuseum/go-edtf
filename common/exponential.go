@@ -5,6 +5,7 @@ import (
 	"math/big"
 )
 
+// Parse a string in exponential notation in to a year value in numeric form.
 func ParseExponentialNotation(notation string) (int, error) {
 
 	flt, _, err := big.ParseFloat(notation, 10, 0, big.ToNearestEven)

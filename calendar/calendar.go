@@ -1,3 +1,4 @@
+// package calendar provides common date and calendar methods.
 package calendar
 
 import (
@@ -8,6 +9,7 @@ import (
 	"time"
 )
 
+// Calculate the number of days in a month for a 'YYYYMM' formatted string.
 func DaysInMonthWithString(yyyymm string) (int, error) {
 
 	ym := strings.Split(yyyymm, "-")
@@ -41,6 +43,7 @@ func DaysInMonthWithString(yyyymm string) (int, error) {
 	return DaysInMonth(yyyy, mm)
 }
 
+// Calculate the number of days in a month given a year and month in numeric form.
 func DaysInMonth(yyyy int, mm int) (int, error) {
 
 	// Because Go can't parse dates < 0...
