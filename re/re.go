@@ -26,7 +26,7 @@ const PATTERN_DATE_X string = `(` + PATTERN_YEAR_X + `|(?:` + PATTERN_MONTH_X + 
 
 // Level 0
 
-const PATTERN_DATE string = `(\-?\d{4})(?:-([0][1-9]|1[0-2])(?:-([012][1-9]|3[01]))?)?`
+const PATTERN_DATE string = `(\-?\d{4})(?:-([0][1-9]|1[0-2])(?:-(0[1-9]|[12][0-9]|3[01]))?)?`
 
 const PATTERN_DATE_AND_TIME string = PATTERN_DATE + `T(\d{2}):(\d{2}):(\d{2})(Z|(\+|-)(\d{2})(\:(\d{2}))?)?`
 
