@@ -9,39 +9,6 @@ import (
 	"github.com/sfomuseum/go-edtf/level2"
 )
 
-// Return a boolean value indicating whether a string is considered to be an "open" EDTF date.
-func IsOpen(s string) bool {
-
-	switch s {
-	case edtf.OPEN, edtf.OPEN_2012:
-		return true
-	default:
-		return false
-	}
-}
-
-// Return a boolean value indicating whether a string is considered to be an "unspecified" EDTF date.
-func IsUnspecified(s string) bool {
-
-	switch s {
-	case edtf.UNSPECIFIED, edtf.UNSPECIFIED_2012:
-		return true
-	default:
-		return false
-	}
-}
-
-// Return a boolean value indicating whether a string is considered to be an "unknown" EDTF date.
-func IsUnknown(s string) bool {
-
-	switch s {
-	case edtf.UNKNOWN, edtf.UNKNOWN_2012:
-		return true
-	default:
-		return false
-	}
-}
-
 // Return a boolean value indicating whether a string is a valid EDTF date.
 func IsValid(edtf_str string) bool {
 
