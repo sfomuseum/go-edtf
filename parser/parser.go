@@ -7,6 +7,7 @@ import (
 	"github.com/sfomuseum/go-edtf/level0"
 	"github.com/sfomuseum/go-edtf/level1"
 	"github.com/sfomuseum/go-edtf/level2"
+	_ "log"
 )
 
 // Return a boolean value indicating whether a string is a valid EDTF date.

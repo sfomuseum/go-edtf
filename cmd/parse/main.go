@@ -1,3 +1,4 @@
+// parse is a command-line tool to read one or more EDTF strings and return a list of JSON-encode edtf.EDTFDate objects.
 package main
 
 import (
