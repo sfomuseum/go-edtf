@@ -23,7 +23,9 @@ type DateRange struct {
 	Inner *DateSpan
 }
 
-// DeriveRanges will parse 'edtf_str' and return a `DateRange` instance containing Unix timestamps.
+// DeriveRanges will parse 'edtf_str' and return a boolean flag signaling that it was possible to derive date ranges and, when possible, a
+// `DateRange` instance containing Unix timestamps. For example some EDTF date strings like ".." (indicating an "open" or "ongoing" date)
+// are valid EDTF but not suitable for deriving a date range.
 func DeriveRanges(edtf_str string) (bool, *DateRange, error) {
 
 	if !isValid(edtf_str) {
