@@ -7,13 +7,19 @@ import (
 	_ "log"
 )
 
+// DateSpan is a struct containing Unix timestamps for a range of (two) dates. Dates before 1970-01-01 are represented as negative values.
 type DateSpan struct {
+	// Start is the Unix timestamp for the starting date.
 	Start int64
-	End   int64
+	// End is the Unix timestamp for the ending date.
+	End int64
 }
 
+// DateRange is a struct containing inner and outer `DateSpan` instances for an EDTF date string.
 type DateRange struct {
+	// Outer is a `DateSpan` instance which matches the lower value of a starting date range and the upper value of an ending date range.
 	Outer *DateSpan
+	// Outer is a `DateSpan` instance which matches the upper value of a starting date range and the lower value of an ending date range.
 	Inner *DateSpan
 }
 
@@ -117,4 +123,3 @@ func isValid(edtf_str string) bool {
 
 	return true
 }
-
