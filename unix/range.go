@@ -24,16 +24,16 @@ type DateRange struct {
 }
 
 // DeriveRanges will parse 'edtf_str' and return a `DateRange` instance containing Unix timestamps.
-func DeriveRanges(edtf_str string) (*DateRange, error) {
+func DeriveRanges(edtf_str string) (bool, *DateRange, error) {
 
 	if !isValid(edtf_str) {
-		return nil, nil
+		return false, nil, nil
 	}
 
 	edtf_dt, err := parser.ParseString(edtf_str)
 
 	if err != nil {
-		return nil, fmt.Errorf("Failed to parse '%s', %w", edtf_str, err)
+		return false, nil, fmt.Errorf("Failed to parse '%s', %w", edtf_str, err)
 	}
 
 	start := edtf_dt.Start
@@ -46,19 +46,19 @@ func DeriveRanges(edtf_str string) (*DateRange, error) {
 	end_upper := end.Upper
 
 	if start_lower == nil {
-		return nil, nil
+		return false, nil, nil
 	}
 
 	if start_upper == nil {
-		return nil, nil
+		return false, nil, nil
 	}
 
 	if end_lower == nil {
-		return nil, nil
+		return false, nil, nil
 	}
 
 	if end_upper == nil {
-		return nil, nil
+		return false, nil, nil
 	}
 
 	start_lower_ts := start_lower.Timestamp
@@ -68,19 +68,19 @@ func DeriveRanges(edtf_str string) (*DateRange, error) {
 	end_upper_ts := end_upper.Timestamp
 
 	if start_lower_ts == nil {
-		return nil, nil
+		return false, nil, nil
 	}
 
 	if start_upper_ts == nil {
-		return nil, nil
+		return false, nil, nil
 	}
 
 	if end_lower_ts == nil {
-		return nil, nil
+		return false, nil, nil
 	}
 
 	if end_upper_ts == nil {
-		return nil, nil
+		return false, nil, nil
 	}
 
 	outer_start := start_lower_ts.Unix()
@@ -104,7 +104,7 @@ func DeriveRanges(edtf_str string) (*DateRange, error) {
 		Inner: inner,
 	}
 
-	return r, nil
+	return true, r, nil
 }
 
 func isValid(edtf_str string) bool {

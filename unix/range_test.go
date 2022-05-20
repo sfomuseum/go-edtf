@@ -10,20 +10,18 @@ func TestDeriveRanges(t *testing.T) {
 	tests := map[string]*DateRange{
 		"2021-05-25": &DateRange{Outer: &DateSpan{Start: 1621900800, End: 1621987199}, Inner: &DateSpan{Start: 1621900800, End: 1621987199}},
 		"2021-11-09": &DateRange{Outer: &DateSpan{Start: 1636416000, End: 1636502399}, Inner: &DateSpan{Start: 1636416000, End: 1636502399}},
-		edtf.UNKNOWN: nil,
-		edtf.OPEN:    nil,
 	}
 
 	for edtf_str, expected_ranges := range tests {
-
-		date_ranges, err := DeriveRanges(edtf_str)
+		
+		derived, date_ranges, err := DeriveRanges(edtf_str)
 
 		if err != nil {
 			t.Fatalf("Failed to derive ranges for '%s', %v", edtf_str, err)
 		}
 
-		if date_ranges == nil {
-			continue
+		if !derived {
+			t.Fatalf("Expected to derive ranges for '%s' but did not", edtf_str)
 		}
 
 		if date_ranges.Inner.Start != expected_ranges.Inner.Start {
@@ -44,4 +42,26 @@ func TestDeriveRanges(t *testing.T) {
 
 	}
 
+}
+
+func TestDeriveRangesNotApplicable(t *testing.T) {
+
+	tests := map[string]*DateRange{
+		edtf.UNKNOWN: nil,
+		edtf.OPEN:    nil,
+	}
+
+	for edtf_str, _ := range tests {
+		
+		derived, _, err := DeriveRanges(edtf_str)
+
+		if err != nil {
+			t.Fatalf("Failed to derive ranges for '%s', %v", edtf_str, err)
+		}
+		
+		if derived {
+			t.Fatalf("Not expected to derive ranges for '%s' but did not", edtf_str)
+		}
+	}		
+		
 }
