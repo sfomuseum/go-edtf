@@ -4,6 +4,7 @@ import (
 	"fmt"
 )
 
+// IsBetween reports whether the EDTF string `d` is betwen the EDTF strings `inceptions` and `cessation`.
 func IsBetween(d string, inception string, cessation string) (bool, error) {
 
 	is_before_inception, err := IsBefore(d, inception)
