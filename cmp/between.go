@@ -2,6 +2,8 @@ package cmp
 
 import (
 	"fmt"
+
+	"github.com/sfomuseum/go-edtf"
 )
 
 // IsBetween reports whether the EDTF string `d` is betwen the EDTF strings `inceptions` and `cessation`.
@@ -17,14 +19,17 @@ func IsBetween(d string, inception string, cessation string) (bool, error) {
 		return false, nil
 	}
 
-	is_after_cessation, err := IsAfter(d, cessation)
+	if cessation != edtf.OPEN {
 
-	if err != nil {
-		return false, fmt.Errorf("Failed to determine if date is after cessation date, %w", err)
-	}
+		is_after_cessation, err := IsAfter(d, cessation)
 
-	if is_after_cessation {
-		return false, nil
+		if err != nil {
+			return false, fmt.Errorf("Failed to determine if date is after cessation date, %w", err)
+		}
+
+		if is_after_cessation {
+			return false, nil
+		}
 	}
 
 	return true, nil
