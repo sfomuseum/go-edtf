@@ -7,17 +7,20 @@ import (
 func TestIsBetween(t *testing.T) {
 
 	tests_between := [][3]string{
-		[3]string{ "2024-03-21", "2022-12", "2024-06-17" },
+		[3]string{"2024-03-21", "2022-12", "2024-06-17"},
+		[3]string{"2024-03-21", "2024~", "2024-06-17"},
+		[3]string{"2024-03-21", "2024~", "2024~"},
 	}
 
 	tests_before := [][3]string{
-		[3]string{ "2021-03-21", "2022-12", "2024-06-17" },
+		[3]string{"2021-03-21", "2022-12", "2024-06-17"},
+		[3]string{"2024-03-21", "2024~", "2024-02~"},
 	}
 
 	tests_after := [][3]string{
-		[3]string{ "2021-03-21", "1984-12", "1996-12-08" },
+		[3]string{"2021-03-21", "1984-12", "1996-12-08"},
 	}
-	
+
 	for _, dates := range tests_between {
 
 		d := dates[0]
@@ -68,5 +71,4 @@ func TestIsBetween(t *testing.T) {
 			t.Fatalf("Expected '%s' to be after '%s' (and '%s')", d, cessation, inception)
 		}
 	}
-	
 }
