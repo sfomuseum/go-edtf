@@ -13,7 +13,7 @@ func TestDeriveRanges(t *testing.T) {
 	}
 
 	for edtf_str, expected_ranges := range tests {
-		
+
 		derived, date_ranges, err := DeriveRanges(edtf_str)
 
 		if err != nil {
@@ -52,16 +52,16 @@ func TestDeriveRangesNotApplicable(t *testing.T) {
 	}
 
 	for edtf_str, _ := range tests {
-		
+
 		derived, _, err := DeriveRanges(edtf_str)
 
 		if err != nil {
 			t.Fatalf("Failed to derive ranges for '%s', %v", edtf_str, err)
 		}
-		
+
 		if derived {
 			t.Fatalf("Not expected to derive ranges for '%s' but did not", edtf_str)
 		}
-	}		
-		
+	}
+
 }
