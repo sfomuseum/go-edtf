@@ -359,7 +359,7 @@ $> ./bin/parse 2004-06-XX/2004-07-03 '{1667,1668,1670..1672}' | jq
 
 ## WebAssembly (WASM)
 
-The `go-edtf` "parse" functionality is available as WebAssembly (WASM) binary. Currently `wasmjs` (JavaScript) and `wasip1` are supported.
+The `go-edtf` "parse" functionality is available as a WebAssembly (WASM) binary. Currently `wasmjs` (JavaScript) and `wasip1` are supported.
 
 ### JavaScript
 
@@ -373,6 +373,8 @@ GOOS=js GOARCH=wasm \
 		cmd/parse-wasm/main.go
 ```
 
+To run consult the docs for the [server-wasm](#server-wasm) tool below.
+
 ### wasip1
 
 To build the WASI P1 binary run the handy `wasip1` Makefile target:
@@ -383,6 +385,63 @@ GOARCH=wasm GOOS=wasip1 \
 		go build -mod vendor -ldflags="-s -w" -tags wasip1 \
 		-o wasm/parse-p1.wasm \
 		./cmd/parse-wasi/main.go
+```
+
+To run, you might do something like this:
+
+```
+$> wasmtime ./wasm/parse-p1.wasm 2025-04-02 | jq
+{
+  "start": {
+    "edtf": "2025-04-02",
+    "lower": {
+      "datetime": "2025-04-02T00:00:00Z",
+      "timestamp": 1743552000,
+      "ymd": {
+        "year": 2025,
+        "month": 4,
+        "day": 2
+      },
+      "precision": 64
+    },
+    "upper": {
+      "datetime": "2025-04-02T00:00:00Z",
+      "timestamp": 1743552000,
+      "ymd": {
+        "year": 2025,
+        "month": 4,
+        "day": 2
+      },
+      "precision": 64
+    }
+  },
+  "end": {
+    "edtf": "2025-04-02",
+    "lower": {
+      "datetime": "2025-04-02T23:59:59Z",
+      "timestamp": 1743638399,
+      "ymd": {
+        "year": 2025,
+        "month": 4,
+        "day": 2
+      },
+      "precision": 64
+    },
+    "upper": {
+      "datetime": "2025-04-02T23:59:59Z",
+      "timestamp": 1743638399,
+      "ymd": {
+        "year": 2025,
+        "month": 4,
+        "day": 2
+      },
+      "precision": 64
+    }
+  },
+  "edtf": "2025-04-02",
+  "level": 0,
+  "feature": "Date"
+}
 ```
 
 ### server-wasm
