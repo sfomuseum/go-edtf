@@ -359,7 +359,9 @@ $> ./bin/parse 2004-06-XX/2004-07-03 '{1667,1668,1670..1672}' | jq
 
 ## WebAssembly (WASM)
 
-The `go-edtf` "parse" functionality is available as a WebAssembly (WASM) binary. Currently `wasmjs` (JavaScript) and `wasip1` are supported.
+The `go-edtf` "parse" functionality is available as a WebAssembly (WASM) binary. Currently `wasmjs` (JavaScript), `wasip1` and `wasip2` are supported.
+
+_Note that `.wasm` files are explicitly excluded from version control in this package. In order to use them you will need to build the binaries manually using one or more of the handy Makefile targets described below._
 
 ### JavaScript
 
@@ -377,7 +379,7 @@ To run consult the docs for the [server-wasm](#server-wasm) tool below.
 
 ### wasip1
 
-To build the WASI P1 binary run the handy `wasip1` Makefile target:
+To build the WASI p1 binary run the handy `wasip1` Makefile target:
 
 ```
 $> make wasip1
@@ -441,6 +443,54 @@ $> wasmtime ./wasm/parse-p1.wasm 2025-04-02 | jq
   "edtf": "2025-04-02",
   "level": 0,
   "feature": "Date"
+}
+```
+
+### wasi-p2
+
+To build the WASI p2 binary run the handy `wasip2` Makefile target:
+
+```
+$> make wasip2
+tinygo build -target wasip2 -o wasm/parse-p2.wasm ./cmd/parse-wasi/main.go
+```
+
+_Note: WASI p2 requires that you have [TinyGo](https://tinygo.org/) installed._
+
+To run, you might do something like this:
+
+```
+$> wasmtime ./wasm/parse-p2.wasm 2025-04-02T12:30:23 | jq
+{
+  "start": {
+    "edtf": "",
+    "lower": {
+      "datetime": "2025-04-02T12:30:23Z",
+      "timestamp": 1743597023,
+      "ymd": null
+    },
+    "upper": {
+      "datetime": "2025-04-02T12:30:23Z",
+      "timestamp": 1743597023,
+      "ymd": null
+    }
+  },
+  "end": {
+    "edtf": "",
+    "lower": {
+      "datetime": "2025-04-02T12:30:23Z",
+      "timestamp": 1743597023,
+      "ymd": null
+    },
+    "upper": {
+      "datetime": "2025-04-02T12:30:23Z",
+      "timestamp": 1743597023,
+      "ymd": null
+    }
+  },
+  "edtf": "2025-04-02T12:30:23",
+  "level": 0,
+  "feature": "Date and Time"
 }
 ```
 
