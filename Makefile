@@ -4,6 +4,11 @@ LDFLAGS=-s -w
 cli:
 	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/parse cmd/parse/main.go
 	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/matches cmd/matches/main.go
+	go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -o bin/server-wasm cmd/server-wasm/main.go
+
+server:
+	@make wasmjs
+	go run -mod $(GOMOD) cmd/server-wasm/main.go
 
 wasmjs:
 	GOOS=js GOARCH=wasm \

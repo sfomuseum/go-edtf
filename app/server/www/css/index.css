@@ -1,0 +1,21 @@
+body {
+	margin: 1rem;
+}
+
+footer {
+	padding-top:1rem;
+	border-top: solid thin;
+	font-size:small;
+}
+
+#result {
+	border:solid thin;
+	font-family: monospace;
+	display:none;
+	background-color:#ededed;
+	padding:1rem;
+}
+
+.italic {
+	font-style:italic;
+}

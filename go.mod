@@ -1,4 +1,4 @@
 module github.com/sfomuseum/go-edtf
 
-go 1.12
+go 1.16
 
