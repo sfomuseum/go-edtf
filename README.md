@@ -357,6 +357,161 @@ $> ./bin/parse 2004-06-XX/2004-07-03 '{1667,1668,1670..1672}' | jq
 ]
 ```
 
+## WebAssembly (WASM)
+
+The `go-edtf` "parse" functionality is available as a WebAssembly (WASM) binary. Currently `wasmjs` (JavaScript), `wasip1` and `wasip2` are supported.
+
+_Note that `.wasm` files are explicitly excluded from version control in this package. In order to use them you will need to build the binaries manually using one or more of the handy Makefile targets described below._
+
+### JavaScript
+
+To build the JavaScript WASM binary run the handy `wasmjs` Makefile target:
+
+```
+$> make wasmjs
+GOOS=js GOARCH=wasm \
+		go build -mod vendor -ldflags="-s -w" -tags wasmjs \
+		-o wasm/parse-js.wasm \
+		cmd/parse-wasm/main.go
+```
+
+To run consult the docs for the [server-wasm](#server-wasm) tool below.
+
+### wasip1
+
+To build the WASI p1 binary run the handy `wasip1` Makefile target:
+
+```
+$> make wasip1
+GOARCH=wasm GOOS=wasip1 \
+		go build -mod vendor -ldflags="-s -w" -tags wasip1 \
+		-o wasm/parse-p1.wasm \
+		./cmd/parse-wasi/main.go
+```
+
+To run, you might do something like this:
+
+```
+$> wasmtime ./wasm/parse-p1.wasm 2025-04-02 | jq
+{
+  "start": {
+    "edtf": "2025-04-02",
+    "lower": {
+      "datetime": "2025-04-02T00:00:00Z",
+      "timestamp": 1743552000,
+      "ymd": {
+        "year": 2025,
+        "month": 4,
+        "day": 2
+      },
+      "precision": 64
+    },
+    "upper": {
+      "datetime": "2025-04-02T00:00:00Z",
+      "timestamp": 1743552000,
+      "ymd": {
+        "year": 2025,
+        "month": 4,
+        "day": 2
+      },
+      "precision": 64
+    }
+  },
+  "end": {
+    "edtf": "2025-04-02",
+    "lower": {
+      "datetime": "2025-04-02T23:59:59Z",
+      "timestamp": 1743638399,
+      "ymd": {
+        "year": 2025,
+        "month": 4,
+        "day": 2
+      },
+      "precision": 64
+    },
+    "upper": {
+      "datetime": "2025-04-02T23:59:59Z",
+      "timestamp": 1743638399,
+      "ymd": {
+        "year": 2025,
+        "month": 4,
+        "day": 2
+      },
+      "precision": 64
+    }
+  },
+  "edtf": "2025-04-02",
+  "level": 0,
+  "feature": "Date"
+}
+```
+
+### wasi-p2
+
+To build the WASI p2 binary run the handy `wasip2` Makefile target:
+
+```
+$> make wasip2
+tinygo build -target wasip2 -o wasm/parse-p2.wasm ./cmd/parse-wasi/main.go
+```
+
+_Note: WASI p2 requires that you have [TinyGo](https://tinygo.org/) installed._
+
+To run, you might do something like this:
+
+```
+$> wasmtime ./wasm/parse-p2.wasm 2025-04-02T12:30:23 | jq
+{
+  "start": {
+    "edtf": "",
+    "lower": {
+      "datetime": "2025-04-02T12:30:23Z",
+      "timestamp": 1743597023,
+      "ymd": null
+    },
+    "upper": {
+      "datetime": "2025-04-02T12:30:23Z",
+      "timestamp": 1743597023,
+      "ymd": null
+    }
+  },
+  "end": {
+    "edtf": "",
+    "lower": {
+      "datetime": "2025-04-02T12:30:23Z",
+      "timestamp": 1743597023,
+      "ymd": null
+    },
+    "upper": {
+      "datetime": "2025-04-02T12:30:23Z",
+      "timestamp": 1743597023,
+      "ymd": null
+    }
+  },
+  "edtf": "2025-04-02T12:30:23",
+  "level": 0,
+  "feature": "Date and Time"
+}
+```
+
+### server-wasm
+
+There is a bare-bones HTTP server implementation demonstrating the use of the `parse-js.wasm` WASM binary in a web application. The easiest way to use it is to run the handy `server` Makefile target. For example:
+
+```
+$> make server
+GOOS=js GOARCH=wasm \
+		go build -mod vendor -ldflags="-s -w" -tags wasmjs \
+		-o wasm/parse-js.wasm \
+		cmd/parse-wasm/main.go
+go run -mod vendor cmd/server-wasm/main.go
+2026/05/21 11:35:49 Listening for requests on localhost:8080
+```
+
+And then when you open your web browser to `http://localhost:8080` you'll see something like this:
+
+![](docs/images/edtf-parse-wasm.png)
+
 ## Tests
 
 Tests are defined and handled in (3) places:

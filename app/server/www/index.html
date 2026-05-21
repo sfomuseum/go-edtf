@@ -1,0 +1,41 @@
+<html>
+  <head>
+      <meta charset="utf-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>EDTF Parser</title>
+      <link rel="stylesheet" type="text/css" href="css/bootstrap.min.css" />      
+      <link rel="stylesheet" type="text/css" href="css/index.css" />
+  </head>
+
+  <body>
+      <div class="container">
+	  <header>
+	      <h1>EDTF Parser</h1>
+	  </header>
+	  <main>
+	      <form class="form">
+		  <div id="query" class="form-group">
+		      <label for="raw">Enter a valid <a href="http://www.loc.gov/standards/datetime/">Extended DateTime Format</a> (EDTF) string.</label>
+		      <input type="text" id="raw" name="raw" class="form-control" aria-describedby="description" />
+		      
+		      <small id="description">EDTF level 0, 1 and 2 EDTF strings are accepted, with the exception of specific features <a href="https://github.com/sfomuseum/go-edtf#features">noted in the go-edtf documentation</a>.</small>
+		  </div>
+		  
+		  <button id="button" onclick="parse(); return false;" disabled class="btn btn-primary" type="submit">Loading...</button>
+	      </form>
+	      <div id="result"></div>
+	  </main>
+	  
+	  <footer>
+	      <p>This webpage demonstrates the <a href="https://github.com/sfomuseum/go-edtf#example"><code>go-edtf</code> parser functionality</a> exported to JavaScript as a <a href="https://en.wikipedia.org/wiki/WebAssembly">WebAssembly</a> binary. The source code for this webpage is available from <a href="https://github.com/sfomuseum">SFO Museum's GitHub account</a>:</p>
+	      
+	      <ul>
+		  <li><a href="https://github.com/sfomuseum/go-edtf">sfomuseum/go-edtf</a></li>
+	      </ul>
+	  </footer>
+      </div>
+  </body>
+  <script src="javascript/sfomuseum.golang.wasm.bundle.js"></script>
+  <script src="javascript/index.js"></script>
+  
+</html>
