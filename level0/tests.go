@@ -6,6 +6,12 @@ import (
 
 var Tests map[string]map[string]*tests.TestResult = map[string]map[string]*tests.TestResult{
 	DATE: map[string]*tests.TestResult{
+		"0000-01-01": tests.NewTestResult(tests.TestResultOptions{
+			StartLowerTimeRFC3339: "0000-01-01T00:00:00Z",
+			StartUpperTimeRFC3339: "0000-01-01T00:00:00Z",
+			EndLowerTimeRFC3339:   "0000-01-01T23:59:59Z",
+			EndUpperTimeRFC3339:   "0000-01-01T23:59:59Z",
+		}),
 		"1985-04-12": tests.NewTestResult(tests.TestResultOptions{
 			StartLowerTimeRFC3339: "1985-04-12T00:00:00Z",
 			StartUpperTimeRFC3339: "1985-04-12T00:00:00Z",

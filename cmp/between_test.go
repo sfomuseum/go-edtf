@@ -13,6 +13,7 @@ func TestIsBetween(t *testing.T) {
 		[3]string{"2024-03-21", "2024~", "2024-06-17"},
 		[3]string{"2024-03-21", "2024~", "2024~"},
 		[3]string{"2024-03-21", "2024~", edtf.OPEN},
+		[3]string{"2024-06-18", "2024-06-17", edtf.OPEN},
 	}
 
 	tests_before := [][3]string{
