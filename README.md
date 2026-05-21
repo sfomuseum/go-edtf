@@ -357,6 +357,52 @@ $> ./bin/parse 2004-06-XX/2004-07-03 '{1667,1668,1670..1672}' | jq
 ]
 ```
 
+## WebAssembly (WASM)
+
+The `go-edtf` "parse" functionality is available as WebAssembly (WASM) binary. Currently `wasmjs` (JavaScript) and `wasip1` are supported.
+
+### JavaScript
+
+To build the JavaScript WASM binary run the handy `wasmjs` Makefile target:
+
+```
+$> make wasmjs
+GOOS=js GOARCH=wasm \
+		go build -mod vendor -ldflags="-s -w" -tags wasmjs \
+		-o wasm/parse-js.wasm \
+		cmd/parse-wasm/main.go
+```
+
+### wasip1
+
+To build the WASI P1 binary run the handy `wasip1` Makefile target:
+
+```
+$> make wasip1
+GOARCH=wasm GOOS=wasip1 \
+		go build -mod vendor -ldflags="-s -w" -tags wasip1 \
+		-o wasm/parse-p1.wasm \
+		./cmd/parse-wasi/main.go
+```
+
+### server-wasm
+
+There is a bare-bones HTTP server implementation demonstrating the use of the `parse-js.wasm` WASM binary in a web application. The easiest way to use it is to run the handy `server` Makefile target. For example:
+
+```
+$> make server
+GOOS=js GOARCH=wasm \
+		go build -mod vendor -ldflags="-s -w" -tags wasmjs \
+		-o wasm/parse-js.wasm \
+		cmd/parse-wasm/main.go
+go run -mod vendor cmd/server-wasm/main.go
+2026/05/21 11:35:49 Listening for requests on localhost:8080
+```
+
+And then when you open your web browser to `http://localhost:8080` you'll see something like this:
+
+![](docs/images/edtf-parse-wasm.png)
+
 ## Tests
 
 Tests are defined and handled in (3) places:

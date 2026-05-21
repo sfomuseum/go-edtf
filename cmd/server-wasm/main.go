@@ -1,8 +1,8 @@
 package main
 
 import (
-	_ "context"
 	"flag"
+	"fmt"
 	"log"
 	"net/http"
 
@@ -12,20 +12,13 @@ import (
 
 func main() {
 
-	// var server_uri string
-	// flag.StringVar(&server_uri, "server-uri", "http://localhost:8080", "A valid aaronland/go-http-server URI.")
+	var host string
+	var port int
+	
+	flag.StringVar(&host, "host", "localhost", "The host to serve requests from")
+	flag.IntVar(&port, "port", 8080, "The port to serve requests from")	
 
 	flag.Parse()
-
-	/*
-		ctx := context.Background()
-
-		s, err := server.NewServer(ctx, server_uri)
-
-		if err != nil {
-			log.Fatalf("Failed to create new server, %v", err)
-		}
-	*/
 
 	mux := http.NewServeMux()
 
@@ -38,9 +31,9 @@ func main() {
 	mux.Handle("/wasm/", http.StripPrefix("/wasm/", wasm_handler))
 	mux.Handle("/", www_handler)
 
-	addr := "localhost:8080"
-
-	// log.Printf("Listening on %s", s.Address())
+	addr := fmt.Sprintf("%s:%d", host, port)
+	log.Printf("Listening for requests on %s", addr)
+	
 	err := http.ListenAndServe(addr, mux)
 
 	if err != nil {

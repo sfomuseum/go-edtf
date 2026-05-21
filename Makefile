@@ -16,9 +16,11 @@ wasmjs:
 		-o wasm/parse-js.wasm \
 		cmd/parse-wasm/main.go
 
-wasip:
+wasip1:
 	GOARCH=wasm GOOS=wasip1 \
 		go build -mod $(GOMOD) -ldflags="$(LDFLAGS)" -tags wasip1 \
 		-o wasm/parse-p1.wasm \
 		./cmd/parse-wasi/main.go
 
+# wasip2:
+# 	tinygo build -target wasip2 -o wasm/parse-p2.wasm ./cmd/parse-wasi/main.go
