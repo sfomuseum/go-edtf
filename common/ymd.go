@@ -99,10 +99,6 @@ func YMDFromStrings(str_yyyy string, str_mm string, str_dd string) (*edtf.YMD, e
 		dd = d
 	}
 
-	if yyyy == 0 {
-		return nil, errors.New("Missing year")
-	}
-
 	if yyyy > edtf.MAX_YEARS {
 		return nil, edtf.Unsupported("year", strconv.Itoa(yyyy))
 	}
